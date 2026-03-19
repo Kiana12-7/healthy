@@ -6,37 +6,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".HomeFragment">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="209dp"
-        android:layout_height="52dp"
-        android:layout_marginBottom="84dp"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toTopOf="@+id/btnMaterial"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/my_fragment"
+        android:name="com.example.myapplication.topBarFragment"
+        android:layout_width="411dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.549"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewHorizontal"
-        android:layout_width="426dp"
-        android:layout_height="75dp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnMaterial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
-        android:text="我是一个 Material 按钮"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewHorizontal"
+        android:layout_width="414dp"
+        android:layout_height="91dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.612" />
+        app:layout_constraintTop_toBottomOf="@+id/my_fragment" />
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/HomeContentFragment"
+        android:name="com.example.myapplication.HomeContentFragment"
+        android:layout_width="401dp"
+        android:layout_height="565dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewHorizontal" />
 </androidx.constraintlayout.widget.ConstraintLayout>
