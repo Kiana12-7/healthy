@@ -8,8 +8,8 @@
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
-        android:layout_width="188dp"
-        android:layout_height="39dp"
+        android:layout_width="206dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:background="@drawable/search_background"
         android:iconifiedByDefault="false"
@@ -17,6 +17,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.772" />
+        app:layout_constraintVertical_bias="0.789" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
