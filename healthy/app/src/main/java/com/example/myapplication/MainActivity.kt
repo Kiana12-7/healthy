@@ -53,8 +53,9 @@ class MainActivity : AppCompatActivity() {
 
     // 替换Fragment的辅助方法
     private fun replaceFragment(fragment: Fragment) {
+        // 【修复ID】把 fragment_container1 改回 fragment_container
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container1, fragment)
+            .replace(R.id.fragment_container, fragment)
             .commit()
     }
 

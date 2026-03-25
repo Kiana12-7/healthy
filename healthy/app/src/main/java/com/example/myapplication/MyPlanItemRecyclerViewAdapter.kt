@@ -1,49 +1,29 @@
 package com.example.myapplication
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 
-import com.example.myapplication.placeholder.PlaceholderContent.PlaceholderItem
-import com.example.myapplication.databinding.FragmentPlanItemBinding
-
-/**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
- */
+// 把构造函数参数改成 List<String>
 class MyPlanItemRecyclerViewAdapter(
-    private val values: List<PlaceholderItem>
+    private val values: List<String>
 ) : RecyclerView.Adapter<MyPlanItemRecyclerViewAdapter.ViewHolder>() {
 
+    // ViewHolder 直接用系统的简单布局，或者你自己的 item 布局
+    inner class ViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
-        return ViewHolder(
-            FragmentPlanItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
-
+        // 这里用了一个最简单的系统自带的 TextView 作为 Item，你也可以换成你自己的布局
+        val textView = LayoutInflater.from(parent.context)
+            .inflate(android.R.layout.simple_list_item_1, parent, false) as TextView
+        return ViewHolder(textView)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
+        // 直接显示计划名称
+        holder.textView.text = values[position]
     }
 
     override fun getItemCount(): Int = values.size
-
-    inner class ViewHolder(binding: FragmentPlanItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        val idView: TextView = binding.itemNumber
-        val contentView: TextView = binding.content
-
-        override fun toString(): String {
-            return super.toString() + " '" + contentView.text + "'"
-        }
-    }
-
 }
