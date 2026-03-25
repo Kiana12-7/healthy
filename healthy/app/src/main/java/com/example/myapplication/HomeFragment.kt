@@ -1,6 +1,5 @@
 package com.example.myapplication
 
-import HorizontalAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,29 +9,44 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class HomeFragment : Fragment() {
+
+    private val tabList = listOf("计划", "课程")
+    private val planFragment by lazy { PlanItemFragment() }
+    private val courseFragment by lazy { CourseFragment() }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        // 1. 加载布局文件（完全保留你原来的逻辑）
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+    ): View? {
+        val rootView = inflater.inflate(R.layout.fragment_home, container, false)
 
-        // 2. 从当前 Fragment 的视图中查找 RecyclerView（完全保留）
-        val recyclerView: RecyclerView = view.findViewById(R.id.recyclerViewHorizontal)
+        val recyclerView: RecyclerView = rootView.findViewById(R.id.recyclerViewHorizontal)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        // 3. 设置水平布局管理器（完全保留，滑动效果就在这）
-        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.layoutManager = layoutManager
-
-        // 4. 【唯一修改的地方】准备数据：把原来的 Item 1-20 换成你要的4个名字
-        val data = listOf("推荐", "计划", "课程", "社区")
-
-        // 5. 设置适配器（完全保留你原来的 HorizontalAdapter）
-        val adapter = HorizontalAdapter(data)
+        val adapter = HorizontalAdapter(tabList)
         recyclerView.adapter = adapter
 
-        // 6. 返回填充好的视图（完全保留）
-        return view
+        // 默认显示第0个（计划Tab）
+        switchFragment(0)
+        adapter.setSelectPosition(0)
+
+        adapter.onTabClick = { position ->
+            switchFragment(position)
+        }
+
+        return rootView
+    }
+
+    private fun switchFragment(position: Int) {
+        val target = if (position == 0) {
+            courseFragment // 计划Tab现在显示原来的课程内容
+        } else {
+            planFragment   // 课程Tab现在显示原来的计划内容
+        }
+
+        childFragmentManager.beginTransaction()
+            .replace(R.id.HomeContentFragment, target)
+            .commitAllowingStateLoss()
     }
 }
