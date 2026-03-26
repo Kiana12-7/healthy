@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeFragment">
+    tools:context=".fragment.HomeFragment">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/my_fragment"
-        android:name="com.example.myapplication.topBarFragment"
+        android:name="com.example.myapplication.fragment.topBarFragment"
         android:layout_width="411dp"
         android:layout_height="38dp"
         android:layout_marginTop="32dp"
@@ -29,7 +29,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/HomeContentFragment"
-        android:name="com.example.myapplication.HomeContentFragment"
+        android:name="com.example.myapplication.fragment.HomeContentFragment"
         android:layout_width="401dp"
         android:layout_height="565dp"
         app:layout_constraintBottom_toBottomOf="parent"

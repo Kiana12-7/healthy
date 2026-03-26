@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeContentFragment">
+    tools:context=".fragment.HomeContentFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".PersonalFragment">
+        tools:context=".fragment.PersonalFragment">
 
         <ImageView
             android:id="@+id/my_image"
@@ -25,7 +25,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/my_fragment"
-            android:name="com.example.myapplication.PlanItemFragment"
+            android:name="com.example.myapplication.fragment.PlanItemFragment"
             android:layout_width="410dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"

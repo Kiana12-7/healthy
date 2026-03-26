@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
