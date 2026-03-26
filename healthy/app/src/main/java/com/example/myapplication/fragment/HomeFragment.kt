@@ -26,11 +26,8 @@ class HomeFragment : Fragment() {
         // 3. 设置水平布局管理器（水平滚动）
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        // 4. 准备模拟数据
-        val data = mutableListOf<String>()
-        for (i in 1..20) {
-            data.add("Item $i")
-        }
+        // 4. 准备数据
+        val data = listOf("推荐", "计划", "课程", "社区")
 
         // 5. 设置适配器（确保 HorizontalAdapter 已定义），把数据变成列表项
         recyclerView.adapter = HorizontalAdapter(data)
