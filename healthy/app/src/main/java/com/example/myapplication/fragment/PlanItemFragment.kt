@@ -12,7 +12,7 @@ import com.example.myapplication.adapter.MyPlanItemRecyclerViewAdapter
 
 class PlanItemFragment : Fragment() {
 
-    // 你的38个计划数据
+    // 计划数据
     private val planList = listOf(
         "个性减脂计划",
         "告别肚腩计划",
