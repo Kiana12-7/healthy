@@ -1,5 +1,6 @@
-package com.example.myapplication
+package com.example.myapplication.fragment
 
+import HorizontalAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.CourseFragment
+import com.example.myapplication.R
 
 class HomeFragment : Fragment() {
 
@@ -21,6 +24,7 @@ class HomeFragment : Fragment() {
     // 缓存Fragment，避免重复创建
     private val fragmentCache = mutableMapOf<Int, Fragment>()
 
+    // Fragment 绘制界面的方法
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

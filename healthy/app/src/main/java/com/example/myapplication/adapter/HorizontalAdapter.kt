@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
@@ -45,6 +46,7 @@ class HorizontalAdapter(
 
     override fun getItemCount(): Int = dataList.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setSelectPosition(position: Int) {
         this.selectedPosition = position
         notifyDataSetChanged()

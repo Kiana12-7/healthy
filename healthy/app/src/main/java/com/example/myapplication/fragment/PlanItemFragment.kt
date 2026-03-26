@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.myapplication.R
+import com.example.myapplication.adapter.MyPlanItemRecyclerViewAdapter
 
 class PlanItemFragment : Fragment() {
 
@@ -56,7 +58,7 @@ class PlanItemFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // 加载你原来的列表布局
+        // 加载列表布局
         val view = inflater.inflate(R.layout.fragment_item_list, container, false)
         if (view is RecyclerView) {
             with(view) {

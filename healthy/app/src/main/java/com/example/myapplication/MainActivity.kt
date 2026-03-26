@@ -8,7 +8,11 @@ import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.myapplication.fragment.HomeFragment
+import com.example.myapplication.fragment.PersonalFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.core.view.size
+import androidx.core.view.get
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,31 +20,31 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-
-        bottomNav = findViewById(R.id.bottom_navigation)
+        enableEdgeToEdge() // 全屏模式
+        setContentView(R.layout.activity_main) // 加载页面布局
 
         // 默认显示首页，默认加粗选中
         if (savedInstanceState == null) {
             replaceFragment(HomeFragment())
-            updateMenuItemStyle(bottomNav.menu.getItem(0), true)
+            updateMenuItemStyle(bottomNav.menu[0], true)
         }
 
-        // 导航选中监听
-        bottomNav.setOnNavigationItemSelectedListener { item ->
+        // 找到底部导航
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        // 设置导航项选中监听
+        bottomNav.setOnItemSelectedListener { item ->
             // 先把所有项恢复正常样式
-            for (i in 0 until bottomNav.menu.size()) {
-                updateMenuItemStyle(bottomNav.menu.getItem(i), false)
+            for (i in 0 until bottomNav.menu.size) {
+                updateMenuItemStyle(bottomNav.menu[i], false)
             }
             // 当前选中项加粗
             updateMenuItemStyle(item, true)
 
-            // 切换Fragment（和你的menu id完全匹配）
+            // 切换Fragment
             when (item.itemId) {
                 R.id.navigation_home -> {
                     replaceFragment(HomeFragment())
-                    true
+                    true // 允许选中，按钮会高亮、切换页面
                 }
                 R.id.navigation_personal -> {
                     replaceFragment(PersonalFragment())
@@ -51,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // 替换Fragment的辅助方法
+    // 替换 Fragment 的辅助方法
     private fun replaceFragment(fragment: Fragment) {
         // 【修复ID】把 fragment_container1 改回 fragment_container
         supportFragmentManager.beginTransaction()
