@@ -1,10 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutManager="LinearLayoutManager"
-    tools:context=".fragment.PlanItemFragment"
-    tools:listitem="@layout/fragment_plan_item" />
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- 顶部筛选栏：固定高度，永远在最上面 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="14dp"
+        android:paddingHorizontal="8dp"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF">
+
+        <TextView
+            android:id="@+id/btn_filter_goal"
+            style="@style/GreenFilterButtonStyle"
+            android:text="目标" />
+
+        <TextView
+            android:id="@+id/btn_filter_part"
+            style="@style/GreenFilterButtonStyle"
+            android:text="部位" />
+
+        <TextView
+            android:id="@+id/btn_filter_difficulty"
+            style="@style/GreenFilterButtonStyle"
+            android:text="难度" />
+
+        <TextView
+            android:id="@+id/btn_filter_crowd"
+            style="@style/GreenFilterButtonStyle"
+            android:text="适合人群" />
+    </LinearLayout>
+
+    <!-- 绿色分割线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E8F5E9"/>
+
+    <!-- 计划列表：占满筛选栏下方的所有空间，内容少时也不会把筛选栏挤下去 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_plan_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="ifContentScrolls"/>
+
+</LinearLayout>

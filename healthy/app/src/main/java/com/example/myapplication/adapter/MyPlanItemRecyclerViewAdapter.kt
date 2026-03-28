@@ -4,26 +4,36 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.model.PlanItem
 
-// 把构造函数参数改成 List<String>
 class MyPlanItemRecyclerViewAdapter(
-    private val values: List<String>
-) : RecyclerView.Adapter<MyPlanItemRecyclerViewAdapter.ViewHolder>() {
+    // 明确指定接收PlanItem列表，彻底解决类型不匹配
+    private var planList: List<PlanItem>
+) : RecyclerView.Adapter<MyPlanItemRecyclerViewAdapter.PlanViewHolder>() {
 
-    // ViewHolder 直接用系统的简单布局，或者你自己的 item 布局
-    inner class ViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
+    // 内部ViewHolder
+    inner class PlanViewHolder(val itemText: TextView) : RecyclerView.ViewHolder(itemText)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // 这里用了一个最简单的系统自带的 TextView 作为 Item，你也可以换成你自己的布局
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanViewHolder {
+        // 用系统自带的简单布局，避免自定义布局报错
         val textView = LayoutInflater.from(parent.context)
             .inflate(android.R.layout.simple_list_item_1, parent, false) as TextView
-        return ViewHolder(textView)
+        return PlanViewHolder(textView)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // 直接显示计划名称
-        holder.textView.text = values[position]
+    override fun onBindViewHolder(holder: PlanViewHolder, position: Int) {
+        val plan = planList[position]
+        holder.itemText.text = plan.name
+        // 统一设置item样式，避免排版错乱
+        holder.itemText.setPadding(40, 24, 40, 24)
+        holder.itemText.textSize = 16f
     }
 
-    override fun getItemCount(): Int = values.size
+    override fun getItemCount(): Int = planList.size
+
+    // 筛选后更新列表的方法
+    fun refreshData(newList: List<PlanItem>) {
+        this.planList = newList
+        notifyDataSetChanged()
+    }
 }
