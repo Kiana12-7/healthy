@@ -15,8 +15,9 @@ class HomeFragment : Fragment() {
 
     private val pageConfig = listOf(
 
-        "课程" to CourseFragment::class.java,      // 课程Tab -> 课程页面
         "计划" to PlanItemFragment::class.java,  // 计划Tab -> 计划页面
+        "课程" to CourseFragment::class.java,      // 课程Tab -> 课程页面
+
     )
 
     private val tabNames = pageConfig.map { it.first }

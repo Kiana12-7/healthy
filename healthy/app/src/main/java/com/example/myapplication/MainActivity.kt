@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.view.MenuItem
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-// 【核心修复】导入fragment子包中的两个Fragment
 import com.example.myapplication.fragment.HomeFragment
 import com.example.myapplication.fragment.PersonalFragment
 
@@ -19,21 +19,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        // enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        // 先初始化控件，再使用
+
         bottomNav = findViewById(R.id.bottom_navigation)
 
-        // 默认显示首页
         if (savedInstanceState == null) {
             replaceFragment(HomeFragment())
             updateMenuItemStyle(bottomNav.menu.getItem(0), true)
         }
 
-        // 替换废弃的监听方法，使用新版API
         bottomNav.setOnItemSelectedListener { item ->
-            // 重置所有菜单项样式
+            // 重置所有样式
             for (i in 0 until bottomNav.menu.size()) {
                 updateMenuItemStyle(bottomNav.menu.getItem(i), false)
             }
@@ -55,14 +54,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Fragment替换方法
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()
     }
 
-    // 菜单项文字加粗/恢复样式
     private fun updateMenuItemStyle(item: MenuItem, isSelected: Boolean) {
         val title = item.title.toString()
         val spannableString = SpannableString(title)

@@ -12,35 +12,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <!-- 底部按钮栏：清晰的白绿对比 -->
+    <!-- 底部按钮栏，全部换成TextView，彻底解决紫色问题 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="20dp">
 
-        <!-- 重置按钮：白背景 + 绿边框 + 绿文字 -->
-        <Button
-            android:id="@+id/btn_reset"
+        <!-- 重置按钮 -->
+        <TextView
+            android:id="@+id/tv_reset"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
             android:layout_marginEnd="10dp"
+            android:gravity="center"
             android:text="重置"
             android:textSize="15sp"
             android:textColor="#4CAF50"
+            android:clickable="true"
+            android:focusable="true"
             android:background="@drawable/bg_btn_reset"/>
 
-        <!-- 确定按钮：绿背景 + 白文字 -->
-        <Button
-            android:id="@+id/btn_confirm"
+        <!-- 确定按钮 -->
+        <TextView
+            android:id="@+id/tv_confirm"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
             android:layout_marginStart="10dp"
+            android:gravity="center"
             android:text="确定"
             android:textSize="15sp"
             android:textColor="#FFFFFF"
+            android:clickable="true"
+            android:focusable="true"
             android:background="@drawable/bg_btn_confirm"/>
     </LinearLayout>
 

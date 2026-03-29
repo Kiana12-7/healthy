@@ -1,19 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 顶部筛选按钮样式 -->
     <style name="GreenFilterButtonStyle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
-        <item name="android:paddingHorizontal">6dp</item>
-        <item name="android:paddingVertical">8dp</item>
-        <item name="android:textSize">14sp</item>
-        <!-- 未选中：绿色文字 -->
+        <!-- 兼容低版本：替换paddingHorizontal为左右padding -->
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <!-- 兼容低版本：替换paddingVertical为上下padding -->
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textColor">#4CAF50</item>
-        <item name="android:drawablePadding">6dp</item>
+        <item name="android:drawablePadding">2dp</item>
         <item name="android:drawableEnd">@android:drawable/arrow_down_float</item>
-        <!-- 选中/未选中背景 -->
-        <item name="android:background">@drawable/selector_top_filter_button</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
     </style>
 </resources>

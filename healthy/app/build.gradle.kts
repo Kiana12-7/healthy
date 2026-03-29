@@ -51,4 +51,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.material)                  // Material Components
     implementation(libs.androidx.constraintlayout) // ConstraintLayout
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 }
