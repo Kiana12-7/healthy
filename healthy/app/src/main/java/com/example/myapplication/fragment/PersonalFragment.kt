@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.fragment
 
 import com.example.myapplication.data.service.UserViewModel
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.myapplication.R
 
 class PersonalFragment : Fragment() {
     // 直接获取当前页面的 ViewModel
