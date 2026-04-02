@@ -1,0 +1,31 @@
+spring:
+  profiles:
+    active: cjn  # 新增这一行，激活 cjn 环境
+  config:
+    activate:
+      on-profile: cjn
+  application:
+    name: tute-lab-schedule
+  datasource:
+    url: "jdbc:mysql://${datasource.host:localhost}:${datasource.port:3319}/${datasource.dbname:healthy}?useUnicode=true&characterEncoding=utf-8"
+    username: "${datasource.username:root}"
+    password: "${datasource.password:root}"
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: "org.hibernate.dialect.MySQLDialect"
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  flyway:
+    enabled: true
+  thymeleaf:
+    cache: false
+    encoding: utf-8
+  # 上传文件大小限制
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: ${file.size:20MB}
+      max-request-size: ${file.size:20MB}

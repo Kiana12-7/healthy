@@ -31,6 +31,7 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- 横向导航栏RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewHorizontal"
         android:layout_width="match_parent"
@@ -41,14 +42,63 @@
         app:layout_constraintTop_toBottomOf="@+id/homeTabLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/my_fragment" />
+
+    <!-- 筛选栏：计划Tab显示，课程Tab隐藏 -->
+    <!-- 新增weightSum，确保4个按钮完美平分宽度，不挤压 -->
+    <LinearLayout
+        android:id="@+id/filter_bar_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="8dp"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewHorizontal">
+
+        <TextView
+            android:id="@+id/btn_filter_goal_home"
+            style="@style/GreenFilterButtonStyle"
+            android:text="@string/filter_goal" />
+
+        <TextView
+            android:id="@+id/btn_filter_part_home"
+            style="@style/GreenFilterButtonStyle"
+            android:text="@string/filter_part" />
+
+        <TextView
+            android:id="@+id/btn_filter_difficulty_home"
+            style="@style/GreenFilterButtonStyle"
+            android:text="@string/filter_difficulty" />
+
+        <TextView
+            android:id="@+id/btn_filter_crowd_home"
+            style="@style/GreenFilterButtonStyle"
+            android:text="@string/filter_crowd" />
+    </LinearLayout>
+
+    <!-- 分割线 -->
+    <View
+        android:id="@+id/divider_filter"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E8F5E9"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/filter_bar_home"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/homeViewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        tools:name="com.example.myapplication.fragment.PlanItemFragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerViewHorizontal" />
+        app:layout_constraintTop_toBottomOf="@id/divider_filter" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

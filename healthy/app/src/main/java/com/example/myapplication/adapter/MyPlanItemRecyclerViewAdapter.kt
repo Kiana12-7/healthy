@@ -5,12 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.myapplication.databinding.FragmentPlanItemBinding
-
-// 1. 我们自己随便建一个简单的类，替代被删掉的 PlaceholderItem
-data class SimplePlanItem(val id: String, val content: String)
+import com.example.myapplication.model.PlanItem
 
 class MyPlanItemRecyclerViewAdapter(
-    private val values: List<SimplePlanItem>
+    // 使用 var 允许数据更新，类型统一为正式的 PlanItem
+    private var values: List<PlanItem>
 ) : RecyclerView.Adapter<MyPlanItemRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,11 +24,15 @@ class MyPlanItemRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
     }
 
     override fun getItemCount(): Int = values.size
+
+    // 【关键】供筛选功能调用，刷新列表
+    fun updateData(newList: List<PlanItem>) {
+        this.values = newList
+        notifyDataSetChanged()
+    }
 
     inner class ViewHolder(binding: FragmentPlanItemBinding) :
         RecyclerView.ViewHolder(binding.root) {

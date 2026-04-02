@@ -8,10 +8,13 @@ import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.myapplication.ui.home.HomeFragment
-import com.example.myapplication.fragment.PersonalFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.myapplication.fragment.PersonalFragment
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
 
         // 【关键修改 1】：先通过 findViewById 给类成员变量赋值
         // 去掉了之前的 "val"，确保初始化的是类顶部的那个 bottomNav
@@ -58,24 +62,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // 替换 Fragment 的辅助方法
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()
     }
 
-    // 文字加粗/取消加粗的样式控制
     private fun updateMenuItemStyle(item: MenuItem, isSelected: Boolean) {
         val title = item.title.toString()
         val spannableString = SpannableString(title)
-
         if (isSelected) {
             spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, title.length, 0)
         } else {
             spannableString.setSpan(StyleSpan(Typeface.NORMAL), 0, title.length, 0)
         }
-
         item.title = spannableString
     }
 }
