@@ -8,13 +8,11 @@ import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
+import com.example.myapplication.fragment.PersonalFragment
 import com.example.myapplication.ui.home.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.example.myapplication.fragment.PersonalFragment
-import androidx.core.view.size
 
 
 class MainActivity : AppCompatActivity() {
