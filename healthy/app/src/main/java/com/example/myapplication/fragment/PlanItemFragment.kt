@@ -18,74 +18,69 @@ import com.example.myapplication.widget.FilterPopupWindow
 
 class PlanItemFragment : Fragment() {
 
-    // 所有计划数据（PlanItem类型，和适配器完全匹配）
+    private var columnCount = 1
     private val fullPlanList = PlanItem.getAllPlans()
-    // 所有筛选标签配置
     private val allFilterTags = PlanItem.getAllFilterTags()
-    // 存储当前选中的标签
     private val selectedTagMap = mutableMapOf<FilterType, MutableList<FilterTag>>()
 
     private lateinit var planAdapter: MyPlanItemRecyclerViewAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            columnCount = it.getInt(ARG_COLUMN_COUNT)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // 加载修复后的布局
         val rootView = inflater.inflate(R.layout.fragment_item_list, container, false)
 
-        // 初始化列表，传入PlanItem类型的列表，彻底解决类型报错
+        // 查找 RecyclerView
         val planRecyclerView = rootView.findViewById<RecyclerView>(R.id.rv_plan_list)
-        planRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        planAdapter = MyPlanItemRecyclerViewAdapter(fullPlanList)
-        planRecyclerView.adapter = planAdapter
+        val actualRecyclerView = planRecyclerView ?: (if (rootView is RecyclerView) rootView else null)
 
-        // 绑定筛选按钮点击事件
+        actualRecyclerView?.let { rv ->
+            rv.layoutManager = LinearLayoutManager(requireContext())
+            planAdapter = MyPlanItemRecyclerViewAdapter(fullPlanList)
+            rv.adapter = planAdapter
+        }
+
         initFilterButtons(rootView)
-
         return rootView
     }
 
-    // 初始化筛选按钮
     private fun initFilterButtons(rootView: View) {
-        // 目标筛选按钮
-        rootView.findViewById<TextView>(R.id.btn_filter_goal).setOnClickListener {
-            showFilterPopup(it, FilterType.GOAL)
-        }
-        // 部位筛选按钮
-        rootView.findViewById<TextView>(R.id.btn_filter_part).setOnClickListener {
-            showFilterPopup(it, FilterType.PART)
-        }
-        // 难度筛选按钮
-        rootView.findViewById<TextView>(R.id.btn_filter_difficulty).setOnClickListener {
-            showFilterPopup(it, FilterType.DIFFICULTY)
-        }
-        // 人群筛选按钮
-        rootView.findViewById<TextView>(R.id.btn_filter_crowd).setOnClickListener {
-            showFilterPopup(it, FilterType.CROWD)
-        }
+        rootView.findViewById<TextView>(R.id.btn_filter_goal)?.setOnClickListener { showFilterPopup(it, FilterType.GOAL) }
+        rootView.findViewById<TextView>(R.id.btn_filter_part)?.setOnClickListener { showFilterPopup(it, FilterType.PART) }
+        rootView.findViewById<TextView>(R.id.btn_filter_difficulty)?.setOnClickListener { showFilterPopup(it, FilterType.DIFFICULTY) }
+        rootView.findViewById<TextView>(R.id.btn_filter_crowd)?.setOnClickListener { showFilterPopup(it, FilterType.CROWD) }
     }
 
-    // 显示筛选弹窗
     private fun showFilterPopup(anchorView: View, filterType: FilterType) {
         val tagList = allFilterTags[filterType] ?: return
-
-        // 恢复之前的选中状态
         val savedSelected = selectedTagMap[filterType] ?: emptyList()
+
         tagList.forEach { tag ->
             tag.isSelected = savedSelected.any { it.id == tag.id }
         }
 
-        // 弹出筛选窗
         FilterPopupWindow(requireContext(), tagList) { selectedTags ->
-            // 保存选中的标签
             selectedTagMap[filterType] = selectedTags.toMutableList()
-            // 执行筛选并刷新列表
             val filteredList = FilterManager.filterPlans(fullPlanList, selectedTagMap)
-            planAdapter.refreshData(filteredList)
-            // 选中的按钮高亮显示
+            planAdapter.updateData(filteredList) // 调用刚才在适配器里写的 updateData
             anchorView.isSelected = selectedTags.isNotEmpty()
         }.show(anchorView)
+    }
+
+    companion object {
+        const val ARG_COLUMN_COUNT = "column-count"
+        @JvmStatic
+        fun newInstance(columnCount: Int) = PlanItemFragment().apply {
+            arguments = Bundle().apply { putInt(ARG_COLUMN_COUNT, columnCount) }
+        }
     }
 }
