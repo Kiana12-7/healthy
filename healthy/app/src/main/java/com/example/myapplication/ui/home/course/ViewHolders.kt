@@ -1,9 +1,8 @@
-package com.example.myapplication.ui.home.adapter
+package com.example.myapplication.ui.home.course
 
-import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.example.myapplication.data.models.HomeItem
+import com.example.myapplication.data.model.HomeItem
 import com.example.myapplication.databinding.ItemVideoBinding
 
 /**

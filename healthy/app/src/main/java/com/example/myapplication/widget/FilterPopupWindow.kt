@@ -11,7 +11,7 @@ import android.widget.PopupWindow
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
-import com.example.myapplication.model.FilterTag
+import com.example.myapplication.ui.home.plan.planItem.FilterTag
 
 class FilterPopupWindow(
     context: Context,

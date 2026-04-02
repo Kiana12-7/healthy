@@ -1,30 +1,28 @@
-package com.example.myapplication.fragment
+package com.example.myapplication.ui.home.course
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import com.example.myapplication.R
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.myapplication.R
-import com.example.myapplication.databinding.FragmentHomeContentBinding
-import com.example.myapplication.ui.home.HomeViewModel
-import com.example.myapplication.ui.home.adapter.HomeAdapter
+import com.example.myapplication.databinding.FragmentCourseBinding
 import com.example.myapplication.ui.video.VideoDetailActivity
 
-class HomeContentFragment : Fragment(R.layout.fragment_home_content) {
+class CourseFragment : Fragment(R.layout.fragment_course) {
 
-    private var _binding: FragmentHomeContentBinding? = null
+    private var _binding: FragmentCourseBinding? = null
     private val binding get() = _binding!!
 
-    private var homeAdapter: HomeAdapter? = null
+    private var courseAdapter: CourseAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentHomeContentBinding.bind(view)
+        _binding = FragmentCourseBinding.bind(view)
 
         // 获取共享的 ViewModel
-        val viewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
+        val viewModel = ViewModelProvider(requireActivity())[CourseModel::class.java]
 
         // 1. 预先配置 RecyclerView
         setupRecyclerView()
@@ -38,19 +36,20 @@ class HomeContentFragment : Fragment(R.layout.fragment_home_content) {
                 binding.rvVideoList.visibility = View.VISIBLE
 
                 // 【性能优化】：如果 adapter 为空则创建，不为空则只更新数据
-                if (homeAdapter == null) {
-                    homeAdapter = HomeAdapter(videos) { video ->
-                        val intent = Intent(requireContext(), VideoDetailActivity::class.java).apply {
-                            putExtra("VIDEO_URL", video.videoUrl)
-                            putExtra("VIDEO_TITLE", video.title)
-                        }
+                if (courseAdapter == null) {
+                    courseAdapter = CourseAdapter(videos) { video ->
+                        val intent =
+                            Intent(requireContext(), VideoDetailActivity::class.java).apply {
+                                putExtra("VIDEO_URL", video.videoUrl)
+                                putExtra("VIDEO_TITLE", video.title)
+                            }
                         startActivity(intent)
                     }
-                    binding.rvVideoList.adapter = homeAdapter
+                    binding.rvVideoList.adapter = courseAdapter
                 } else {
-                    // 如果你的 HomeAdapter 里写了更新方法，调用它；
+                    // 如果你的 courseAdapter 里写了更新方法，调用它；
                     // 如果没写，暂时先这样，或者重新赋值一次
-                    binding.rvVideoList.adapter = homeAdapter
+                    binding.rvVideoList.adapter = courseAdapter
                 }
 
                 binding.rvVideoList.requestLayout()
@@ -75,10 +74,5 @@ class HomeContentFragment : Fragment(R.layout.fragment_home_content) {
             isNestedScrollingEnabled = false
             setHasFixedSize(false)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

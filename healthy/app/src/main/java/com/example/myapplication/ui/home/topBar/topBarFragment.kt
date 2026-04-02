@@ -1,4 +1,4 @@
-package com.example.myapplication.fragment
+package com.example.myapplication.ui.home.topBar
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

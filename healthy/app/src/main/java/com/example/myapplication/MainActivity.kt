@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.myapplication.ui.home.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.example.myapplication.fragment.PersonalFragment
+import com.example.myapplication.ui.personal.PersonalFragment
 
 
 class MainActivity : AppCompatActivity() {
