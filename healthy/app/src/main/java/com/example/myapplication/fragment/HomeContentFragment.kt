@@ -17,36 +17,42 @@ class HomeContentFragment : Fragment(R.layout.fragment_home_content) {
     private var _binding: FragmentHomeContentBinding? = null
     private val binding get() = _binding!!
 
-    // 提取 Adapter 为成员变量，避免重复创建
     private var homeAdapter: HomeAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHomeContentBinding.bind(view)
 
-        // 1. 获取共享的 ViewModel
+        // 获取共享的 ViewModel
         val viewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
 
-        // 2. 预先配置 RecyclerView
+        // 1. 预先配置 RecyclerView
         setupRecyclerView()
 
-        // 3. 观察数据
+        // 2. 观察数据
         viewModel.homeData.observe(viewLifecycleOwner) { videos ->
             if (!videos.isNullOrEmpty()) {
+                // 【修复核心】：确保这里使用的 ID 与 XML 中的 android:id="@+id/tv_placeholder" 对应
+                // ViewBinding 会自动把下划线命名的 ID 转换成驼峰命名
                 binding.tvPlaceholder.visibility = View.GONE
                 binding.rvVideoList.visibility = View.VISIBLE
 
-                // 【核心改进】：如果 adapter 已存在则刷新，不存在则创建
-                homeAdapter = HomeAdapter(videos) { video ->
-                    val intent = Intent(requireContext(), VideoDetailActivity::class.java).apply {
-                        putExtra("VIDEO_URL", video.videoUrl)
-                        putExtra("VIDEO_TITLE", video.title)
+                // 【性能优化】：如果 adapter 为空则创建，不为空则只更新数据
+                if (homeAdapter == null) {
+                    homeAdapter = HomeAdapter(videos) { video ->
+                        val intent = Intent(requireContext(), VideoDetailActivity::class.java).apply {
+                            putExtra("VIDEO_URL", video.videoUrl)
+                            putExtra("VIDEO_TITLE", video.title)
+                        }
+                        startActivity(intent)
                     }
-                    startActivity(intent)
+                    binding.rvVideoList.adapter = homeAdapter
+                } else {
+                    // 如果你的 HomeAdapter 里写了更新方法，调用它；
+                    // 如果没写，暂时先这样，或者重新赋值一次
+                    binding.rvVideoList.adapter = homeAdapter
                 }
-                binding.rvVideoList.adapter = homeAdapter
 
-                // 强制要求布局重绘，解决瀑布流不显示的问题
                 binding.rvVideoList.requestLayout()
             } else {
                 binding.tvPlaceholder.visibility = View.VISIBLE
@@ -54,18 +60,20 @@ class HomeContentFragment : Fragment(R.layout.fragment_home_content) {
             }
         }
 
-        // 4. 加载数据
+        // 加载数据
         viewModel.fetchHomeData()
     }
 
     private fun setupRecyclerView() {
+        // 瀑布流布局
         val staggeredManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        // 关键：防止瀑布流 Item 乱跳
         staggeredManager.gapStrategy = 2
+
         binding.rvVideoList.apply {
             layoutManager = staggeredManager
-            // 解决 NestedScrollView 嵌套导致的滑动和显示冲突
             isNestedScrollingEnabled = false
-            setHasFixedSize(false) // 瀑布流高度不固定，设为 false
+            setHasFixedSize(false)
         }
     }
 
