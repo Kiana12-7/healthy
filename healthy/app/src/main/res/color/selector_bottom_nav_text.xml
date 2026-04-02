@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 选中状态：深黑色，和你之前的加粗效果匹配 -->
+    <item android:color="#222222" android:state_checked="true" />
+    <!-- 未选中状态：浅灰色，视觉区分明显 -->
+    <item android:color="#888888" android:state_checked="false" />
+</selector>
