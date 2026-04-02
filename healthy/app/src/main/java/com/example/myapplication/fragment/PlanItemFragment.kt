@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.myapplication.adapter.MyPlanItemRecyclerViewAdapter
 import com.example.myapplication.R
-import com.example.myapplication.placeholder.PlaceholderContent
+import com.example.myapplication.adapter.SimplePlanItem
 
 /**
  * A fragment representing a list of Items.
@@ -36,7 +36,9 @@ class PlanItemFragment : Fragment() {
         if (view is RecyclerView) {
             with(view) {
                 layoutManager = LinearLayoutManager(context)
-                adapter = MyPlanItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
+                // 我们只塞1条测试计划进去，这样它就不会把视频列表往下挤了！
+                val testData = listOf(SimplePlanItem("计划", "今日核心训练待完成"))
+                adapter = MyPlanItemRecyclerViewAdapter(testData)
             }
         }
         return view

@@ -36,6 +36,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
 }
 
 dependencies {
@@ -51,4 +52,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.material)                  // Material Components
     implementation(libs.androidx.constraintlayout) // ConstraintLayout
+    implementation("io.coil-kt:coil:2.7.0")
+    // Media3 ExoPlayer 核心库
+    implementation("androidx.media3:media3-exoplayer:1.10.0")
+    // Media3 UI 组件（提供播放界面控制）
+    implementation("androidx.media3:media3-ui:1.10.0")
 }
