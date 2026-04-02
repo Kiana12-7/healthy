@@ -1,4 +1,4 @@
-package com.example.myapplication.model
+package com.example.myapplication.ui.home.plan.planItem
 
 // 筛选类型枚举
 enum class FilterType {

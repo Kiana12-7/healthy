@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.ui.home.plan.planItem
 
 import android.annotation.SuppressLint
 import android.graphics.Typeface
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.R
 
 class HorizontalAdapter(
     private val dataList: List<String>,

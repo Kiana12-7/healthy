@@ -8,7 +8,7 @@
     tools:context=".ui.home.HomeFragment"
     tools:ignore="MissingDefaultResource"> <androidx.fragment.app.FragmentContainerView
     android:id="@+id/my_fragment"
-    android:name="com.example.myapplication.fragment.topBarFragment"
+    android:name="com.example.myapplication.ui.home.topBar.topBarFragment"
     android:layout_width="match_parent"
     android:layout_height="40dp"
     android:layout_marginHorizontal="16dp"
@@ -42,7 +42,6 @@
         app:layout_constraintTop_toBottomOf="@+id/homeTabLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-        app:layout_constraintTop_toBottomOf="@id/my_fragment" />
 
     <!-- 筛选栏：计划Tab显示，课程Tab隐藏 -->
     <!-- 新增weightSum，确保4个按钮完美平分宽度，不挤压 -->

@@ -1,4 +1,4 @@
-package com.example.myapplication.data.models
+package com.example.myapplication.data.model
 
 // HomeItem.kt
 sealed class HomeItem {

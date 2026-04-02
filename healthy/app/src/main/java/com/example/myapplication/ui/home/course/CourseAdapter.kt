@@ -1,16 +1,16 @@
-package com.example.myapplication.ui.home.adapter
+package com.example.myapplication.ui.home.course
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.data.models.HomeItem
+import com.example.myapplication.data.model.HomeItem
 import com.example.myapplication.databinding.ItemVideoBinding
 
 /**
  * 视频列表适配器
  * 确定了使用 HomeItem.Video 数据模型。
  */
-class HomeAdapter(
+class CourseAdapter(
     private val list: List<HomeItem.Video>,
     private val onVideoClick: (HomeItem.Video) -> Unit
 ) : RecyclerView.Adapter<VideoViewHolder>() {

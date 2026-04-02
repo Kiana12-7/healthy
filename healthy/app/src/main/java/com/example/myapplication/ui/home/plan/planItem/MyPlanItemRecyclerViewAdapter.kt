@@ -1,11 +1,11 @@
-package com.example.myapplication.adapter
+package com.example.myapplication.ui.home.plan.planItem
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.FragmentPlanItemBinding
-import com.example.myapplication.model.PlanItem
+import com.example.myapplication.ui.home.plan.planItem.PlanItem
 
 class MyPlanItemRecyclerViewAdapter(
     // 使用 var 允许数据更新，类型统一为正式的 PlanItem
