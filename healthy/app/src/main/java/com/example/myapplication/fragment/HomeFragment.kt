@@ -1,3 +1,4 @@
+
 package com.example.myapplication.fragment
 
 import android.os.Bundle
@@ -39,7 +40,6 @@ class HomeFragment : Fragment() {
 
         val adapter = HorizontalAdapter(tabNames)
         recyclerView.adapter = adapter
-
         // 默认显示第0个
         switchFragment(0)
         adapter.setSelectPosition(0)

@@ -1,6 +1,5 @@
 package org.example.api.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import org.example.api.entity.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

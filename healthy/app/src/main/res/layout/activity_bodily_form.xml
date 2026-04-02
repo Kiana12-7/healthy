@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- 顶部 Toolbar（只保留返回箭头，不设置标题） -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:navigationIcon="?attr/homeAsUpIndicator" />
+
+    <!-- 页面内容区域 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- 基础信息（小字，灰色） -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="基础信息"
+            android:textSize="14sp"
+            android:textColor="#999999"
+            android:layout_marginBottom="8dp" />
+
+        <!-- 选择你的体型（大字，加粗） -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择你的体型"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_marginBottom="24dp" />
+
+        <!-- 中间图片卡片 -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            android:layout_marginBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/ivBodyShape"
+                    android:layout_width="400dp"
+                    android:layout_height="400dp"
+                    android:src="@drawable/stright_form"
+                    android:scaleType="fitCenter" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- 选项按钮区域 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="4"
+            android:layout_marginBottom="24dp">
+
+            <Button
+                android:id="@+id/btnStraight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="直筒型"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#E0E0E0"
+                android:textColor="#333333" />
+
+            <Button
+                android:id="@+id/btnPear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="梨型"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#E0E0E0"
+                android:textColor="#333333" />
+
+            <Button
+                android:id="@+id/btnFunnel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="漏斗型"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#E0E0E0"
+                android:textColor="#333333" />
+
+            <Button
+                android:id="@+id/btnApple"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="苹果型"
+                android:backgroundTint="#E0E0E0"
+                android:textColor="#333333" />
+
+        </LinearLayout>
+
+        <!-- 下一步按钮 -->
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="下一步"
+            android:textSize="16sp"
+            android:backgroundTint="?attr/colorPrimary" />
+
+    </LinearLayout>
+
+</LinearLayout>
