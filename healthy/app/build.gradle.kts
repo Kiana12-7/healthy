@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-    // --- 基础核心库 ---
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -48,32 +47,19 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.recyclerview)
-
-    // --- 网络请求 (Retrofit + OkHttp) ---
-    // 建议使用 2.11.0，这是目前最稳的版本
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-
-    // --- 图片加载 (Coil) ---
-    // 2.6.0 是目前兼容性极佳的版本
     implementation("io.coil-kt:coil:2.6.0")
-
-    // --- 视频播放 (Media3 / ExoPlayer) ---
-    // 1.3.1 是 Media3 目前公认的稳定版，1.10.0 并不存在于官方仓库
     implementation("androidx.media3:media3-exoplayer:1.3.1")
     implementation("androidx.media3:media3-ui:1.3.1")
     implementation("androidx.media3:media3-common:1.3.1")
-
-    // --- 生命周期与协程 ---
-    // 2.7.0 适配了较新的 Android 系统组件
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
-
-    // --- 测试相关 ---
+    implementation(libs.androidx.annotation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
