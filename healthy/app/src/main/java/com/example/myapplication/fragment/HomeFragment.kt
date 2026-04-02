@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.HorizontalAdapter
+import com.example.myapplication.adapter.HorizontalAdapter
 import com.example.myapplication.R
+import com.example.myapplication.adapter.PlanAdapter
+import com.example.myapplication.model.PlanItem
 
 class HomeFragment : Fragment() {
 
@@ -50,7 +52,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun switchFragment(position: Int) {
-        // 从缓存取，如果没有就new一个
+
         val fragment = fragmentCache.getOrPut(position) {
             pageConfig[position].second.newInstance()
         }
@@ -58,5 +60,21 @@ class HomeFragment : Fragment() {
         childFragmentManager.beginTransaction()
             .replace(R.id.HomeContentFragment, fragment)
             .commitAllowingStateLoss()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+//        val recyclerViewHorizontal = view.findViewById<RecyclerView>(R.id.recyclerViewHorizontal)
+//
+//        // 安全判断：如果找不到控件，直接跳过，不会崩溃
+//        if (recyclerViewHorizontal != null) {
+//            recyclerViewHorizontal.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+//
+//            val list = listOf("全部", "减脂", "增肌", "有氧", "舒缓")
+//            val adapter = HorizontalAdapter(list)
+//            recyclerViewHorizontal.adapter = adapter
+//        }
     }
 }
