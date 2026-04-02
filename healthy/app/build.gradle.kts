@@ -72,6 +72,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+    implementation(libs.androidx.annotation)
 
     // --- 测试相关 ---
     testImplementation(libs.junit)
