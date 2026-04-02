@@ -6,39 +6,63 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".fragment.HomeContentFragment">
+    android:background="#F8F8F8">
 
-    <!-- 唯一内部根布局，所有控件都放在这里，解决多根标签报错 -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- 顶部banner图片：ID唯一，无重复，解决重复ID报错 -->
         <ImageView
             android:id="@+id/iv_banner_plan"
-            android:layout_width="388dp"
+            android:layout_width="0dp"
             android:layout_height="195dp"
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="16dp"
-            android:clickable="true"
-            android:focusable="true"
             android:scaleType="centerCrop"
             android:src="@drawable/ai_plan"
-            android:contentDescription="@string/desc_banner_plan"
+            android:contentDescription="Banner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- 下方Fragment容器：标签正确闭合，属性合法，解决无法识别类、标签不闭合报错 -->
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fcv_plan_content"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/iv_banner_plan"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/plan_item_container"
+            android:name="com.example.myapplication.fragment.PlanItemFragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/iv_banner_plan"
+            tools:layout="@layout/fragment_plan_item" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvVideoList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:paddingHorizontal="4dp"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            app:spanCount="2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/plan_item_container"
+            tools:listitem="@layout/item_video" />
+
+        <TextView
+            android:id="@+id/tv_placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:text="到底啦，去看看其他课程吧~"
+            android:textColor="#999999"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rvVideoList" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.core.widget.NestedScrollView>
