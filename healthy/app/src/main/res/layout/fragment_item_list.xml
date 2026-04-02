@@ -1,10 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutManager="LinearLayoutManager"
-    tools:context=".fragment.PlanItemFragment"
-    tools:listitem="@layout/fragment_plan_item" />
+    android:background="#FFFFFF">
+
+    <!-- 筛选栏：固定在PlanItemFragment的最顶部 -->
+    <LinearLayout
+        android:id="@+id/filter_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:paddingVertical="12dp"
+        android:paddingHorizontal="8dp"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/btn_filter_goal"
+            style="@style/GreenFilterButtonStyle"
+            android:text="@string/filter_goal" />
+
+        <TextView
+            android:id="@+id/btn_filter_part"
+            style="@style/GreenFilterButtonStyle"
+            android:text="@string/filter_part" />
+
+        <TextView
+            android:id="@+id/btn_filter_difficulty"
+            style="@style/GreenFilterButtonStyle"
+            android:text="@string/filter_difficulty" />
+
+        <TextView
+            android:id="@+id/btn_filter_crowd"
+            style="@style/GreenFilterButtonStyle"
+            android:text="@string/filter_crowd" />
+    </LinearLayout>
+
+    <!-- 分割线 -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E8F5E9"
+        app:layout_constraintTop_toBottomOf="@id/filter_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- 计划列表：占满筛选栏下方的所有空间，可正常滚动 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_plan_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:overScrollMode="ifContentScrolls"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

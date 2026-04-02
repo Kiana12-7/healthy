@@ -51,6 +51,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.material)                  // Material Components
     implementation(libs.androidx.constraintlayout) // ConstraintLayout
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     // Retrofit 核心
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     // JSON 解析（Gson）

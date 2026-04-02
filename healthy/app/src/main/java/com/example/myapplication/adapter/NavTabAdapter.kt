@@ -1,3 +1,5 @@
+package com.example.myapplication.adapter
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -6,7 +8,6 @@ import com.example.myapplication.R
 
 class NavTabAdapter : RecyclerView.Adapter<NavTabAdapter.TabViewHolder>() {
 
-    // 这里就是你要的4个名字
     private val tabNameList = listOf("推荐", "计划", "课程", "社区")
 
     inner class TabViewHolder(itemView: TextView) : RecyclerView.ViewHolder(itemView) {
