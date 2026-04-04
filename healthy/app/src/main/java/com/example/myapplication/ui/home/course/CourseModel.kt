@@ -1,11 +1,11 @@
-package com.example.myapplication.ui.home
+package com.example.myapplication.ui.home.course
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.myapplication.data.models.HomeItem
+import com.example.myapplication.data.model.HomeItem
 
-class HomeViewModel : ViewModel() {
+class CourseModel : ViewModel() {
 
     private val _homeData = MutableLiveData<List<HomeItem.Video>>()
     val homeData: LiveData<List<HomeItem.Video>> = _homeData

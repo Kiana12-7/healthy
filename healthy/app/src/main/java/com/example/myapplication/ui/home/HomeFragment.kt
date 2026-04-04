@@ -7,11 +7,11 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentHomeBinding
-import com.example.myapplication.fragment.HomeContentFragment
+import com.example.myapplication.ui.home.course.CourseFragment
+import com.example.myapplication.ui.home.plan.PlanContentFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
-
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -31,10 +31,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     0 -> PlaceholderFragment.newInstance("推荐页面建设中...")
 
                     // 【修复】：索引 1 对应“课程”，显示你要求的那个 Keep 风格布局
-                    1 -> HomeContentFragment()
+                    1 -> CourseFragment()
 
                     // 【修复】：索引 2 对应“计划”
-                    2 -> PlanFragment()
+                    2 -> PlanContentFragment()
 
                     else -> PlaceholderFragment.newInstance(tabTitles[position])
                 }
@@ -61,7 +61,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 /**
  * 计划页面：目前复用 fragment_home_content 布局
  */
-class PlanFragment : Fragment(R.layout.fragment_home_content) {
+class PlanFragment : Fragment(R.layout.fragment_plan_content) {
     // 后续可以在这里通过 binding 初始化计划页面的特有逻辑
 }
 
@@ -70,7 +70,7 @@ class PlanFragment : Fragment(R.layout.fragment_home_content) {
  * 注意：需要在 fragment_home_content.xml 中确保有一个 ID 为 tv_placeholder 的 TextView，
  * 或者你随便找个存在的 TextView ID 替换掉。
  */
-class PlaceholderFragment : Fragment(R.layout.fragment_home_content) {
+class PlaceholderFragment : Fragment(R.layout.fragment_plan_content) {
     companion object {
         fun newInstance(title: String): PlaceholderFragment {
             val fragment = PlaceholderFragment()

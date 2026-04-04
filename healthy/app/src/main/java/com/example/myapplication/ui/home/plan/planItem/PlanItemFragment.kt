@@ -1,4 +1,4 @@
-package com.example.myapplication.fragment
+package com.example.myapplication.ui.home.plan.planItem
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,18 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
-import com.example.myapplication.adapter.MyPlanItemRecyclerViewAdapter
-import com.example.myapplication.manager.FilterManager
-import com.example.myapplication.model.FilterTag
-import com.example.myapplication.model.FilterType
-import com.example.myapplication.model.PlanItem
 import com.example.myapplication.widget.FilterPopupWindow
 
 class PlanItemFragment : Fragment() {
 
     private var columnCount = 1
-    private val fullPlanList = PlanItem.getAllPlans()
-    private val allFilterTags = PlanItem.getAllFilterTags()
+    private val fullPlanList = PlanItem.Companion.getAllPlans()
+    private val allFilterTags = PlanItem.Companion.getAllFilterTags()
     private val selectedTagMap = mutableMapOf<FilterType, MutableList<FilterTag>>()
 
     private lateinit var planAdapter: MyPlanItemRecyclerViewAdapter

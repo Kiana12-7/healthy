@@ -1,8 +1,4 @@
-package com.example.myapplication.manager
-
-import com.example.myapplication.model.FilterTag
-import com.example.myapplication.model.FilterType
-import com.example.myapplication.model.PlanItem
+package com.example.myapplication.ui.home.plan.planItem
 
 object FilterManager {
 

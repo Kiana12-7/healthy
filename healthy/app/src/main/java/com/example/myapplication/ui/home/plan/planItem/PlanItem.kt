@@ -1,4 +1,4 @@
-package com.example.myapplication.model
+package com.example.myapplication.ui.home.plan.planItem
 
 import com.example.myapplication.R
 

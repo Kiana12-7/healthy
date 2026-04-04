@@ -1,6 +1,5 @@
-package com.example.myapplication.fragment
+package com.example.myapplication.ui.personal
 
-import com.example.myapplication.data.service.UserViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.R
+import com.example.myapplication.data.service.UserViewModel
 
 class PersonalFragment : Fragment() {
     // 直接获取当前页面的 ViewModel
