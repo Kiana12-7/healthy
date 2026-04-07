@@ -1,9 +1,9 @@
 package org.example.api.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import org.example.api.dto.LoggedInUserDTO;
 import org.example.api.entity.User;
 import org.example.api.service.UserService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -29,12 +29,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(
+    public LoggedInUserDTO login(
             @RequestParam String username,
             @RequestParam String password
     ) {
-        User user = userService.login(username, password);
-        return ResponseEntity.ok(user);
+        return userService.login(username, password);
     }
 
     private interface GetCurrentLoginUserJsonView {
