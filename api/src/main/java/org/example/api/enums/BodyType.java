@@ -4,9 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum BodyType {
-    ECTOMORPH((byte) 0, "外胚型（瘦长）"),
-    MESOMORPH((byte) 1, "中胚型（肌肉型）"),
-    ENDOMORPH((byte) 2, "内胚型（易胖）");
+    RECTANGLE((byte) 0, "直筒型"),
+    PEAR((byte) 1, "梨型"),
+    HOURGLASS((byte) 2, "沙漏型"),
+    APPLE((byte) 3, "苹果型");
 
     private final byte value;
     private final String description;
