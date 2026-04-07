@@ -1,4 +1,4 @@
-package com.example.myapplication.data.serviceImpl
+package com.example.myapplication.data.remote
 
 import com.example.myapplication.data.model.User
 import retrofit2.http.GET

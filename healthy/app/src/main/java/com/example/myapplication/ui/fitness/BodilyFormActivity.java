@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.fitnessForm;
+package com.example.myapplication.ui.fitness;
 
 import android.os.Bundle;
 import android.view.MenuItem;

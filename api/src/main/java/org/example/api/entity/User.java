@@ -12,13 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * 用户实体
- * */
+ */
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class User extends club.yunzhi.minicrm.entity.BaseEntity<Long> {
+public class User extends BaseEntity<Long> {
     private String username;
 
     private String name;
@@ -28,11 +27,11 @@ public class User extends club.yunzhi.minicrm.entity.BaseEntity<Long> {
     @JsonView(PasswordJsonView.class)
     private String password;
 
-    // 与 FitnessForm 的一对多关系（可选）
+    // 与 FitnessForm 的一对多关系
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<FitnessForm> fitnessForms = new ArrayList<>();
 
-    // 与 WorkoutPlan 的一对多关系（可选）
+    // 与 WorkoutPlan 的一对多关系
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<WorkoutPlan> workoutPlans = new ArrayList<>();
 
