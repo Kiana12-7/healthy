@@ -38,15 +38,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         // 设置导航项选中监听
-        bottomNav.setOnItemSelectedListener { item ->
-            // 先将所有导航项恢复为普通文字样式
-            for (i in 0 until bottomNav.menu.size) {
-                updateMenuItemStyle(bottomNav.menu[i], false)
-            }
-            // 当前选中项加粗
-            updateMenuItemStyle(item, true)
-            // 根据选中的导航项 ID 切换对应 Fragment
-            when (item.itemId) {
+        bottomNav.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
                 R.id.navigation_home -> {
                     replaceFragment(HomeFragment())
                     true
@@ -74,7 +67,7 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment) // 替换容器内的 Fragment
-            .commit() // 提交事务
+            .commitAllowingStateLoss() // 提交事务
     }
 
     /**
