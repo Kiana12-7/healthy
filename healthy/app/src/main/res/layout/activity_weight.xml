@@ -67,7 +67,7 @@
                 android:layout_height="300dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/normal"
-                android:layout_marginBottom="32dp" />
+            android:layout_marginBottom="32dp" />
 
             <!-- 跳转到伤病选择的按钮 -->
             <Button
