@@ -24,6 +24,8 @@ public class UserController {
     }
 
 
+
+
     private interface GetCurrentLoginUserJsonView {
     }
 }

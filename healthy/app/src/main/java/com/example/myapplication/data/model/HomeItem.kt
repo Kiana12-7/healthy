@@ -1,6 +1,5 @@
 package com.example.myapplication.data.model
 
-// HomeItem.kt
 sealed class HomeItem {
     data class Video(
         val id: Int,

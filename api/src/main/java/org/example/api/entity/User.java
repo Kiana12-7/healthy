@@ -35,10 +35,6 @@ public class User extends BaseEntity<Long> {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<WorkoutPlan> workoutPlans = new ArrayList<>();
 
-    public void setUsername(String username) {
-        this.setPhone(username);
-    }
-
     public interface PasswordJsonView {
     }
 }

@@ -10,14 +10,21 @@ import com.example.myapplication.data.model.Result
 import com.example.myapplication.R
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
-
+    // 内部可修改的表单状态（私有）
     private val _loginForm = MutableLiveData<LoginFormState>()
+    // 页面外部只能观察，不能修改
     val loginFormState: LiveData<LoginFormState> = _loginForm
-
+    // 内部可修改的登录结果
     private val _loginResult = MutableLiveData<LoginResult>()
+    // 页面外部观察登录结果
     val loginResult: LiveData<LoginResult> = _loginResult
 
-    fun login(username: String, password: String) {
+    /**
+     * 执行登录
+     * @param username 用户名
+     * @param password 密码
+     */
+    suspend fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
         val result = loginRepository.login(username, password)
 
@@ -29,6 +36,10 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         }
     }
 
+    /**
+     * 当用户名/密码输入内容变化时触发
+     * 用于实时校验输入是否合法
+     */
     fun loginDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {
             _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
@@ -39,7 +50,10 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         }
     }
 
-    // A placeholder username validation check
+    /**
+     * 用户名合法性校验
+     * 规则：如果包含 @ 则按邮箱校验，否则非空即有效
+     */
     private fun isUserNameValid(username: String): Boolean {
         return if (username.contains('@')) {
             Patterns.EMAIL_ADDRESS.matcher(username).matches()
@@ -48,7 +62,10 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         }
     }
 
-    // A placeholder password validation check
+    /**
+     * 密码合法性校验
+     * 规则：长度 >5 位
+     */
     private fun isPasswordValid(password: String): Boolean {
         return password.length > 5
     }
