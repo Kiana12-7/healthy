@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import com.example.myapplication.ui.home.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.example.myapplication.ui.personal.PersonalFragment
-
+import com.example.myapplication.ui.today.TodayFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,6 +42,11 @@ class MainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.navigation_home -> {
                     replaceFragment(HomeFragment())
+                    true
+                }
+
+                R.id.navigation_today -> {
+                    replaceFragment(TodayFragment())
                     true
                 }
 
