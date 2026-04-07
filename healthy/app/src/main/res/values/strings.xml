@@ -122,4 +122,5 @@
     <string name="desc_ai_fab">AI助手</string>
     <string name="desc_search_icon">搜索图标</string>
     <string name="hint_ask_ai">询问 AI 教练</string>
+    <string name="navigation_today">今日</string>
 </resources>
