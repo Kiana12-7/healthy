@@ -9,6 +9,7 @@ import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentHomeBinding
 import com.example.myapplication.ui.home.course.CourseFragment
 import com.example.myapplication.ui.home.plan.PlanContentFragment
+import com.example.myapplication.ui.home.plan.planItem.PlanItemFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -34,7 +35,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     1 -> CourseFragment()
 
                     // 【修复】：索引 2 对应“计划”
-                    2 -> PlanContentFragment()
+                    2 -> PlanItemFragment()
 
                     else -> PlaceholderFragment.newInstance(tabTitles[position])
                 }

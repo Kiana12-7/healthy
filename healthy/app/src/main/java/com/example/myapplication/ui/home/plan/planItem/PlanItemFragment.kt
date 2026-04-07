@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,8 +15,8 @@ import com.example.myapplication.widget.FilterPopupWindow
 class PlanItemFragment : Fragment() {
 
     private var columnCount = 1
-    private val fullPlanList = PlanItem.Companion.getAllPlans()
-    private val allFilterTags = PlanItem.Companion.getAllFilterTags()
+    private val fullPlanList = PlanItem.getAllPlans()
+    private val allFilterTags = PlanItem.getAllFilterTags()
     private val selectedTagMap = mutableMapOf<FilterType, MutableList<FilterTag>>()
 
     private lateinit var planAdapter: MyPlanItemRecyclerViewAdapter
@@ -32,19 +33,30 @@ class PlanItemFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // 加载正确的布局文件 fragment_item_list.xml
         val rootView = inflater.inflate(R.layout.fragment_item_list, container, false)
 
-        // 查找 RecyclerView
-        val planRecyclerView = rootView.findViewById<RecyclerView>(R.id.rv_plan_list)
-        val actualRecyclerView = planRecyclerView ?: (if (rootView is RecyclerView) rootView else null)
+        // 直接找到RecyclerView，不用复杂的null判断
+        val rvPlanList = rootView.findViewById<RecyclerView>(R.id.rv_plan_list)
 
-        actualRecyclerView?.let { rv ->
-            rv.layoutManager = LinearLayoutManager(requireContext())
-            planAdapter = MyPlanItemRecyclerViewAdapter(fullPlanList)
-            rv.adapter = planAdapter
+        // 设置布局管理器
+        rvPlanList.layoutManager = LinearLayoutManager(requireContext())
+
+        // 初始化适配器，加载38个计划数据
+        planAdapter = MyPlanItemRecyclerViewAdapter(fullPlanList)
+        rvPlanList.adapter = planAdapter
+
+        // 设置点击事件（测试用）
+        planAdapter.setOnItemClickListener { plan ->
+            Toast.makeText(requireContext(), "点击了：${plan.name}", Toast.LENGTH_SHORT).show()
         }
 
+        // 初始化筛选按钮（保留原有功能）
         initFilterButtons(rootView)
+
+        // 打印日志，确认数据加载成功
+        android.util.Log.d("PlanItemFragment", "计划数量：${fullPlanList.size}")
+
         return rootView
     }
 
@@ -66,7 +78,7 @@ class PlanItemFragment : Fragment() {
         FilterPopupWindow(requireContext(), tagList) { selectedTags ->
             selectedTagMap[filterType] = selectedTags.toMutableList()
             val filteredList = FilterManager.filterPlans(fullPlanList, selectedTagMap)
-            planAdapter.updateData(filteredList) // 调用刚才在适配器里写的 updateData
+            planAdapter.updateData(filteredList)
             anchorView.isSelected = selectedTags.isNotEmpty()
         }.show(anchorView)
     }
