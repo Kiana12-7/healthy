@@ -3,7 +3,6 @@ package org.example.api.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -11,13 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * 用户信息表单
- * */
+ */
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class FitnessForm extends club.yunzhi.minicrm.entity.BaseEntity<Long> {
+public class FitnessForm extends BaseEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

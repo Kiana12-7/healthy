@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
-import com.example.myapplication.data.LoginRepository
-import com.example.myapplication.data.Result
+import com.example.myapplication.data.repository.LoginRepository
+import com.example.myapplication.data.model.Result
 
 import com.example.myapplication.R
 

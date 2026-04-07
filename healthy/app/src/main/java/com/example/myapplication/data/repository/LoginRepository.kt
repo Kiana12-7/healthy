@@ -1,5 +1,7 @@
-package com.example.myapplication.data
+package com.example.myapplication.data.repository
 
+import com.example.myapplication.data.remote.LoginDataSource
+import com.example.myapplication.data.model.Result
 import com.example.myapplication.data.model.LoggedInUser
 
 /**

@@ -1,11 +1,11 @@
-package com.example.myapplication.data.service
+package com.example.myapplication.ui.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.model.User
-import com.example.myapplication.data.serviceImpl.RetrofitClient
+import com.example.myapplication.data.remote.RetrofitClient
 import kotlinx.coroutines.launch
 
 /**
