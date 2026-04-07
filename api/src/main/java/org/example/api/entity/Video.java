@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class Video extends club.yunzhi.minicrm.entity.BaseEntity<Long> {
+public class Video extends BaseEntity<Long> {
     private String title;
     private String url;
     private Integer duration;  // 秒

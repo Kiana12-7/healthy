@@ -1,13 +1,11 @@
-package com.example.myapplication.data.serviceImpl
+package com.example.myapplication.data.remote
 
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.lazy
-import okhttp3.logging.HttpLoggingInterceptor
 
 object RetrofitClient {
-    // 替换为你的后台接口地址
     private const val BASE_URL = "http://10.0.2.2:8080/user/"
 
     // OkHttp 客户端（带日志）

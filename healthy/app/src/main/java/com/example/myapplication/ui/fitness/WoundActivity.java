@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.fitnessForm;
+package com.example.myapplication.ui.fitness;
 
 import android.content.Intent;
 import android.os.Bundle;

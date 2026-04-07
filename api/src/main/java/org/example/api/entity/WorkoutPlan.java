@@ -16,7 +16,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class WorkoutPlan extends club.yunzhi.minicrm.entity.BaseEntity<Long> {
+public class WorkoutPlan extends BaseEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
