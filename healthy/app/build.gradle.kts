@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.recyclerview)
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
 
     // --- 网络请求 (Retrofit + OkHttp) ---
     // 建议使用 2.11.0，这是目前最稳的版本

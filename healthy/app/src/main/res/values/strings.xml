@@ -3,6 +3,7 @@
     <!-- 底部导航菜单文字 -->
     <string name="navigation_home">首页</string>
     <string name="navigation_personal">我的</string>
+    <string name="navigation_today">今日</string>
     <string name="filter_goal">目标</string>
     <string name="filter_part">部位</string>
     <string name="filter_difficulty">难度</string>
@@ -103,4 +104,13 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="desc_ai_coach">AI教练\n</string>
+    <string name="title_my_schedule">我的日程</string>
+    <string name="title_my_course">我的课程</string>
+    <string name="desc_empty_img">无日程插图</string>
+    <string name="schedule_empty_hint">合理的计划有益于建立运动习惯</string>
+    <string name="btn_customize_plan">定制计划</string>
+    <string name="desc_ai_fab">AI助手</string>
+    <string name="desc_search_icon">搜索图标</string>
+    <string name="hint_ask_ai">询问 AI 教练</string>
 </resources>
