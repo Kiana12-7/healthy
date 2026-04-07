@@ -3,7 +3,6 @@
     <!-- 底部导航菜单文字 -->
     <string name="navigation_home">首页</string>
     <string name="navigation_personal">我的</string>
-    <string name="navigation_today">今日</string>
     <string name="filter_goal">目标</string>
     <string name="filter_part">部位</string>
     <string name="filter_difficulty">难度</string>
@@ -104,6 +103,16 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_username">用户名</string>
+    <string name="prompt_email">邮箱</string>
+    <string name="prompt_password">密码</string>
+    <string name="action_sign_in">登录或注册</string>
+    <string name="action_sign_in_short">登录</string>
+    <string name="welcome">"欢迎您 !"</string>
+    <string name="invalid_username">非法用户名</string>
+    <string name="invalid_password">密码必须大于5个字符</string>
+    <string name="login_failed">"登录失败"</string>
     <string name="desc_ai_coach">AI教练\n</string>
     <string name="title_my_schedule">我的日程</string>
     <string name="title_my_course">我的课程</string>

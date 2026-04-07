@@ -1,6 +1,5 @@
 package com.example.myapplication.data.model
 
-// HomeItem.kt
 sealed class HomeItem {
     // 定义一个抽象 id，方便 Adapter 处理
     abstract val id: Int
