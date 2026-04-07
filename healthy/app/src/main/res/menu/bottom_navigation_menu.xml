@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/navigation_home"
-        android:title="首页" />
+        android:title="@string/navigation_home" />
+    <item
+        android:id="@+id/navigation_today"
+        android:title="@string/navigation_today"/>
     <item
         android:id="@+id/navigation_personal"
-        android:title="我的" />
+        android:title="@string/navigation_personal" />
 </menu>
