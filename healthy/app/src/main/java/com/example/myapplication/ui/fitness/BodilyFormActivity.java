@@ -1,11 +1,11 @@
 package com.example.myapplication.ui.fitness;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -83,11 +83,9 @@ public class BodilyFormActivity extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(BodilyFormActivity.this, "你选择了" + selectedShape + "体型", Toast.LENGTH_SHORT).show();
-                // 这里可以跳转到后续界面，例如：
-                // Intent intent = new Intent(BodilyFormActivity.this, FifthActivity.class);
-                // startActivity(intent);
-                // 暂时不跳转，仅提示
+                Intent intent = new Intent(BodilyFormActivity.this, AimActivity.class);
+                intent.putExtra("body_shape", selectedShape);
+                startActivity(intent);
             }
         });
     }

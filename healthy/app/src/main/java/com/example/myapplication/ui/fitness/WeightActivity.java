@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.fitness;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -97,6 +98,11 @@ public class WeightActivity extends AppCompatActivity {
 
             // 根据 BMI 显示对应的图片
             updateStatusImage(bmi);
+            // 在 calculateAndDisplayBmi() 方法中，计算得到 bmi 后添加以下代码：
+            SharedPreferences sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putFloat("bmi", (float) bmi);
+            editor.apply();
 
         } catch (NumberFormatException e) {
             tvBmiResult.setText("BMI: 输入无效");
