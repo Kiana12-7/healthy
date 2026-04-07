@@ -6,8 +6,7 @@ import lombok.Getter;
 public enum GoalState {
     LOSE_FAT((byte) 0, "减脂"),
     BUILD_MUSCLE((byte) 1, "增肌"),
-    KEEP_FIT((byte) 2, "保持健康"),
-    IMPROVE_ENDURANCE((byte) 3, "提升耐力");
+    KEEP_FIT((byte) 2, "保持健康");
 
     private final byte value;
     private final String description;

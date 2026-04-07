@@ -4,10 +4,11 @@ import lombok.Getter;
 
 @Getter
 public enum TrainLocation {
-    HOME((byte) 0, "居家"),
-    GYM((byte) 1, "健身房"),
-    OUTDOOR((byte) 2, "户外"),
-    MIXED((byte) 3, "混合");
+    CHEST((byte) 0, "胸部"),
+    ARM_LEG((byte) 1, "臂腿"),
+    CORE((byte) 2, "腰腹"),
+    SHOULDER_ARM((byte) 3, "肩臂"),
+    FULL_BODY((byte) 4, "全身");
 
     private final byte value;
     private final String description;
