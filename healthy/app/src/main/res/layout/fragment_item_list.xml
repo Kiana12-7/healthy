@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-    <!-- 筛选栏：固定在PlanItemFragment的最顶部 -->
+    <!-- 筛选栏 -->
     <LinearLayout
         android:id="@+id/filter_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="4"
-        android:paddingVertical="12dp"
+        android:paddingVertical="6dp"
         android:paddingHorizontal="8dp"
         android:gravity="center_vertical"
         android:background="#FFFFFF"
@@ -40,7 +40,7 @@
             android:text="@string/filter_crowd" />
     </LinearLayout>
 
-    <!-- 分割线 -->
+
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
@@ -50,15 +50,59 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- 计划列表：占满筛选栏下方的所有空间，可正常滚动 -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_plan_list"
+    <!-- 滚动区域 -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:overScrollMode="ifContentScrolls"
+        android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/divider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- 定制计划 Banner -->
+            <ImageView
+                android:id="@+id/iv_banner_plan"
+                android:layout_width="0dp"
+                android:layout_height="195dp"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="4dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ai_plan"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- 计划列表 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_plan_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/iv_banner_plan"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!-- 底部提示 -->
+            <TextView
+                android:id="@+id/tv_placeholder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"
+                android:text="到底啦，去看看定制其他吧~"
+                android:textColor="#999999"
+                android:textSize="12sp"
+                app:layout_constraintTop_toBottomOf="@id/rv_plan_list"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

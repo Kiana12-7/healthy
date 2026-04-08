@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -33,30 +34,31 @@ class PlanItemFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // 加载正确的布局文件 fragment_item_list.xml
         val rootView = inflater.inflate(R.layout.fragment_item_list, container, false)
 
-        // 直接找到RecyclerView，不用复杂的null判断
+
+        val bannerPlan = rootView.findViewById<ImageView>(R.id.iv_banner_plan)
+        bannerPlan.setOnClickListener {
+            // 测试：点击弹出Toast
+            Toast.makeText(requireContext(), "点击了个性定制计划", Toast.LENGTH_SHORT).show()
+
+            // 后续改成跳转到定制问卷页面
+            // val intent = Intent(requireContext(), PlanCustomActivity::class.java)
+            // startActivity(intent)
+        }
+
+
         val rvPlanList = rootView.findViewById<RecyclerView>(R.id.rv_plan_list)
-
-        // 设置布局管理器
         rvPlanList.layoutManager = LinearLayoutManager(requireContext())
-
-        // 初始化适配器，加载38个计划数据
+        val fullPlanList = PlanItem.getAllPlans()
         planAdapter = MyPlanItemRecyclerViewAdapter(fullPlanList)
         rvPlanList.adapter = planAdapter
 
-        // 设置点击事件（测试用）
         planAdapter.setOnItemClickListener { plan ->
             Toast.makeText(requireContext(), "点击了：${plan.name}", Toast.LENGTH_SHORT).show()
         }
 
-        // 初始化筛选按钮（保留原有功能）
         initFilterButtons(rootView)
-
-        // 打印日志，确认数据加载成功
-        android.util.Log.d("PlanItemFragment", "计划数量：${fullPlanList.size}")
-
         return rootView
     }
 
