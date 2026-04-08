@@ -113,7 +113,17 @@
     <string name="invalid_username">非法用户名</string>
     <string name="invalid_password">密码必须大于5个字符</string>
     <string name="login_failed">"登录失败"</string>
-、
+    <string name="desc_ai_coach">AI教练\n</string>
+    <string name="title_my_schedule">我的日程</string>
+    <string name="title_my_course">我的课程</string>
+    <string name="desc_empty_img">无日程插图</string>
+    <string name="schedule_empty_hint">合理的计划有益于建立运动习惯</string>
+    <string name="btn_customize_plan">定制计划</string>
+    <string name="desc_ai_fab">AI助手</string>
+    <string name="desc_search_icon">搜索图标</string>
+    <string name="hint_ask_ai">询问 AI 教练</string>
+    <string name="navigation_today">今日</string>
+
     <!-- 通用描述 -->
     <string name="avatar_desc">用户头像</string>
     <string name="order_desc">订单</string>
@@ -149,4 +159,4 @@
     <string name="daily_checkin">每日签到</string>
     <string name="function_icon">功能图标</string>
 
-、</resources>
+</resources>
