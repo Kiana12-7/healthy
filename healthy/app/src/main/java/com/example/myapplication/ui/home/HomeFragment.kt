@@ -15,36 +15,32 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    // 1. 定义标签页（索引分别为 0, 1, 2）
-    private val tabTitles = listOf("推荐", "课程", "计划")
+    // 删除推荐，只保留课程、计划（索引0、1）
+    private val tabTitles = listOf("课程", "计划")
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHomeBinding.bind(view)
 
-        // 2. 设置 ViewPager2 的适配器
+        // ViewPager2适配器，只加载课程和计划
         val adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount(): Int = tabTitles.size
 
             override fun createFragment(position: Int): Fragment {
                 return when (position) {
-                    0 -> PlaceholderFragment.newInstance("推荐页面建设中...")
-
-                    1 -> CourseFragment()
-
-                    2 -> PlanItemFragment()
-
-                    else -> PlaceholderFragment.newInstance(tabTitles[position])
+                    0 -> CourseFragment() // 索引0：课程
+                    1 -> PlanItemFragment() // 索引1：计划
+                    else -> PlanItemFragment()
                 }
             }
         }
 
         binding.homeViewPager.adapter = adapter
 
-        // 设置默认显示“课程”页（索引为 1）
+        // 默认显示“计划”页（索引为1），方便测试
         binding.homeViewPager.setCurrentItem(1, false)
 
-        // 3. 将 TabLayout 和 ViewPager2 绑定
+        // 3. 将 TabLayout 和 ViewPager2 绑定（完全保留你原来的代码）
         TabLayoutMediator(binding.homeTabLayout, binding.homeViewPager) { tab, position ->
             tab.text = tabTitles[position]
         }.attach()
@@ -57,14 +53,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 }
 
 /**
- * 计划页面：目前复用 fragment_home_content 布局
- */
-class PlanFragment : Fragment(R.layout.fragment_plan_content) {
-    // 后续可以在这里通过 binding 初始化计划页面的特有逻辑
-}
-
-/**
- * 通用的占位 Fragment：用于还没开发的页面（如“推荐”）
+ * 通用的占位 Fragment
  */
 class PlaceholderFragment : Fragment(R.layout.fragment_plan_content) {
     companion object {
