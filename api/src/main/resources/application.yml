@@ -1,3 +1,7 @@
+server:
+  address: 0.0.0.0  # 强制允许外部访问
+  port: 8080
+
 spring:
   profiles:
     active: cjn

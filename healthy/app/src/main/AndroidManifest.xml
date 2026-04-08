@@ -26,13 +26,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.fitnessForm.BodilyFormActivity"
+            android:name=".ui.fitness.BodilyFormActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.fitnessForm.WoundActivity"
+            android:name=".ui.fitness.WoundActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.fitnessForm.WeightActivity"
+            android:name=".ui.fitness.WeightActivity"
             android:exported="false"
             android:theme="@style/Theme.MyApplication"
             android:usesCleartextTraffic="true"
