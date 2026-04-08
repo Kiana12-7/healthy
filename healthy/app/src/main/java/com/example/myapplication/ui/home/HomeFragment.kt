@@ -8,7 +8,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentHomeBinding
 import com.example.myapplication.ui.home.course.CourseFragment
-import com.example.myapplication.ui.home.plan.PlanContentFragment
 import com.example.myapplication.ui.home.plan.planItem.PlanItemFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -31,10 +30,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 return when (position) {
                     0 -> PlaceholderFragment.newInstance("推荐页面建设中...")
 
-                    // 【修复】：索引 1 对应“课程”，显示你要求的那个 Keep 风格布局
                     1 -> CourseFragment()
 
-                    // 【修复】：索引 2 对应“计划”
                     2 -> PlanItemFragment()
 
                     else -> PlaceholderFragment.newInstance(tabTitles[position])
@@ -44,7 +41,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         binding.homeViewPager.adapter = adapter
 
-        // 【优化】：设置默认显示“课程”页（索引为 1）
+        // 设置默认显示“课程”页（索引为 1）
         binding.homeViewPager.setCurrentItem(1, false)
 
         // 3. 将 TabLayout 和 ViewPager2 绑定
@@ -68,8 +65,6 @@ class PlanFragment : Fragment(R.layout.fragment_plan_content) {
 
 /**
  * 通用的占位 Fragment：用于还没开发的页面（如“推荐”）
- * 注意：需要在 fragment_home_content.xml 中确保有一个 ID 为 tv_placeholder 的 TextView，
- * 或者你随便找个存在的 TextView ID 替换掉。
  */
 class PlaceholderFragment : Fragment(R.layout.fragment_plan_content) {
     companion object {
@@ -84,8 +79,6 @@ class PlaceholderFragment : Fragment(R.layout.fragment_plan_content) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // 尝试寻找 TextView 并显示标题内容
-        // 如果你的 fragment_home_content 里没有这个 ID，程序不会崩但文字不会变
         view.findViewById<TextView>(R.id.tv_placeholder)?.text =
             arguments?.getString("title") ?: "未命名页面"
     }
