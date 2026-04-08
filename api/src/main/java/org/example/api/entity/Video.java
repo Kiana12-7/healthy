@@ -15,4 +15,5 @@ public class Video extends BaseEntity<Long> {
     private String title;
     private String url;
     private Integer duration;  // 秒
+    private String coverUrl;
 }
