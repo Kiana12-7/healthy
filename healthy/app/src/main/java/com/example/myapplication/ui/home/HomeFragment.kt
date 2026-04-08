@@ -53,7 +53,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 }
 
 /**
- * 通用的占位 Fragment：保留代码，不影响运行
+ * 通用的占位 Fragment
  */
 class PlaceholderFragment : Fragment(R.layout.fragment_plan_content) {
     companion object {

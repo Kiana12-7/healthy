@@ -3,37 +3,44 @@ package com.example.myapplication.ui.home.course
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.data.model.HomeItem
+import com.example.myapplication.data.model.CourseItem
 import com.example.myapplication.databinding.ItemVideoBinding
 
 /**
- * 视频列表适配器
- * 确定了使用 HomeItem.Video 数据模型。
+ * 课程视频列表适配器
+ * 作用：为 RecyclerView 提供数据绑定、条目创建和点击事件处理
  */
 class CourseAdapter(
-    private val list: List<HomeItem.Video>,
-    private val onVideoClick: (HomeItem.Video) -> Unit
+    // 视频数据列表
+    private val list: List<CourseItem.TrainingVideo>,
+    // 条目点击事件回调
+    private val onVideoClick: (CourseItem.TrainingVideo) -> Unit
 ) : RecyclerView.Adapter<VideoViewHolder>() {
 
+    /**
+     * 创建 ViewHolder 实例
+     * 负责加载条目布局，返回可复用的条目容器
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
-        // 使用 ViewBinding 加载 item_video 布局
+        // 使用 ViewBinding 绑定 item_video 布局文件
         val binding = ItemVideoBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
+        // 返回创建好的 ViewHolder
         return VideoViewHolder(binding)
     }
 
+    /**
+     * 绑定数据到条目视图
+     */
     override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
         val item = list[position]
-
-        // 调用 ViewHolders.kt 中的 bind 方法进行数据填充和点击事件绑定
         holder.bind(item, onVideoClick)
-
-        // 【加固逻辑】：确保整个条目都是可以点击的
-        holder.itemView.setOnClickListener {
-            onVideoClick(item)
-        }
     }
 
+    /**
+     * 获取列表总条目数量
+     * 返回视频数据集合的大小
+     */
     override fun getItemCount(): Int = list.size
 }
