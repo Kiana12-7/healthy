@@ -21,6 +21,9 @@ spring:
       enabled: true
       max-file-size: ${file.size:20MB}
       max-request-size: ${file.size:20MB}
+qianwen:
+  api:
+    key: "sk-41cc37e376ce40bb9e07ab265cf6a2bd"
 
 ---
 

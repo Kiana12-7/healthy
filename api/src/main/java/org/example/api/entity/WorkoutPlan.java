@@ -25,9 +25,6 @@ public class WorkoutPlan extends BaseEntity<Long> {
     @JoinColumn(name = "form_id", nullable = false)
     private FitnessForm fitnessForm;
 
-    @Column(name = "plan_type", length = 50)
-    private String planType;   // 例如 "BEGINNER", "ADVANCED"
-
     @Column(name = "start_date")
     private LocalDate startDate;
 
