@@ -1,10 +1,19 @@
 package org.example.api.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.example.api.dto.LoggedInUserDTO;
 import org.example.api.entity.User;
 import org.example.api.repository.UserRepository;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LoggedInUserDTO login(String username, String password) {
+    public LoggedInUserDTO login(String username, String password, HttpServletRequest request) {
         // 根据用户名查用户
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("用户名不存在"));
@@ -27,6 +36,21 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("密码不正确");
         }
+
+        // 构建用户权限列表
+        List<GrantedAuthority> authorities = new ArrayList<>();
+         authorities.add(new SimpleGrantedAuthority("ROLE_USER")); // 如果有权限可以加
+
+        // 创建 Authentication 对象
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(username, null, authorities);
+
+        // 手动将认证信息存入 SecurityContext
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // 手动触发 Session 创建
+        HttpSession session = request.getSession(true); // true 表示如果没有就创建
+        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
         return new LoggedInUserDTO(
                 user.getId().toString(),
