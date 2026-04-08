@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.home.plan.planItem
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.ui.fitness.WeightActivity
 import com.example.myapplication.widget.FilterPopupWindow
 
 class PlanItemFragment : Fragment() {
@@ -39,12 +41,10 @@ class PlanItemFragment : Fragment() {
 
         val bannerPlan = rootView.findViewById<ImageView>(R.id.iv_banner_plan)
         bannerPlan.setOnClickListener {
-            // 测试：点击弹出Toast
-            Toast.makeText(requireContext(), "点击了个性定制计划", Toast.LENGTH_SHORT).show()
-
-            // 后续改成跳转到定制问卷页面
-            // val intent = Intent(requireContext(), PlanCustomActivity::class.java)
-            // startActivity(intent)
+            bannerPlan.setOnClickListener {
+                val intent = Intent(requireContext(), WeightActivity::class.java)
+                startActivity(intent)
+            }
         }
 
 
