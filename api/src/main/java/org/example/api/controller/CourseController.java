@@ -32,7 +32,7 @@ public class CourseController {
             dto.setAuthor("System");
             dto.setCoverUrl(video.getCoverUrl());
             dto.setVideoUrl(video.getUrl());
-            dto.setDuration("未知");
+            dto.setDuration(video.getDuration());
             dto.setLevel("K1");
             return dto;
         }).collect(Collectors.toList());
