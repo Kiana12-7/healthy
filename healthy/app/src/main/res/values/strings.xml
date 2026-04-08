@@ -113,4 +113,40 @@
     <string name="invalid_username">非法用户名</string>
     <string name="invalid_password">密码必须大于5个字符</string>
     <string name="login_failed">"登录失败"</string>
-</resources>
+、
+    <!-- 通用描述 -->
+    <string name="avatar_desc">用户头像</string>
+    <string name="order_desc">订单</string>
+    <string name="favorite_desc">收藏</string>
+    <string name="settings_desc">设置</string>
+    <string name="arrow_desc">箭头</string>
+
+    <!-- 用户信息 -->
+    <string name="default_nickname">健身达人</string>
+    <string name="lv_8">Lv.8</string>
+    <string name="id_12345678">ID: 12345678</string>
+    <string name="edit_profile">编辑资料</string>
+
+    <!-- 统计数据 -->
+    <string name="default_days">27</string>
+    <string name="workout_days">运动天数</string>
+
+    <string name="default_calories">1580</string>
+    <string name="calories_burned">消耗卡路里</string>
+
+    <string name="default_courses">12</string>
+    <string name="courses_completed">完成课程</string>
+
+    <!-- 功能列表 -->
+    <string name="my_orders">我的订单</string>
+    <string name="my_favorites">我的收藏</string>
+    <string name="settings">设置</string>
+
+    <string name="lv_4">Lv.4</string>
+    <string name="coin_challenge">赚币挑战</string>
+    <string name="lucky_draw">幸运抽奖</string>
+    <string name="daily_draw">每日抽奖</string>
+    <string name="daily_checkin">每日签到</string>
+    <string name="function_icon">功能图标</string>
+
+、</resources>
