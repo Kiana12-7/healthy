@@ -1,5 +1,6 @@
 package org.example.api.service;
 
+import org.example.api.dto.AIPlanResponseDTO;
 import org.example.api.entity.FitnessForm;
 import org.example.api.enums.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,17 +8,23 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.Mockito.*;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 class AIPlanGeneratorImplTest {
 
     private AIPlanGeneratorImpl instance;
     private VideoService videoService;
+    private PlanDetailService planDetailService;
 
     @BeforeEach
     void setUp() {
         this.videoService = Mockito.mock(VideoService.class);
-        this.instance = new AIPlanGeneratorImpl(videoService);
+        this.planDetailService = Mockito.mock(PlanDetailService.class);
+        this.instance = new AIPlanGeneratorImpl(videoService, planDetailService);
     }
 
     @Test
@@ -85,5 +92,69 @@ class AIPlanGeneratorImplTest {
                 PlanType.fromByte(form.getPlanType()), PassionSport.fromByte(form.getPassionSport()),
                 videoService.getAvailableVideosString()
         ));
+    }
+
+    @Test
+    void parseResponse() {
+        AIPlanResponseDTO result = instance.parseResponse("""
+                                          {
+                                      "planType": "减脂",
+                                      "durationDays": 28,
+                                      "startDate": "2026-04-08",
+                                      "endDate": "2026-05-05",
+                                      "weeklyFrequency": 5,
+                                      "details": [
+                                        {
+                                          "dayNumber": 1,
+                                          "videos": [
+                                            {"actionName": "bench_press_video", "orderInDay": 1},
+                                            {"actionName": "bicep_curls_video", "orderInDay": 2}
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                    """);
+        // 顶层字段断言
+        assertNotNull(result);
+        assertNotNull(result.getPlanType());
+        assertEquals("减脂", result.getPlanType());
+        assertNotNull(result.getDurationDays());
+        assertEquals(28, result.getDurationDays());
+        assertNotNull(result.getStartDate());
+        assertEquals("2026-04-08", result.getStartDate());
+        assertNotNull(result.getEndDate());
+        assertEquals("2026-05-05", result.getEndDate());
+        assertNotNull(result.getWeeklyFrequency());
+        assertEquals(5, result.getWeeklyFrequency());
+
+        // details 列表断言
+        assertNotNull(result.getDetails());
+        assertEquals(1, result.getDetails().size());
+
+        AIPlanResponseDTO.DayDetail dayDetail = result.getDetails().get(0);
+        assertNotNull(dayDetail);
+        assertNotNull(dayDetail.getDayNumber());
+        assertEquals(1, dayDetail.getDayNumber());
+
+        // videos 列表断言
+        List<AIPlanResponseDTO.Video> videos = dayDetail.getVideos();
+        assertNotNull(videos);
+        assertEquals(2, videos.size());
+
+        // 第一个视频断言
+        AIPlanResponseDTO.Video video1 = videos.get(0);
+        assertNotNull(video1);
+        assertNotNull(video1.getActionName());
+        assertEquals("bench_press_video", video1.getActionName());
+        assertNotNull(video1.getOrderInDay());
+        assertEquals(1, video1.getOrderInDay());
+
+        // 第二个视频断言
+        AIPlanResponseDTO.Video video2 = videos.get(1);
+        assertNotNull(video2);
+        assertNotNull(video2.getActionName());
+        assertEquals("bicep_curls_video", video2.getActionName());
+        assertNotNull(video2.getOrderInDay());
+        assertEquals(2, video2.getOrderInDay());
     }
 }

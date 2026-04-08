@@ -37,4 +37,11 @@ public class WorkoutPlan extends BaseEntity<Long> {
 
     @OneToMany(mappedBy = "workoutPlan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PlanDetail> planDetails = new ArrayList<>();
+
+    public  WorkoutPlan() {
+    }
+
+    public WorkoutPlan(Long workoutPlanId) {
+        this.id = workoutPlanId;
+    }
 }
