@@ -138,7 +138,7 @@
     <string name="edit_profile">编辑资料</string>
 
     <!-- 统计数据 -->
-    <string name="default_days">27</string>
+    <string name="default_days">运动 27 天</string>
     <string name="workout_days">运动天数</string>
 
     <string name="default_calories">1580</string>
@@ -158,5 +158,13 @@
     <string name="daily_draw">每日抽奖</string>
     <string name="daily_checkin">每日签到</string>
     <string name="function_icon">功能图标</string>
+    <string name="大于号"><![CDATA[>]]></string>
+    <string name="_1">关注 1</string>
+    <string name="_0">粉丝 0</string>
+    <string name="fee">立即续费</string>
+    <string name="schedule"><![CDATA[个性健康计划 >]]></string>
+    <string name="_2">🔥 活动最后 2 天！</string>
+    <string name="vip">会员</string>
+    <string name="data">我的数据</string>
 
 </resources>

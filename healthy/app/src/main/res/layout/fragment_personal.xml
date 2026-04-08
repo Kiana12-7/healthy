@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- 1. 顶部用户信息区（Keep 纯白风格） -->
+        <!-- 1. 顶部用户信息区 -->
         <LinearLayout
             android:id="@+id/layout_user_info"
             android:layout_width="match_parent"
@@ -60,13 +60,14 @@
                         android:textSize="22sp"
                         android:textStyle="bold"/>
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:src="@android:drawable/ic_media_next"
-                        android:contentDescription="@string/arrow_desc"
-                        app:tint="#999999"/>
+                        android:text="@string/大于号"
+                        android:textColor="#999999"
+                        android:textSize="18sp"
+                        android:textStyle="normal"/>
 
                 </LinearLayout>
 
@@ -81,7 +82,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="关注 1"
+                        android:text="@string/_1"
                         android:textColor="#666666"
                         android:textSize="13sp"/>
 
@@ -94,7 +95,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="粉丝 0"
+                        android:text="@string/_0"
                         android:textColor="#666666"
                         android:textSize="13sp"/>
 
@@ -145,7 +146,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:text="累计运动天数 42"
+                        android:text="@string/workout_days"
                         android:textColor="#666666"
                         android:textSize="12sp"/>
 
@@ -161,7 +162,7 @@
             android:layout_height="0.5dp"
             android:background="#F0F0F0"/>
 
-        <!-- 2. Keep 会员横幅 -->
+        <!-- 2. 会员横幅 -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -188,7 +189,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Keep · 会员"
+                        android:text="@string/vip"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold"/>
@@ -196,7 +197,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="立即续费"
+                        android:text="@string/fee"
                         android:textColor="#333333"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -220,14 +221,14 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="个性健康计划 >"
+                        android:text="@string/schedule"
                         android:textColor="#E0E0E0"
                         android:textSize="13sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🔥 活动最后 2 天！"
+                        android:text="@string/_2"
                         android:textColor="#FFD700"
                         android:textSize="13sp"/>
 
@@ -242,6 +243,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:baselineAligned="false"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
@@ -267,7 +269,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="赚币挑战"
+                    android:text="@string/coin_challenge"
                     android:textColor="#333333"
                     android:textSize="12sp"/>
 
@@ -295,7 +297,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="幸运抽奖"
+                    android:text="@string/lucky_draw"
                     android:textColor="#333333"
                     android:textSize="12sp"/>
 
@@ -323,7 +325,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="每日抽奖"
+                    android:text="@string/daily_draw"
                     android:textColor="#333333"
                     android:textSize="12sp"/>
 
@@ -351,7 +353,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="每日签到"
+                    android:text="@string/daily_checkin"
                     android:textColor="#333333"
                     android:textSize="12sp"/>
 
@@ -366,7 +368,7 @@
             android:layout_marginTop="20dp"
             android:background="#F5F7FA"/>
 
-        <!-- 4. 功能网格区（两行 5 个） -->
+        <!-- 4. 功能网格区 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -377,37 +379,33 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
-                <!-- 我的动态 -->
                 <include layout="@layout/item_personal_function"
                     android:id="@+id/item_dynamic"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
 
-                <!-- 收藏与加油 -->
                 <include layout="@layout/item_personal_function"
                     android:id="@+id/item_favorite"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
 
-                <!-- 我的课程 -->
                 <include layout="@layout/item_personal_function"
                     android:id="@+id/item_courses"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
 
-                <!-- 我的活动 -->
                 <include layout="@layout/item_personal_function"
                     android:id="@+id/item_activity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
 
-                <!-- 我的饮食 -->
                 <include layout="@layout/item_personal_function"
                     android:id="@+id/item_diet"
                     android:layout_width="0dp"
@@ -421,37 +419,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
-                <!-- 订单与钱包 -->
                 <include layout="@layout/item_personal_function"
                     android:id="@+id/item_order"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
 
-                <!-- 领福利 -->
                 <include layout="@layout/item_personal_function"
                     android:id="@+id/item_welfare"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
 
-                <!-- 我的家庭 -->
                 <include layout="@layout/item_personal_function"
                     android:id="@+id/item_family"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
 
-                <!-- 我的团队 -->
                 <include layout="@layout/item_personal_function"
                     android:id="@+id/item_team"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
 
-                <!-- 帮助中心 -->
                 <include layout="@layout/item_personal_function"
                     android:id="@+id/item_help"
                     android:layout_width="0dp"
@@ -483,17 +477,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="我的数据"
+                android:text="@string/data"
                 android:textColor="#1A1A1A"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@android:drawable/ic_media_next"
-                android:contentDescription="@string/arrow_desc"
-                app:tint="#999999"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/大于号"
+                android:textColor="#999999"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
 
