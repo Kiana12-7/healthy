@@ -36,8 +36,8 @@ public class FitnessForm extends BaseEntity<Long> {
     @Column(name = "hurt_location")
     private byte hurtLocation;
 
-    @Column(name = "goal_state")
-    private byte goalState;
+    @Column(name = "plan_type")
+    private byte planType;
 
     @Column(name = "passion_sport")
     private byte passionSport;
