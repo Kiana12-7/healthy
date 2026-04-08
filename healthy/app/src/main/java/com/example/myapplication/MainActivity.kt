@@ -1,18 +1,12 @@
 package com.example.myapplication
 
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.StyleSpan
-import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
-import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import com.example.myapplication.ui.home.HomeFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.example.myapplication.ui.personal.PersonalFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,8 +27,6 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             // 默认显示首页 Fragment
             replaceFragment(HomeFragment())
-            // 将第一个导航项设置为选中加粗样式
-            updateMenuItemStyle(bottomNav.menu[0], true)
         }
 
         // 设置导航项选中监听
@@ -62,28 +54,6 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment) // 替换容器内的 Fragment
-            .commitAllowingStateLoss() // 提交事务
-    }
-
-    /**
-     * 更新底部导航栏菜单项的文字样式
-     * @param item 要修改的导航菜单项
-     * @param isSelected true=选中加粗，false=未选中正常
-     */
-    private fun updateMenuItemStyle(item: MenuItem, isSelected: Boolean) {
-        // 获取菜单项的原始文字
-        val title = item.title.toString()
-        // 创建可设置样式的字符串
-        val spannableString = SpannableString(title)
-        // 根据选中状态设置文字粗细
-        if (isSelected) {
-            // 加粗
-            spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, title.length, 0)
-        } else {
-            // 正常
-            spannableString.setSpan(StyleSpan(Typeface.NORMAL), 0, title.length, 0)
-        }
-        // 将设置好样式的文字重新设置给菜单项
-        item.title = spannableString
+            .commit() // 提交事务
     }
 }
