@@ -1,108 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-    <!-- 筛选栏 -->
-    <LinearLayout
-        android:id="@+id/filter_bar"
+    <!-- 可折叠+吸顶容器：实现Banner滑走、筛选栏固定 -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="4"
-        android:paddingVertical="6dp"
-        android:paddingHorizontal="8dp"
-        android:gravity="center_vertical"
         android:background="#FFFFFF"
-        app:layout_constraintTop_toTopOf="parent">
+        app:elevation="0dp">
 
-        <TextView
-            android:id="@+id/btn_filter_goal"
-            style="@style/GreenFilterButtonStyle"
-            android:text="@string/filter_goal" />
-
-        <TextView
-            android:id="@+id/btn_filter_part"
-            style="@style/GreenFilterButtonStyle"
-            android:text="@string/filter_part" />
-
-        <TextView
-            android:id="@+id/btn_filter_difficulty"
-            style="@style/GreenFilterButtonStyle"
-            android:text="@string/filter_difficulty" />
-
-        <TextView
-            android:id="@+id/btn_filter_crowd"
-            style="@style/GreenFilterButtonStyle"
-            android:text="@string/filter_crowd" />
-    </LinearLayout>
-
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#E8F5E9"
-        app:layout_constraintTop_toBottomOf="@id/filter_bar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <!-- 滚动区域 -->
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/divider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- 可折叠区域：定制计划Banner，下滑时完全滑出屏幕 -->
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:minHeight="0dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="#FFFFFF">
 
-            <!-- 定制计划 Banner -->
+            <!-- 定制计划Banner，完全保留原有属性、可点击交互 -->
             <ImageView
                 android:id="@+id/iv_banner_plan"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="195dp"
                 android:layout_marginHorizontal="12dp"
                 android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ai_plan"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"/>
 
-            <!-- 计划列表 -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_plan_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:nestedScrollingEnabled="false"
-                app:layout_constraintTop_toBottomOf="@id/iv_banner_plan"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-            <!-- 底部提示 -->
+        <!-- 筛选栏：下滑后牢牢固定在屏幕顶部 -->
+        <LinearLayout
+            android:id="@+id/filter_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4"
+            android:paddingVertical="6dp"
+            android:paddingHorizontal="8dp"
+            android:gravity="center_vertical"
+            android:background="#FFFFFF"
+            app:layout_scrollFlags="scroll|enterAlways|snap">
+
             <TextView
-                android:id="@+id/tv_placeholder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="32dp"
-                android:text="到底啦，去看看定制其他吧~"
-                android:textColor="#999999"
-                android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@id/rv_plan_list"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                android:id="@+id/btn_filter_goal"
+                style="@style/GreenFilterButtonStyle"
+                android:text="@string/filter_goal" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/btn_filter_part"
+                style="@style/GreenFilterButtonStyle"
+                android:text="@string/filter_part" />
+
+            <TextView
+                android:id="@+id/btn_filter_difficulty"
+                style="@style/GreenFilterButtonStyle"
+                android:text="@string/filter_difficulty" />
+
+            <TextView
+                android:id="@+id/btn_filter_crowd"
+                style="@style/GreenFilterButtonStyle"
+                android:text="@string/filter_crowd" />
+        </LinearLayout>
+
+        <!-- 筛选栏一起吸顶 -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E8F5E9"
+            app:layout_scrollFlags="scroll|enterAlways|snap"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- 计划列表RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_plan_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="ifContentScrolls"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <!-- 底部提示文案 -->
+    <TextView
+        android:id="@+id/tv_placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp"
+        android:text="到底啦，去看看定制其他吧~"
+        android:textColor="#999999"
+        android:textSize="12sp"
+        android:layout_gravity="bottom|center_horizontal"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
