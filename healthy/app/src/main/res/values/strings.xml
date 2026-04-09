@@ -166,5 +166,6 @@
     <string name="_2">🔥 活动最后 2 天！</string>
     <string name="vip">会员</string>
     <string name="data">我的数据</string>
-
+    <string name="course_info">%1$s · %2$s</string>
+    <string name="more">到底啦，去看看其他课程吧~</string>
 </resources>
