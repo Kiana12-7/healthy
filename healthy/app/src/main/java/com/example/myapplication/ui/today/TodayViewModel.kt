@@ -18,8 +18,8 @@ class TodayViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val mockData = listOf(
-                    CourseItem.TrainingVideo(1, "短时间高强度腹肌训练", "KellyGale", "", "", "12分钟", "K2"),
-                    CourseItem.TrainingVideo(2, "3分钟平板支撑", "Koach-Young", "", "", "3分钟", "K3")
+                    CourseItem.TrainingVideo(1, "短时间高强度腹肌训练", "KellyGale", "", "", 12, "K2"),
+                    CourseItem.TrainingVideo(2, "3分钟平板支撑", "Koach-Young", "", "", 3, "K3")
                 )
                 _courseList.value = mockData
 

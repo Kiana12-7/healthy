@@ -17,8 +17,10 @@ class VideoViewHolder(
         // 1. 设置文字内容
         binding.tvTitle.text = item.title
         binding.tvAuthor.text = item.trainerName
-        binding.tvDuration.text = item.duration
+        binding.tvDuration.text = item.duration.toString()
         binding.tvTag.text = item.difficultyTag
+
+        binding.tvDuration.text = formatDuration(item.duration)
 
         // 2. 使用 Coil 加载封面图
         binding.imgCover.load(item.coverUrl) {
@@ -29,5 +31,12 @@ class VideoViewHolder(
         binding.root.setOnClickListener {
             onVideoClick(item)
         }
+    }
+
+    // 秒数 转 00:15 秒
+    private fun formatDuration(seconds: Int): String {
+        val min = seconds / 60
+        val sec = seconds % 60
+        return "%02d:%02d 秒".format(min, sec)
     }
 }
