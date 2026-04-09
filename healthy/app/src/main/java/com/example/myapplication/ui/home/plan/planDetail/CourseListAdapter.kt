@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.home.plan.planItem
+package com.example.myapplication.ui.home.plan.planDetail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -24,12 +24,10 @@ class CourseListAdapter : ListAdapter<CourseItem, CourseListAdapter.CourseViewHo
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(courseItem: CourseItem) {
-            // 绑定课程名称
+            // 绑定训练名称+动作说明
             binding.tvCourseName.text = courseItem.courseName
             // 绑定时长+难度
             binding.tvCourseDuration.text = "${courseItem.duration}分钟 · ${courseItem.difficulty}"
-            // 绑定学习状态
-            binding.tvLearnStatus.text = if (courseItem.isLearned) "已完成训练" else "还未进行过训练"
             // 点击事件
             itemView.setOnClickListener { onItemClickListener?.invoke(courseItem) }
         }
