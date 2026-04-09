@@ -1,5 +1,8 @@
 package org.example.api.utils;
 
+import org.example.api.config.VideoProperties;
+import org.springframework.stereotype.Component;
+import jakarta.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -7,16 +10,31 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+@Component
 public class VideoUtils {
-    // 视频存放根目录
-    private static final String VIDEO_BASE_PATH = "D:/team/healthy/api/video/";
-    // 封面存放目录
-    private static final String COVER_BASE_PATH = "D:/team/healthy/api/video/covers/";
+    // 从配置注入
+    private final VideoProperties videoProperties;
+    private String videoBasePath;
+    private String coverBasePath;
 
-    static {
+    // 注入配置
+    public VideoUtils(VideoProperties videoProperties) {
+        this.videoProperties = videoProperties;
+    }
+
+    /**
+     * 初始化：自动拼接正确路径
+     */
+    @PostConstruct
+    public void init() {
+        String apiPath = System.getProperty("user.dir");
+        this.videoBasePath = apiPath + File.separator + videoProperties.getLocalPath();
+        this.coverBasePath = videoBasePath + File.separator + "covers";
+
         // 启动时确保封面目录存在
         try {
-            Files.createDirectories(Paths.get(COVER_BASE_PATH));
+            Files.createDirectories(Paths.get(coverBasePath));
+            System.out.println("封面目录已创建：" + coverBasePath);
         } catch (IOException e) {
             System.err.println("创建封面目录失败：" + e.getMessage());
         }
@@ -24,33 +42,25 @@ public class VideoUtils {
 
     /**
      * 截取视频第一帧作为封面
-     * @param videoFileName 视频文件名 (如 "bench_press_video.mp4")
-     * @return 生成的封面图片文件名 (如 "bench_press_video.jpg")，失败返回 null
      */
-    public static String extractCover(String videoFileName) {
-        File videoFile = new File(VIDEO_BASE_PATH, videoFileName);
+    public String extractCover(String videoFileName) {
+        File videoFile = new File(videoBasePath, videoFileName);
         if (!videoFile.exists()) {
             System.err.println("视频文件不存在: " + videoFileName);
             return null;
         }
 
-        // 生成封面文件名 (把 .mp4 换成 .jpg)
+        // 生成封面文件名
         String coverFileName = videoFileName.substring(0, videoFileName.lastIndexOf('.')) + ".jpg";
-        File coverFile = new File(COVER_BASE_PATH, coverFileName);
+        File coverFile = new File(coverBasePath, coverFileName);
 
-        // 如果封面已经存在，直接返回，不用重复截取
         if (coverFile.exists()) {
             return coverFileName;
         }
 
         try {
-            // 构建 FFmpeg 命令
-            // -i: 输入文件
-            // -y: 覆盖输出文件
-            // -vframes 1: 只截取第1帧
-            // -ss 00:00:01: 从第1秒开始截（避免黑屏）
             ProcessBuilder processBuilder = new ProcessBuilder(
-                    "D:/team/ffmpeg-8.1-full_build/bin/ffmpeg.exe",
+                    "ffmpeg", // 去掉了硬编码路径，系统环境变量里的ffmpeg即可
                     "-i", videoFile.getAbsolutePath(),
                     "-ss", "00:00:01",
                     "-vframes", "1",
@@ -58,13 +68,10 @@ public class VideoUtils {
                     coverFile.getAbsolutePath()
             );
 
-            // 启动进程并等待完成
             Process process = processBuilder.start();
-
-            // 消费掉输入流和错误流，防止进程卡死
             consumeProcessStream(process);
-
             int exitCode = process.waitFor();
+
             if (exitCode == 0 && coverFile.exists()) {
                 System.out.println("封面截取成功: " + coverFileName);
                 return coverFileName;
@@ -74,27 +81,21 @@ public class VideoUtils {
             }
 
         } catch (Exception e) {
-            System.err.println("截取封面时发生异常：" + e.getMessage());
+            System.err.println("截取封面异常：" + e.getMessage());
             return null;
         }
     }
 
-    private static void consumeProcessStream(Process process) {
-        // 读取错误流
+    private void consumeProcessStream(Process process) {
         new Thread(() -> {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
-                while (reader.readLine() != null) {
-                    // 不打印，只读取，消除空循环警告
-                }
+                while (reader.readLine() != null) {}
             } catch (IOException ignored) {}
         }).start();
 
-        // 读取标准流
         new Thread(() -> {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                while (reader.readLine() != null) {
-                    // 不打印，只读取
-                }
+                while (reader.readLine() != null) {}
             } catch (IOException ignored) {}
         }).start();
     }
