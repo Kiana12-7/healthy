@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -72,8 +73,12 @@ public class BodyPartFocusActivity extends AppCompatActivity {
             } else {
                 String current = labels[currentSelectedIndex];
                 String target = labels[targetSelectedIndex];
-                // 保存选择的数据（可选）
-                // 跳转到运动偏好界面
+                SharedPreferences sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
+                sharedPref.edit()
+                        .putString("current_body_status", current)
+                        .putString("target_body_status", target)
+                        .apply();
+
                 Intent intent = new Intent(BodyPartFocusActivity.this, PreferenceActivity.class);
                 startActivity(intent);
             }

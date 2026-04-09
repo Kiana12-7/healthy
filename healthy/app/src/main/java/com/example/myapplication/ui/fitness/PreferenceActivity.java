@@ -1,10 +1,12 @@
 package com.example.myapplication.ui.fitness;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ public class PreferenceActivity extends AppCompatActivity {
 
     private RadioGroup rgSportType, rgDuration, rgRequirement, rgEquipment;
     private Button btnNext;
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,21 +40,21 @@ public class PreferenceActivity extends AppCompatActivity {
         rgEquipment = findViewById(R.id.rgEquipment);
         btnNext = findViewById(R.id.btnNext);
 
+        sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
+
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validateSelections()) {
-                    // 获取所有选中的值
-                    String sportType = getSelectedSportType();
-                    String duration = getSelectedDuration();
-                    String requirement = getSelectedRequirement();
-                    String equipment = getSelectedEquipment();
+                    // 保存所有选择
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("sport_type", getSelectedSportType());
+                    editor.putString("duration", getSelectedDuration());
+                    editor.putString("requirement", getSelectedRequirement());
+                    editor.putString("equipment", getSelectedEquipment());
+                    editor.apply();
 
-                    // 可以保存到 SharedPreferences 或传递给下一个界面
-                    Toast.makeText(PreferenceActivity.this,
-                            "运动类型：" + sportType + "\n时长：" + duration + "\n要求：" + requirement + "\n器械：" + equipment,
-                            Toast.LENGTH_LONG).show();
-
+                    // 跳转到运动能力界面
                     Intent intent = new Intent(PreferenceActivity.this, AbilityActivity.class);
                     startActivity(intent);
                 } else {
@@ -91,6 +94,9 @@ public class PreferenceActivity extends AppCompatActivity {
     private String getSelectedRequirement() {
         int id = rgRequirement.getCheckedRadioButtonId();
         if (id == R.id.rbNoNoise) return "零噪音";
+        if (id == R.id.rbNoJump) return "无跳跃";
+        if (id == R.id.rbSmallSpace) return "小场地";
+        if (id == R.id.rbNoRequirement) return "没有以上要求";
         return "";
     }
 

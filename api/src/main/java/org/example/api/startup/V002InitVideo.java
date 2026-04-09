@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import ws.schild.jave.MultimediaObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +23,7 @@ public class V002InitVideo implements CommandLineRunner, Ordered {
     public static final int order = 101;
     private final VideoRepository videoRepository;
     private final VideoProperties videoProperties;
+    private final VideoUtils videoUtils;
 
 
     private final List<String> videoPaths = new ArrayList<>(Arrays.asList(
@@ -40,35 +40,36 @@ public class V002InitVideo implements CommandLineRunner, Ordered {
             "squats-video.mp4"
     ));
 
-    public V002InitVideo(VideoRepository videoRepository, VideoProperties videoProperties) {
+    public V002InitVideo(VideoRepository videoRepository, VideoProperties videoProperties, VideoUtils videoUtils) {
         this.videoRepository = videoRepository;
         this.videoProperties = videoProperties;
+        this.videoUtils = videoUtils;
     }
 
     @Override
     public void run(String @NonNull ... args) {
-        // 只在表为空时初始化，避免重复插入
         if (videoRepository.count() > 0) {
             System.out.println("视频表已存在数据，跳过初始化");
             return;
         }
+
         String apiPath = System.getProperty("user.dir");
         String fullVideoPath = apiPath + File.separator + videoProperties.getLocalPath();
+
         for (String path : videoPaths) {
             Video video = new Video();
             video.setUrl(videoProperties.getWebUrl() + path);
             video.setTitle(getChineseTitle(path));
 
-//            String coverFileName = VideoUtils.extractCover(path);
-            video.setCoverUrl(videoProperties.getCoverWebUrl());
+            // 调用注入的 videoUtils
+            String coverFileName = videoUtils.extractCover(path);
+            video.setCoverUrl(coverFileName != null ? videoProperties.getCoverWebUrl() + coverFileName : "");
 
-            // 获取时长
             Integer sec = getVideoDurationSeconds(fullVideoPath + File.separator + path);
             video.setDuration(sec);
 
             videoRepository.save(video);
         }
-
     }
 
     private Integer getVideoDurationSeconds(String filePath) {

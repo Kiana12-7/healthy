@@ -25,7 +25,8 @@ public class AimActivity extends AppCompatActivity {
 
     private String selectedGoal = "";
     private float bmiValue = 0f;
-    private String bodyShape; // 接收从BodilyForm传递的体型
+    private String bodyShape;
+    private SharedPreferences sharedPref;  // 改为成员变量
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,56 +49,41 @@ public class AimActivity extends AppCompatActivity {
         tvRecommendKeep = findViewById(R.id.tvRecommendKeep);
         btnNext = findViewById(R.id.btnNext);
 
-        // 接收体型
         bodyShape = getIntent().getStringExtra("body_shape");
         if (bodyShape == null) bodyShape = "直筒型";
 
-        // 读取 BMI
-        SharedPreferences sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
+        sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
         bmiValue = sharedPref.getFloat("bmi", 21.0f);
 
         setupByBMI();
 
-        cardLoseWeight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedGoal = "瘦身减重";
-                updateCardSelection(cardLoseWeight);
-            }
+        cardLoseWeight.setOnClickListener(v -> {
+            selectedGoal = "瘦身减重";
+            updateCardSelection(cardLoseWeight);
         });
 
-        cardBuildMuscle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedGoal = "塑形/增肌";
-                updateCardSelection(cardBuildMuscle);
-            }
+        cardBuildMuscle.setOnClickListener(v -> {
+            selectedGoal = "塑形/增肌";
+            updateCardSelection(cardBuildMuscle);
         });
 
-        cardKeepHealth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedGoal = "保持健康";
-                updateCardSelection(cardKeepHealth);
-            }
+        cardKeepHealth.setOnClickListener(v -> {
+            selectedGoal = "保持健康";
+            updateCardSelection(cardKeepHealth);
         });
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedGoal.isEmpty()) {
-                    Toast.makeText(AimActivity.this, "请选择一个运动目标", Toast.LENGTH_SHORT).show();
+        btnNext.setOnClickListener(v -> {
+            if (selectedGoal.isEmpty()) {
+                Toast.makeText(AimActivity.this, "请选择一个运动目标", Toast.LENGTH_SHORT).show();
+            } else {
+                sharedPref.edit().putString("aim_goal", selectedGoal).apply();
+
+                if (selectedGoal.equals("保持健康")) {
+                    startActivity(new Intent(AimActivity.this, PreferenceActivity.class));
                 } else {
-                    if (selectedGoal.equals("保持健康")) {
-                        // 直接跳转到运动偏好界面
-                        Intent intent = new Intent(AimActivity.this, PreferenceActivity.class);
-                        startActivity(intent);
-                    } else {
-                        // 跳转到重点改善部位界面，并传递体型
-                        Intent intent = new Intent(AimActivity.this, FocusAreaActivity.class);
-                        intent.putExtra("body_shape", bodyShape);
-                        startActivity(intent);
-                    }
+                    Intent intent = new Intent(AimActivity.this, FocusAreaActivity.class);
+                    intent.putExtra("body_shape", bodyShape);
+                    startActivity(intent);
                 }
             }
         });
