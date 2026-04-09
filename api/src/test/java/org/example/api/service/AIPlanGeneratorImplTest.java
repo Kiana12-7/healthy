@@ -18,15 +18,13 @@ class AIPlanGeneratorImplTest {
 
     private AIPlanGeneratorImpl instance;
     private VideoService videoService;
-    private WorkoutPlanService workoutPlanService;
     private PlanDetailService planDetailService;
 
     @BeforeEach
     void setUp() {
         this.videoService = Mockito.mock(VideoService.class);
-        this.workoutPlanService = Mockito.mock(WorkoutPlanService.class);
         this.planDetailService = Mockito.mock(PlanDetailService.class);
-        this.instance = new AIPlanGeneratorImpl(videoService, workoutPlanService, planDetailService);
+        this.instance = new AIPlanGeneratorImpl(videoService, planDetailService);
     }
 
     @Test
