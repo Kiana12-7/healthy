@@ -1,5 +1,6 @@
 package org.example.api.startup;
 
+import org.example.api.config.VideoProperties;
 import org.example.api.entity.Video;
 import org.example.api.repository.VideoRepository;
 import org.example.api.utils.VideoUtils;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import ws.schild.jave.MultimediaObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,10 +23,8 @@ import java.util.List;
 public class V002InitVideo implements CommandLineRunner, Ordered {
     public static final int order = 101;
     private final VideoRepository videoRepository;
+    private final VideoProperties videoProperties;
 
-    private static final String VIDEO_WEB_URL = "http://10.0.2.2/video/";
-    private static final String COVER_WEB_URL = "http://10.0.2.2/video/covers/";
-    private static final String VIDEO_LOCAL_PATH = "/home/cjn/桌面/healthy/api/video";
 
     private final List<String> videoPaths = new ArrayList<>(Arrays.asList(
             "bench_press_video.mp4",
@@ -40,8 +40,9 @@ public class V002InitVideo implements CommandLineRunner, Ordered {
             "squats-video.mp4"
     ));
 
-    public V002InitVideo(VideoRepository videoRepository) {
+    public V002InitVideo(VideoRepository videoRepository, VideoProperties videoProperties) {
         this.videoRepository = videoRepository;
+        this.videoProperties = videoProperties;
     }
 
     @Override
@@ -51,21 +52,22 @@ public class V002InitVideo implements CommandLineRunner, Ordered {
             System.out.println("视频表已存在数据，跳过初始化");
             return;
         }
-
-        videoPaths.forEach(path -> {
+        String apiPath = System.getProperty("user.dir");
+        String fullVideoPath = apiPath + File.separator + videoProperties.getLocalPath();
+        for (String path : videoPaths) {
             Video video = new Video();
-            video.setUrl(VIDEO_WEB_URL + path);
+            video.setUrl(videoProperties.getWebUrl() + path);
             video.setTitle(getChineseTitle(path));
 
             String coverFileName = VideoUtils.extractCover(path);
-            video.setCoverUrl(coverFileName != null ? COVER_WEB_URL + coverFileName : "");
+            video.setCoverUrl(coverFileName != null ? videoProperties.getCoverWebUrl() + coverFileName : "");
 
-            // 自动获取时长
-            Integer sec = getVideoDurationSeconds(VIDEO_LOCAL_PATH + path);
+            // 获取时长
+            Integer sec = getVideoDurationSeconds(fullVideoPath + File.separator + path);
             video.setDuration(sec);
 
             videoRepository.save(video);
-        });
+        }
 
     }
 
