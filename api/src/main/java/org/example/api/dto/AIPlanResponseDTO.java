@@ -1,9 +1,11 @@
 package org.example.api.dto;
 
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
+@Data
 public class AIPlanResponseDTO {
     private String planType;
     private Integer durationDays;

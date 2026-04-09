@@ -3,12 +3,13 @@ package org.example.api.service;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
 import org.example.api.dto.AIPlanResponseDTO;
 import org.example.api.entity.FitnessForm;
+import org.example.api.entity.WorkoutPlan;
 
 public interface AIPlanGenerator {
     /**
-     * 生成计话1
+     * 生成计划，保存到数据库中
      * */
-    AIPlanResponseDTO generatePlan(FitnessForm form);
+    WorkoutPlan generatePlan(FitnessForm form);
 
     /**
      *
