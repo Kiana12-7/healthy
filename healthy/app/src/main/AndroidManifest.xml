@@ -70,6 +70,10 @@
             android:exported="false"
             android:hardwareAccelerated="true"
             android:label="视频播放器" />
+        <activity
+            android:name=".ui.ai.AiChatActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
