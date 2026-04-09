@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 public class FitnessForm extends BaseEntity<Long> {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -50,4 +50,11 @@ public class FitnessForm extends BaseEntity<Long> {
     @OneToMany(mappedBy = "fitnessForm", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<WorkoutPlan> workoutPlans = new ArrayList<>();
 
+    public FitnessForm() {
+
+    }
+
+    public FitnessForm(Long fitnessFormId) {
+        this.id = fitnessFormId;
+    }
 }
