@@ -9,6 +9,7 @@ sealed class CourseItem {
         val title: String,
         val trainerName: String,    // 教练名
         val coverUrl: String,
+        val videoUrl: String,       // <--- 补上这个字段，解决 Fragment 的红字
         val duration: Int,
         val difficultyTag: String   // 难度标签：初级/中级/高级
     ) : CourseItem()
