@@ -59,8 +59,8 @@ public class V002InitVideo implements CommandLineRunner, Ordered {
             video.setUrl(videoProperties.getWebUrl() + path);
             video.setTitle(getChineseTitle(path));
 
-            String coverFileName = VideoUtils.extractCover(path);
-            video.setCoverUrl(coverFileName != null ? videoProperties.getCoverWebUrl() + coverFileName : "");
+//            String coverFileName = VideoUtils.extractCover(path);
+            video.setCoverUrl(videoProperties.getCoverWebUrl());
 
             // 获取时长
             Integer sec = getVideoDurationSeconds(fullVideoPath + File.separator + path);

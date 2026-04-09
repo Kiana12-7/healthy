@@ -15,11 +15,11 @@ import org.example.api.entity.FitnessForm;
 import org.example.api.entity.WorkoutPlan;
 import org.example.api.enums.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Arrays;
 
 @Service
@@ -27,14 +27,15 @@ public class AIPlanGeneratorImpl implements AIPlanGenerator{
     @Value("${qianwen.api.key}")
     private String apiKey;
     private final VideoService videoService;
-    private static final String OPENAI_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
-    @Setter
-    private WorkoutPlanService workoutPlanService;
+    private static final String OPENAI_URL = "https://dashscope.aliyuncs.com/api/v1";
+    private final WorkoutPlanService workoutPlanService;
     private final PlanDetailService planDetailService;
 
     public AIPlanGeneratorImpl(VideoService videoService,
+                               @Lazy WorkoutPlanService workoutPlanService,
                                PlanDetailService planDetailService) {
         this.videoService = videoService;
+        this.workoutPlanService = workoutPlanService;
         this.planDetailService = planDetailService;
     }
 
@@ -90,8 +91,8 @@ public class AIPlanGeneratorImpl implements AIPlanGenerator{
                 {
                   "dayNumber": 1,
                   "videos": [
-                    {"actionName": "bench_press_video", "orderInDay": 1},
-                    {"actionName": "bicep_curls_video", "orderInDay": 2}
+                    {"actionName": "俯卧撑", "orderInDay": 1},
+                    {"actionName": "引体向上", "orderInDay": 2}
                   ]
                 }
               ]
@@ -117,7 +118,7 @@ public class AIPlanGeneratorImpl implements AIPlanGenerator{
                 .build();
         GenerationParam param = GenerationParam.builder()
                 .apiKey(apiKey)
-                .model("qwen-plus")
+                .model("qwen-turbo")
                 .messages(Arrays.asList(systemMsg, userMsg))
                 .resultFormat(GenerationParam.ResultFormat.MESSAGE)
                 .build();

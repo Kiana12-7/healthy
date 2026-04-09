@@ -28,6 +28,9 @@ object RetrofitClient {
             .build()
     }
 
+    val vitaService: VitaService by lazy {
+        retrofit.create(VitaService::class.java)
+    }
 
     val userService: UserService by lazy {
         retrofit.create(UserService::class.java)

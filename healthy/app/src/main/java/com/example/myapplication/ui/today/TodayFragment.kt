@@ -1,16 +1,24 @@
 package com.example.myapplication.ui.today
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
+import com.example.myapplication.data.remote.RetrofitClient
+import com.example.myapplication.data.remote.VitaDataSource
 import com.example.myapplication.databinding.FragmentTodayBinding
+import kotlinx.coroutines.launch
+import java.io.IOException
 
 class TodayFragment : Fragment(R.layout.fragment_today) {
 
     private var _binding: FragmentTodayBinding? = null
+    private var vitaDataSource = VitaDataSource()
     // 使用这种方式访问 binding，确保 ID 能够被正确解析
     private val binding get() = _binding!!
 
@@ -73,7 +81,25 @@ class TodayFragment : Fragment(R.layout.fragment_today) {
 
         // 悬浮按钮点击
         binding.fabAiCoach.setOnClickListener {
+            Log.d("TodayFragment", "点击")
+            Log.d("TodayFragment", "fabAiCoach is null? ${binding.fabAiCoach == null}")
             // AI 教练逻辑
+            lifecycleScope.launch {
+                try {
+                    val response = RetrofitClient.vitaService.generatePlan()
+                    Log.d("TodayFragment", "zhixing")
+                    if (response.isSuccessful) {
+                        // 请求成功，可以更新 UI 或提示用户
+                        Toast.makeText(requireContext(), "计划生成成功", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "服务器错误: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: IOException) {
+                    Toast.makeText(requireContext(), "网络异常，请检查网络连接", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), "生成失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
