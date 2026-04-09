@@ -2,20 +2,30 @@ package com.example.myapplication.ui.today
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
+import com.example.myapplication.data.remote.RetrofitClient
+import com.example.myapplication.data.remote.VitaDataSource
 import com.example.myapplication.databinding.FragmentTodayBinding
 import com.example.myapplication.ui.ai.AiChatActivity
 import com.example.myapplication.ui.today.TodayViewModel
+import kotlinx.coroutines.launch
+import java.io.IOException
+
 /**
  * 今日课程页面：已同步 CourseItem 模型
  */
 class TodayFragment : Fragment(R.layout.fragment_today) {
 
     private var _binding: FragmentTodayBinding? = null
+    private var vitaDataSource = VitaDataSource()
+    // 使用这种方式访问 binding，确保 ID 能够被正确解析
     private val binding get() = _binding!!
 
     // 确保导入了 androidx.fragment:fragment-ktx 依赖
@@ -82,6 +92,22 @@ class TodayFragment : Fragment(R.layout.fragment_today) {
                 putExtra("SOURCE", "coach")
             }
             startActivity(intent)
+//            lifecycleScope.launch {
+//                try {
+//                    val response = RetrofitClient.vitaService.generatePlan()
+//                    Log.d("TodayFragment", "zhixing")
+//                    if (response.isSuccessful) {
+//                        // 请求成功，可以更新 UI 或提示用户
+//                        Toast.makeText(requireContext(), "计划生成成功", Toast.LENGTH_SHORT).show()
+//                    } else {
+//                        Toast.makeText(requireContext(), "服务器错误: ${response.code()}", Toast.LENGTH_SHORT).show()
+//                    }
+//                } catch (e: IOException) {
+//                    Toast.makeText(requireContext(), "网络异常，请检查网络连接", Toast.LENGTH_SHORT).show()
+//                } catch (e: Exception) {
+//                    Toast.makeText(requireContext(), "生成失败: ${e.message}", Toast.LENGTH_SHORT).show()
+//                }
+//            }
         }
 
         // 3. 之前的定制计划等点击事件保持不变...

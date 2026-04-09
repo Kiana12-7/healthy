@@ -3,6 +3,7 @@ package org.example.api.service;
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.api.dto.LoggedInUserDTO;
 import org.example.api.entity.User;
+import org.springframework.boot.security.autoconfigure.SecurityProperties;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
@@ -17,7 +18,7 @@ public interface UserService {
     /**
      * 获取当前登录用户信息
      * */
-    UserDetails getCurrentLoginUserDetails();
+    User getCurrentLoginUserDetails();
 
     LoggedInUserDTO login(String username, String password, HttpServletRequest request);
 }

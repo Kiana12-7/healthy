@@ -27,6 +27,7 @@ public class OkHttpUtil {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         return getClient(context).newBuilder()
+                .readTimeout(120, TimeUnit.SECONDS)
                 .addInterceptor(logging)
                 .build();
     }
