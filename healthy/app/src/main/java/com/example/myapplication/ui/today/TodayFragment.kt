@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.today
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -7,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentTodayBinding
+import com.example.myapplication.ui.ai.AiChatActivity
 import com.example.myapplication.ui.today.TodayViewModel
 /**
  * 今日课程页面：已同步 CourseItem 模型
@@ -66,19 +68,24 @@ class TodayFragment : Fragment(R.layout.fragment_today) {
     }
 
     private fun initClickListeners() {
+        // 1. AI 搜索框提问区域
         binding.llAiInput.setOnClickListener {
-            // 跳转 AI 助手页面逻辑
+            val intent = Intent(context, AiChatActivity::class.java).apply {
+                putExtra("SOURCE", "search")
+            }
+            startActivity(intent)
         }
 
-        binding.btnCustomize.setOnClickListener {
-            // 定制计划逻辑
-        }
-
+        // 2. 悬浮按钮 - AI 教练
         binding.fabAiCoach.setOnClickListener {
-            // 悬浮 AI 教练逻辑
+            val intent = Intent(context, AiChatActivity::class.java).apply {
+                putExtra("SOURCE", "coach")
+            }
+            startActivity(intent)
         }
-    }
 
+        // 3. 之前的定制计划等点击事件保持不变...
+    }
     private fun setupCalendar() {
         // 设置水平滑动的日历
         binding.rvCalendar.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
