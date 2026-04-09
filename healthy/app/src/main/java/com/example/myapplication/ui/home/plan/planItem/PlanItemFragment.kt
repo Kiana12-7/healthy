@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.home.plan.planItem
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
-import com.example.myapplication.ui.fitness.WeightActivity
 import com.example.myapplication.widget.FilterPopupWindow
 
 class PlanItemFragment : Fragment() {
@@ -38,24 +36,22 @@ class PlanItemFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_item_list, container, false)
 
-
+        // 定制计划Banner点击
         val bannerPlan = rootView.findViewById<ImageView>(R.id.iv_banner_plan)
         bannerPlan.setOnClickListener {
-            bannerPlan.setOnClickListener {
-                val intent = Intent(requireContext(), WeightActivity::class.java)
-                startActivity(intent)
-            }
+            Toast.makeText(requireContext(), "点击了个性定制计划", Toast.LENGTH_SHORT).show()
         }
 
-
+        // 计划列表初始化
         val rvPlanList = rootView.findViewById<RecyclerView>(R.id.rv_plan_list)
         rvPlanList.layoutManager = LinearLayoutManager(requireContext())
-        val fullPlanList = PlanItem.getAllPlans()
+
         planAdapter = MyPlanItemRecyclerViewAdapter(fullPlanList)
         rvPlanList.adapter = planAdapter
 
-        planAdapter.setOnItemClickListener { plan ->
-            Toast.makeText(requireContext(), "点击了：${plan.name}", Toast.LENGTH_SHORT).show()
+        // 计划点击跳转到详情页
+        planAdapter.setOnItemClickListener { planItem ->
+            PlanDetailActivity.actionStart(requireContext(), planItem.id, planItem.name)
         }
 
         initFilterButtons(rootView)
@@ -73,7 +69,8 @@ class PlanItemFragment : Fragment() {
         val tagList = allFilterTags[filterType] ?: return
         val savedSelected = selectedTagMap[filterType] ?: emptyList()
 
-        tagList.forEach { tag ->
+        // 【修复】明确遍历List，消除歧义
+        for (tag in tagList) {
             tag.isSelected = savedSelected.any { it.id == tag.id }
         }
 
@@ -87,6 +84,7 @@ class PlanItemFragment : Fragment() {
 
     companion object {
         const val ARG_COLUMN_COUNT = "column-count"
+
         @JvmStatic
         fun newInstance(columnCount: Int) = PlanItemFragment().apply {
             arguments = Bundle().apply { putInt(ARG_COLUMN_COUNT, columnCount) }
