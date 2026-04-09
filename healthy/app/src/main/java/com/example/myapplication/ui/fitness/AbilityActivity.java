@@ -1,5 +1,7 @@
 package com.example.myapplication.ui.fitness;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +19,8 @@ public class AbilityActivity extends AppCompatActivity {
 
     private RadioGroup rgPushup, rgSquat, rgSitups, rgStairs;
     private Button btnGenerate;
+    private Button btnMyInfo;
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +39,20 @@ public class AbilityActivity extends AppCompatActivity {
         rgSitups = findViewById(R.id.rgSitups);
         rgStairs = findViewById(R.id.rgStairs);
         btnGenerate = findViewById(R.id.btnGenerate);
+        btnMyInfo = findViewById(R.id.btnMyInfo);
 
+        sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
+
+        // “我的信息”按钮：跳转到统计页面
+        btnMyInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AbilityActivity.this, StatisticsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // “生成计划”按钮：保存数据并提示（后续可跳转到计划展示）
         btnGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,7 +63,15 @@ public class AbilityActivity extends AppCompatActivity {
                     String situps = getSelectedSitups();
                     String stairs = getSelectedStairs();
 
-                    // 保存或传递数据
+                    // 保存到 SharedPreferences
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("pushup", pushup);
+                    editor.putString("squat", squat);
+                    editor.putString("situp", situps);
+                    editor.putString("stairs", stairs);
+                    editor.apply();
+
+                    // 显示保存成功提示（后续可替换为跳转）
                     Toast.makeText(AbilityActivity.this,
                             "俯卧撑：" + pushup + "\n深蹲：" + squat + "\n仰卧起坐：" + situps + "\n爬楼：" + stairs,
                             Toast.LENGTH_LONG).show();

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +32,6 @@ public class WeightActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weight);
 
-        // 初始化 Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -61,9 +61,31 @@ public class WeightActivity extends AppCompatActivity {
         etHeightCm.addTextChangedListener(textWatcher);
         etWeightKg.addTextChangedListener(textWatcher);
 
+        // 下一步按钮：校验必须填写身高和体重
         btnGoToThird.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String heightStr = etHeightCm.getText().toString().trim();
+                String weightStr = etWeightKg.getText().toString().trim();
+
+                if (heightStr.isEmpty() || weightStr.isEmpty()) {
+                    Toast.makeText(WeightActivity.this, "请填写身高和体重", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                try {
+                    double heightCm = Double.parseDouble(heightStr);
+                    double weightKg = Double.parseDouble(weightStr);
+                    if (heightCm <= 0 || weightKg <= 0) {
+                        Toast.makeText(WeightActivity.this, "身高和体重必须为正数", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(WeightActivity.this, "请输入有效的数字", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // 校验通过，跳转到伤病选择界面
                 Intent intent = new Intent(WeightActivity.this, WoundActivity.class);
                 startActivity(intent);
             }
@@ -76,8 +98,7 @@ public class WeightActivity extends AppCompatActivity {
 
         if (heightStr.isEmpty() || weightStr.isEmpty()) {
             tvBmiResult.setText("BMI: --");
-            // 无输入时，可设置默认图片或隐藏图片
-            ivStatusImage.setImageResource(R.drawable.normal); // 可选：设置默认图
+            ivStatusImage.setImageResource(R.drawable.normal); // 默认图片
             return;
         }
 
@@ -96,12 +117,14 @@ public class WeightActivity extends AppCompatActivity {
             String bmiText = String.format("BMI: %.1f", bmi);
             tvBmiResult.setText(bmiText);
 
-            // 根据 BMI 显示对应的图片
             updateStatusImage(bmi);
-            // 在 calculateAndDisplayBmi() 方法中，计算得到 bmi 后添加以下代码：
+
+            // 保存 BMI 到 SharedPreferences（供其他界面使用）
             SharedPreferences sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putFloat("bmi", (float) bmi);
+            editor.putFloat("height", (float) heightCm);
+            editor.putFloat("weight", (float) weightKg);
             editor.apply();
 
         } catch (NumberFormatException e) {
@@ -110,10 +133,6 @@ public class WeightActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * 根据 BMI 值更新状态图片
-     * 标准：偏瘦 < 18.5，正常 18.5~24，过胖 >= 24
-     */
     private void updateStatusImage(double bmi) {
         if (bmi < 18.5) {
             ivStatusImage.setImageResource(R.drawable.thin);

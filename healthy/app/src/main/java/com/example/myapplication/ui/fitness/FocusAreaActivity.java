@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -77,16 +78,16 @@ public class FocusAreaActivity extends AppCompatActivity {
             }
         }
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedArea.isEmpty()) {
-                    Toast.makeText(FocusAreaActivity.this, "请选择一个重点改善部位", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent intent = new Intent(FocusAreaActivity.this, BodyPartFocusActivity.class);
-                    intent.putExtra("part", selectedArea);
-                    startActivity(intent);
-                }
+        btnNext.setOnClickListener(v -> {
+            if (selectedArea.isEmpty()) {
+                Toast.makeText(FocusAreaActivity.this, "请选择一个重点改善部位", Toast.LENGTH_SHORT).show();
+            } else {
+                SharedPreferences sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
+                sharedPref.edit().putString("focus_area", selectedArea).apply();
+
+                Intent intent = new Intent(FocusAreaActivity.this, BodyPartFocusActivity.class);
+                intent.putExtra("part", selectedArea);
+                startActivity(intent);
             }
         });
     }
