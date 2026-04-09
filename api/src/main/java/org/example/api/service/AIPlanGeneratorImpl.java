@@ -11,31 +11,48 @@ import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.protocol.Protocol;
 import org.example.api.dto.AIPlanResponseDTO;
 import org.example.api.entity.FitnessForm;
+import org.example.api.entity.WorkoutPlan;
 import org.example.api.enums.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 
 @Service
 public class AIPlanGeneratorImpl implements AIPlanGenerator{
     @Value("${qianwen.api.key}")
     private String apiKey;
-
     private final VideoService videoService;
-
     private static final String OPENAI_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
+    private final WorkoutPlanService workoutPlanService;
+    private final PlanDetailService planDetailService;
 
-    public AIPlanGeneratorImpl(VideoService videoService) {
+    public AIPlanGeneratorImpl(VideoService videoService,
+                               WorkoutPlanService workoutPlanService,
+                               PlanDetailService planDetailService) {
         this.videoService = videoService;
+        this.workoutPlanService = workoutPlanService;
+        this.planDetailService = planDetailService;
     }
 
     @Override
-    public AIPlanResponseDTO generatePlan(FitnessForm form) {
+    public WorkoutPlan generatePlan(FitnessForm form) {
+        // 获取ai生成的json数据，并转化为实体
         String prompt = buildPrompt(form);
         String jsonResponse = callOpenAI(prompt).getOutput().getChoices().get(0).getMessage().getContent();
-        return parseResponse(jsonResponse);
+        AIPlanResponseDTO dto = parseResponse(jsonResponse);
+        LocalDate startTime = LocalDate.parse(dto.getStartDate());
+        LocalDate endTime = LocalDate.parse(dto.getEndDate());
+        // 保存训练计划
+        WorkoutPlan workoutPlan = this.workoutPlanService.save(startTime, endTime, form.getId());
+        // 批量保存训练详情
+        this.planDetailService.saveAllByAIPlan(workoutPlan.getId(), dto.getDetails());
+
+        // todo 重试机制
+        return null;
     }
 
     @Override
