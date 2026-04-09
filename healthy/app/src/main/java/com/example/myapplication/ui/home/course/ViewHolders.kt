@@ -2,7 +2,7 @@ package com.example.myapplication.ui.home.course
 
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.example.myapplication.data.model.HomeItem
+import com.example.myapplication.data.model.CourseItem
 import com.example.myapplication.databinding.ItemVideoBinding
 
 /**
@@ -13,18 +13,18 @@ class VideoViewHolder(
     private val binding: ItemVideoBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: HomeItem.Video, onVideoClick: (HomeItem.Video) -> Unit) {
+    fun bind(item: CourseItem.TrainingVideo, onVideoClick: (CourseItem.TrainingVideo) -> Unit) {
         // 1. 设置文字内容
         binding.tvTitle.text = item.title
-        binding.tvAuthor.text = item.author
-        binding.tvDuration.text = item.duration
-        binding.tvTag.text = item.tag
+        binding.tvAuthor.text = item.trainerName
+        binding.tvDuration.text = item.duration.toString()
+        binding.tvTag.text = item.difficultyTag
+
+        binding.tvDuration.text = formatDuration(item.duration)
 
         // 2. 使用 Coil 加载封面图
-        // 确保你的 HomeViewModel 提供的 coverUrl 是有效的
         binding.imgCover.load(item.coverUrl) {
             crossfade(true)
-            // 如果加载本地视频封面，Coil 也能自动处理部分格式
         }
 
         // 3. 绑定整个条目的点击事件，用于跳转播放
@@ -32,7 +32,11 @@ class VideoViewHolder(
             onVideoClick(item)
         }
     }
-}
 
-// 注意：按照你“第二张图”的需求，BannerViewHolder 暂时不再被课程页列表使用
-// 如果后续其他页面需要，可以保留；如果追求代码精简，可以移除。
+    // 秒数 转 00:15 秒
+    private fun formatDuration(seconds: Int): String {
+        val min = seconds / 60
+        val sec = seconds % 60
+        return "%02d:%02d 秒".format(min, sec)
+    }
+}

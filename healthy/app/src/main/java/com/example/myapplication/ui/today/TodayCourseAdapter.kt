@@ -1,47 +1,64 @@
 package com.example.myapplication.ui.today
 
 import android.view.LayoutInflater
-import android.view.View // 必须手动导入，否则 ViewHolder 无法识别
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.data.model.HomeItem
+import com.example.myapplication.R
+import com.example.myapplication.data.model.CourseItem
 import com.example.myapplication.databinding.ItemTodayCourseBinding
 
-class TodayCourseAdapter : RecyclerView.Adapter<TodayCourseAdapter.ViewHolder>() {
-
-    // 显式指定类型以防推断失败
-    private var list: List<HomeItem> = emptyList()
-
-    fun submitList(newList: List<HomeItem>) {
-        this.list = newList
-        // 解决 "Unresolved reference 'notifyDataSetChanged'"
-        this.notifyDataSetChanged()
-    }
+/**
+ * 适配器：已同步最新的 CourseItem 数据模型
+ */
+class TodayCourseAdapter : ListAdapter<CourseItem, TodayCourseAdapter.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ItemTodayCourseBinding.inflate(layoutInflater, parent, false)
+        val binding = ItemTodayCourseBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = list[position]
+        // getItem(position) 可能返回 null (如果在 PagedList 中)，这里做安全性处理
+        val item = getItem(position) ?: return
 
-        if (item is HomeItem.Video) {
-            holder.binding.tvCourseName.text = item.title
-
-            // 解决 "Do not concatenate text" 警告
-            // 建议：在 strings.xml 定义 <string name="course_info_format">%1$s · %2$s</string>
-            // 然后使用：holder.itemView.context.getString(R.string.course_info_format, item.author, item.duration)
-            // 临时修复（使用字符串模板）：
-            val info = "${item.author} · ${item.duration}"
-            holder.binding.tvCourseInfo.text = info
+        // 匹配最新的 CourseItem.TrainingVideo 类型
+        if (item is CourseItem.TrainingVideo) {
+            holder.bind(item)
         }
     }
 
-    override fun getItemCount(): Int = list.size
+    class ViewHolder(val binding: ItemTodayCourseBinding)
+        : RecyclerView.ViewHolder(binding.root) {
 
-    // 确保这里的 ViewHolder 继承自 RecyclerView.ViewHolder
-    // 并且显式传入 binding.root
-    class ViewHolder(val binding: ItemTodayCourseBinding) : RecyclerView.ViewHolder(binding.root)
+        fun bind(item: CourseItem.TrainingVideo) {
+            binding.tvCourseName.text = item.title
+
+            // 保持 trainerName 和 duration 的对应关系
+            // 请确保 strings.xml 中的 course_info 是 "%1$s · %2$d分钟" 之类的格式
+            binding.tvCourseInfo.text = itemView.context.getString(
+                R.string.course_info,
+                item.trainerName,
+                item.duration
+            )
+
+            // 如果你有封面图，可以在这里添加加载逻辑，例如使用 Coil:
+            // binding.ivCourseCover.load(item.coverUrl)
+        }
+    }
+
+    class DiffCallback : DiffUtil.ItemCallback<CourseItem>() {
+        override fun areItemsTheSame(oldItem: CourseItem, newItem: CourseItem): Boolean {
+            // 使用抽象类中定义的 id 进行比对
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: CourseItem, newItem: CourseItem): Boolean {
+            // data class 的 == 比较会检查所有属性是否一致
+            return oldItem == newItem
+        }
+    }
 }
