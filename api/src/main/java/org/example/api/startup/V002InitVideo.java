@@ -24,7 +24,7 @@ public class V002InitVideo implements CommandLineRunner, Ordered {
 
     private static final String VIDEO_WEB_URL = "http://10.0.2.2/video/";
     private static final String COVER_WEB_URL = "http://10.0.2.2/video/covers/";
-    private static final String VIDEO_LOCAL_PATH = "D:/team/healthy/api/video/";
+    private static final String VIDEO_LOCAL_PATH = "/home/cjn/桌面/healthy/api/video";
 
     private final List<String> videoPaths = new ArrayList<>(Arrays.asList(
             "bench_press_video.mp4",
