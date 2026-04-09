@@ -2,6 +2,15 @@ server:
   address: 0.0.0.0  # 强制允许外部访问
   port: 8080
 
+# 视频文件配置
+video:
+  # 视频存放的本地路径（相对路径：相对于项目 api 文件夹）
+  local-path: video/
+  # 视频访问地址（给前端用的）
+  web-url: http://10.0.2.2/video/
+  # 封面访问地址
+  cover-web-url: http://10.0.2.2/video/covers/
+
 spring:
   profiles:
     active: cjn
