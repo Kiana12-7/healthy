@@ -9,6 +9,7 @@ import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.protocol.Protocol;
+import lombok.Setter;
 import org.example.api.dto.AIPlanResponseDTO;
 import org.example.api.entity.FitnessForm;
 import org.example.api.entity.WorkoutPlan;
@@ -27,14 +28,13 @@ public class AIPlanGeneratorImpl implements AIPlanGenerator{
     private String apiKey;
     private final VideoService videoService;
     private static final String OPENAI_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
-    private final WorkoutPlanService workoutPlanService;
+    @Setter
+    private WorkoutPlanService workoutPlanService;
     private final PlanDetailService planDetailService;
 
     public AIPlanGeneratorImpl(VideoService videoService,
-                               WorkoutPlanService workoutPlanService,
                                PlanDetailService planDetailService) {
         this.videoService = videoService;
-        this.workoutPlanService = workoutPlanService;
         this.planDetailService = planDetailService;
     }
 
