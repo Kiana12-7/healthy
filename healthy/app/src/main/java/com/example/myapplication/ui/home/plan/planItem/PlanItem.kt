@@ -4,12 +4,15 @@ import com.example.myapplication.R
 
 // 计划实体类：预留图片、ID、接口字段
 data class PlanItem(
-    val id: String, // 【预留】后端接口返回的计划ID
+    val id: String, // 后端接口返回的计划ID
     val name: String,
-    val imageResId: Int, // 【新增】本地图片资源ID（开发阶段用）
-    val imageUrl: String? = null, // 【预留】后端接口返回的图片URL（上线用）
+    val imageResId: Int, // 本地图片资源ID（开发阶段用）
+    val imageUrl: String? = null, // 后端接口返回的图片URL（上线用）
     val tagIds: List<String>
-) {
+
+)
+
+{
     companion object {
         // 获取所有38个计划（已绑定图片和标签）
         fun getAllPlans(): List<PlanItem> {
