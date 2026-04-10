@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,6 +50,9 @@ public class BodilyFormActivity extends AppCompatActivity {
                 updateButtonStyle(btnStraight);
             }
         });
+        // 在 onCreate 中找到 btnNext 后添加：
+        btnNext.setEnabled(true);
+        btnNext.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.button_enabled)));
 
         btnPear.setOnClickListener(new View.OnClickListener() {
             @Override
