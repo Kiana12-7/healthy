@@ -38,7 +38,6 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="@string/desc_search_icon"
                     android:src="@android:drawable/ic_menu_search"
                     app:tint="#333333" />
             </LinearLayout>
@@ -58,8 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:clipToPadding="false"
-                android:orientation="horizontal"
-                tools:listitem="@layout/fragment_item_list" />
+                android:orientation="horizontal" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -86,7 +84,6 @@
                         android:id="@+id/iv_empty_img"
                         android:layout_width="120dp"
                         android:layout_height="120dp"
-                        android:contentDescription="@string/desc_empty_img"
                         android:src="@android:drawable/ic_menu_today" />
 
                     <TextView
@@ -101,8 +98,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:backgroundTint="#00C08B"
-                        android:text="@string/btn_customize_plan" />
+                        android:backgroundTint="#00C48C"
+                        android:text="@string/btn_customize_plan"
+                        android:textColor="@android:color/white" />
                 </LinearLayout>
             </FrameLayout>
 
@@ -120,8 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_today_course" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
@@ -131,7 +128,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:contentDescription="@string/desc_ai_fab"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_menu_send"

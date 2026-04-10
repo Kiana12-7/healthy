@@ -2,12 +2,10 @@ package com.example.myapplication.data.model
 
 import java.util.Date
 
-/**
- * 日历日期模型
- */
 data class CalendarDay(
-    val date: Date,          // 原始日期对象
-    val dayOfWeek: String,   // 星期几 (如: 周一)
-    val dayOfMonth: String,  // 几号 (如: 09)
-    var isSelected: Boolean = false // 是否被选中
+    val date: Date,            // 真实日期对象
+    val displayMonthDay: String, // 显示用，例如 "4/9"
+    val displayWeekDay: String,  // 显示用，例如 "周四"
+    val isToday: Boolean,        // 是否是今天
+    var isSelected: Boolean      // 是否被选中
 )

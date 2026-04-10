@@ -7,7 +7,6 @@
     android:background="#FFFFFF">
 
     <!-- 顶部返回标题栏 -->
-    <!-- 系统返回箭头，可替换成自己的图标 -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -19,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- 顶部信息栏：课程总数、想练人数 -->
+    <!-- 顶部信息栏：仅保留课程总数 -->
     <LinearLayout
         android:id="@+id/ll_plan_info"
         android:layout_width="match_parent"
@@ -40,20 +39,6 @@
             android:textColor="#666666"
             android:text="5 节课程"/>
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="12dp"
-            android:background="#E0E0E0"
-            android:layout_marginHorizontal="12dp"/>
-
-        <TextView
-            android:id="@+id/tv_total_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="#666666"
-            android:text="113 人已想练"/>
-
     </LinearLayout>
 
     <!-- 分割线 -->
@@ -66,7 +51,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- 课程列表 -->
+    <!-- 训练动作列表 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_course_list"
         android:layout_width="match_parent"

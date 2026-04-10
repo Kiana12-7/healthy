@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.ui.fitness.WeightActivity
+import com.example.myapplication.ui.home.plan.planDetail.PlanDetailActivity
 import com.example.myapplication.widget.FilterPopupWindow
 
 class PlanItemFragment : Fragment() {

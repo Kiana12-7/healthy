@@ -21,9 +21,17 @@
             android:name=".ui.fitness.StatisticsActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.home.plan.planItem.PlanDetailActivity"
+            android:name=".ui.home.plan.planDetail.PlanDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.MyApplication" />
+        <activity
+            android:name=".ui.home.plan.planDetail.TimerFullScreenActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MyApplication"/>
+        <activity
+            android:name=".ui.home.plan.planDetail.TrainingDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MyApplication"/>
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true"

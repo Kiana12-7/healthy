@@ -8,8 +8,7 @@
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_ai_avatar" />//ai教练的头像
-    <TextView
+        android:src="@drawable/ic_ai_avatar" /><TextView
     android:id="@+id/tv_content"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
