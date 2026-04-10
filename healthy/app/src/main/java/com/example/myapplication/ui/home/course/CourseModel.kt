@@ -18,19 +18,30 @@ class CourseModel : ViewModel() {
     }
 
     fun fetchVideoListFromServer() {
-        // 使用协程，不再需要 enqueue 和 Callback
         viewModelScope.launch {
             try {
-                // 直接调用 suspend 方法，它会挂起协程直到获取结果
+                // 1. 获取后端原始数据 List<VideoDto>
                 val list = RetrofitClient.courseService.getVideoList()
 
-                // 协程中可以直接使用 .value 赋值（如果在主线程），
-                // 或者为了安全起见使用 .postValue
-                _homeData.value = list
+                // 2. 【核心修复】将 List<VideoDto> 转换为 List<CourseItem.TrainingVideo>
+                // 解决 Assignment type mismatch 报错
+                val mappedList = list.map { dto ->
+                    CourseItem.TrainingVideo(
+                        id = dto.id,
+                        title = dto.title,
+                        trainerName = dto.author ?: "专业教练", // 对应后端的 author
+                        coverUrl = dto.coverUrl ?: "",
+                        videoUrl = dto.videoUrl,
+                        duration = dto.duration,
+                        difficultyTag = dto.level ?: "初级"     // 对应后端的 level
+                    )
+                }
 
-                Log.d("CourseModel", "成功获取数据，数量: ${list.size}")
+                // 3. 将转换后的 UI 列表赋值给 LiveData
+                _homeData.value = mappedList
+
+                Log.d("CourseModel", "成功获取数据，数量: ${mappedList.size}")
             } catch (e: Exception) {
-                // 处理异常（如网络断开、服务器 404 等）
                 Log.e("CourseModel", "获取视频列表失败: ${e.message}")
                 _homeData.value = emptyList()
             }
