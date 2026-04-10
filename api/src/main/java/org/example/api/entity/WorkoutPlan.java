@@ -17,12 +17,16 @@ import java.util.List;
 @Entity
 @Data
 public class WorkoutPlan extends BaseEntity<Long> {
+    @Column(name = "name")
+    private String name;
+
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "form_id", nullable = false)
+    @JoinColumn(name = "form_id", nullable = true)
     private FitnessForm fitnessForm;
 
     @Column(name = "start_date")
