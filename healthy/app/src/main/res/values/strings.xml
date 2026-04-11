@@ -171,4 +171,9 @@
     <string name="ai_coach_ask">输入你的健身问题...</string>
     <string name="sent">发送</string>
     <string name="ai_coach">AI 健身教练</string>
+
+    <string name="prepare_pose">准备姿势</string>
+    <string name="action_process">动作过程</string>
+    <string name="breath_rhythm">呼吸节奏</string>
+    <string name="attention">注意事项</string>
 </resources>

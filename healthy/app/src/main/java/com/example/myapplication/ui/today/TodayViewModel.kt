@@ -83,7 +83,11 @@ class TodayViewModel : ViewModel() {
                         coverUrl = dto.coverUrl ?: "",
                         videoUrl = dto.videoUrl,
                         duration = dto.duration,
-                        difficultyTag = dto.level ?: "初级"
+                        difficultyTag = dto.level ?: "初级",
+                        preparePose = dto.preparePose ?: "自然站立，核心收紧",
+                        actionProcess = dto.actionProcess ?: "保持动作稳定，匀速完成",
+                        breathRhythm = dto.breathRhythm ?: "保持均匀呼吸",
+                        attention = dto.attention ?: "动作标准优先，不要追求速度"
                     )
                 }
                 _courseList.value = mappedList
