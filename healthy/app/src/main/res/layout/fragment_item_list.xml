@@ -54,24 +54,27 @@
             <TextView
                 android:id="@+id/btn_filter_goal"
                 style="@style/GreenFilterButtonStyle"
-                android:text="@string/filter_goal" />
+                android:text="@string/filter_goal"
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/btn_filter_part"
                 style="@style/GreenFilterButtonStyle"
-                android:text="@string/filter_part" />
+                android:text="@string/filter_part"
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/btn_filter_difficulty"
                 style="@style/GreenFilterButtonStyle"
-                android:text="@string/filter_difficulty" />
+                android:text="@string/filter_difficulty"
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/btn_filter_crowd"
                 style="@style/GreenFilterButtonStyle"
-                android:text="@string/filter_crowd" />
+                android:text="@string/filter_crowd"
+                android:textColor="#000000"/>
         </LinearLayout>
-
 
         <View
             android:id="@+id/divider"
