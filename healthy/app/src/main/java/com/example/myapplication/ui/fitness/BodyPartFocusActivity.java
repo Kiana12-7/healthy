@@ -1,6 +1,8 @@
 package com.example.myapplication.ui.fitness;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -10,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,6 +67,9 @@ public class BodyPartFocusActivity extends AppCompatActivity {
         setupCurrentOptions();
         // 创建改善后选项视图（初始全部可用）
         setupTargetOptions();
+
+        // 初始按钮状态（未选择时禁用）
+        updateButtonState();
 
         btnNext.setOnClickListener(v -> {
             if (currentSelectedIndex == -1 || targetSelectedIndex == -1) {
@@ -190,6 +194,8 @@ public class BodyPartFocusActivity extends AppCompatActivity {
                 updateCurrentSelection(index);
                 // 根据新的当前选项，更新改善后选项的可用性
                 updateTargetOptionsAvailability();
+                // 更新按钮状态
+                updateButtonState();
             });
             llCurrentOptions.addView(itemView);
         }
@@ -209,6 +215,8 @@ public class BodyPartFocusActivity extends AppCompatActivity {
                 if (isTargetAllowed(index)) {
                     if (targetSelectedIndex == index) return;
                     updateTargetSelection(index);
+                    // 更新按钮状态
+                    updateButtonState();
                 } else {
                     Toast.makeText(BodyPartFocusActivity.this, "当前体态无法直接改善为此目标", Toast.LENGTH_SHORT).show();
                 }
@@ -239,7 +247,7 @@ public class BodyPartFocusActivity extends AppCompatActivity {
                 // 允许：纤细
                 return target.equals("健壮");
             case "健壮":
-                // 只能选纤细
+                // 只能选健壮
                 return target.equals("健壮");
             default:
                 return false;
@@ -266,6 +274,8 @@ public class BodyPartFocusActivity extends AppCompatActivity {
                 oldIv.setImageResource(uncheckResources[targetSelectedIndex]);
             }
             targetSelectedIndex = -1;
+            // 清除后也要更新按钮状态
+            updateButtonState();
         }
     }
 
@@ -324,6 +334,17 @@ public class BodyPartFocusActivity extends AppCompatActivity {
             newIv.setImageResource(checkResources[newIndex]);
         }
         targetSelectedIndex = newIndex;
+    }
+
+    /**
+     * 更新“下一步”按钮状态：当前和改善后都选中时启用并变绿，否则禁用并变灰
+     */
+    private void updateButtonState() {
+        boolean isValid = currentSelectedIndex != -1 && targetSelectedIndex != -1;
+        btnNext.setEnabled(isValid);
+        btnNext.setBackgroundTintList(ColorStateList.valueOf(
+                isValid ? getColor(R.color.button_enabled) : getColor(R.color.button_disabled)
+        ));
     }
 
     @Override

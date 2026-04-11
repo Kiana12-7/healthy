@@ -40,14 +40,21 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService{
 
     @Override
     public WorkoutPlan save(LocalDate startTime, LocalDate endTime, Long fitnessFormId) {
+        return this.save(startTime, endTime,fitnessFormId, "ai生成计划");
+    }
+
+    @Override
+    public WorkoutPlan save(LocalDate startTime, LocalDate endTime, Long fitnessFormId, String name) {
         // 保存WorkoutPlan实体
         WorkoutPlan workoutPlan = new WorkoutPlan();
         workoutPlan.setStartDate(startTime);
         workoutPlan.setEndDate(endTime);
         FitnessForm fitnessForm = this.fitnessFormRepository.findById(fitnessFormId).orElseThrow(EntityExistsException::new);
         workoutPlan.setFitnessForm(fitnessForm);
+        workoutPlan.setName(name);
         workoutPlan.setUser(fitnessForm.getUser());
 
         return this.workoutPlanRepository.save(workoutPlan);
     }
+
 }
