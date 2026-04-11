@@ -59,6 +59,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="返回"
-        android:backgroundTint="?attr/colorPrimary" />
+        android:backgroundTint="@color/button_enabled" />
 
 </LinearLayout>

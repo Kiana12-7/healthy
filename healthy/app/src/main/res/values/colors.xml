@@ -7,4 +7,6 @@
     <color name="selected_button_bg">#90CAF9</color> <!-- BodilyFormActicity勾选颜色 -->
     <color name="selected_card_bg">#E3F2FD</color>   <!-- AimActivity勾选颜色 -->
     <color name="keep_green">#81E292</color>
+    <color name="button_disabled">#CCCCCC</color>   <!-- 灰色 -->
+    <color name="button_enabled">#81C784</color>    <!-- 浅绿色 -->
 </resources>
