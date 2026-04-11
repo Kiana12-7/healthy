@@ -6,131 +6,98 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.ActivityPlanDetailBinding
-import com.example.myapplication.ui.home.plan.planItem.PlanItem
-import java.util.Locale
 
 class PlanDetailActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityPlanDetailBinding
-    private lateinit var courseAdapter: CourseListAdapter
 
-    private var planId: String = ""
-    private var planName: String = ""
+    private lateinit var binding: ActivityPlanDetailBinding
+
+    // 接收planId和planName
+    private val planId: String by lazy {
+        intent.getStringExtra(KEY_PLAN_ID) ?: "plan_fat_loss_default_001"
+    }
+    private val planName: String by lazy {
+        intent.getStringExtra(KEY_PLAN_NAME) ?: "个性减脂计划"
+    }
+
+    // 训练数据
+    private val fatLossCourseList by lazy {
+        listOf(
+            CourseItem(
+                courseId = "${planId}_001",
+                planId = planId,
+                courseName = "全身激活燃脂循环",
+                actionList = listOf(
+                    TrainActionItem(
+                        actionId = "action_001",
+                        actionName = "开合跳",
+                        groupDesc = "20次 × 4组",
+                        restDesc = "组间休息：45秒",
+                        videoUrl = "https://xxx.com/video1.mp4",
+                        actionDesc = "【准备姿势】\n双脚并拢站立，双手自然下垂\n\n【动作过程】\n1. 双脚向两侧跳开，同时双手举过头顶\n2. 双脚跳回并拢，双手回落\n\n【呼吸节奏】\n跳起时吸气，回落时呼气\n\n【注意事项】\n膝盖微屈缓冲，不要锁死关节"
+                    ),
+                    TrainActionItem(
+                        actionId = "action_002",
+                        actionName = "高抬腿",
+                        groupDesc = "30秒 × 4组",
+                        restDesc = "组间休息：45秒",
+                        videoUrl = "https://xxx.com/video2.mp4",
+                        actionDesc = "【准备姿势】\n挺胸收腹，双脚与肩同宽\n\n【动作过程】\n1. 快速交替抬高大腿，抬至与地面平行\n2. 前脚掌落地，快速切换\n\n【呼吸节奏】\n保持均匀呼吸，不要憋气\n\n【注意事项】\n核心收紧，上半身不要晃动"
+                    ),
+                    TrainActionItem(
+                        actionId = "action_003",
+                        actionName = "勾脚跳",
+                        groupDesc = "25次 × 4组",
+                        restDesc = "组间休息：45秒",
+                        videoUrl = "https://xxx.com/video3.mp4",
+                        actionDesc = "【准备姿势】\n双脚并拢，双手放在身体两侧\n\n【动作过程】\n1. 双脚向前跳，同时勾脚尖，脚跟先落地\n2. 落地后快速回弹，重复动作\n\n【呼吸节奏】\n保持均匀呼吸\n\n【注意事项】\n膝盖微屈，避免冲击关节"
+                    )
+                ),
+                duration = 20,
+                difficulty = "易",
+                isLearned = false,
+                videoUrl = "https://xxx.com/course_video1.mp4"
+            )
+        )
+    }
+
+    companion object {
+        const val KEY_PLAN_ID = "key_plan_id"
+        const val KEY_PLAN_NAME = "key_plan_name" // 新增常量，传计划名称
+
+        fun actionStart(context: Context, planId: String, planName: String) {
+            val intent = Intent(context, PlanDetailActivity::class.java).apply {
+                putExtra(KEY_PLAN_ID, planId)
+                putExtra(KEY_PLAN_NAME, planName)
+            }
+            context.startActivity(intent)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlanDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        intent.extras?.let {
-            planId = it.getString("plan_id", "")
-            planName = it.getString("plan_name", "")
-        }
-
-        initToolbar()
-        initRecyclerView()
-        loadPlanDetailData()
+        initTopBar()
+        initActionList()
     }
 
-    private fun initToolbar() {
+    private fun initTopBar() {
         binding.toolbar.title = planName
         binding.toolbar.setNavigationOnClickListener { finish() }
     }
 
-    private fun initRecyclerView() {
-        courseAdapter = CourseListAdapter()
-        binding.rvCourseList.apply {
-            layoutManager = LinearLayoutManager(this@PlanDetailActivity)
-            adapter = courseAdapter
-        }
+    // 初始化课程列表
+    private fun initActionList() {
+        binding.rvCourseList.layoutManager = LinearLayoutManager(this)
+        val courseAdapter = CourseListAdapter()
+        courseAdapter.submitList(fatLossCourseList)
 
-        // 点击训练项 → 跳训练详情页
+        // 点击课程 → 跳转到训练详情页
         courseAdapter.setOnItemClickListener { courseItem ->
             TrainingDetailActivity.actionStart(this@PlanDetailActivity, courseItem)
         }
-    }
 
-
-
-    private fun loadPlanDetailData() {
-        val mockPlanDetail = getMockPlanDetail(planId)
-        binding.tvTotalCourse.text = String.format(Locale.getDefault(), "%d 节课程", mockPlanDetail.totalCourseCount)
-        courseAdapter.setData(mockPlanDetail.courseList)
-    }
-
-    // 更新训练数据：短名称+完整步骤
-    private fun getMockPlanDetail(planId: String): PlanDetail {
-        val planItem = PlanItem.getAllPlans().firstOrNull { it.id == planId }
-        val planName = planItem?.name ?: "个性减脂计划"
-
-        // 个性减脂计划专属5节训练（列表短名+详情完整步骤）
-        val fatLossCourseList = listOf(
-            CourseItem(
-                courseId = "${planId}_001",
-                planId = planId,
-                courseName = "全身激活燃脂循环",
-                content = "【训练步骤】\n1. 开合跳 20次 × 4组\n2. 高抬腿 30秒 × 4组\n3. 勾脚跳 25次 × 4组\n✅ 组间休息：45秒\n💡 训练要点：动作连贯，保持呼吸节奏",
-                duration = 20,
-                difficulty = "易",
-                isLearned = false,
-                videoUrl = "https://xxx.com/video1.mp4"
-            ),
-            CourseItem(
-                courseId = "${planId}_002",
-                planId = planId,
-                courseName = "核心燃脂进阶",
-                content = "【训练步骤】\n1. 平板支撑 40秒 × 3组\n2. 登山跑 30秒 × 4组\n3. 侧支撑转体 20次/侧 × 3组\n✅ 组间休息：1分钟\n💡 训练要点：核心收紧，避免塌腰",
-                duration = 25,
-                difficulty = "中",
-                isLearned = false,
-                videoUrl = "https://xxx.com/video2.mp4"
-            ),
-            CourseItem(
-                courseId = "${planId}_003",
-                planId = planId,
-                courseName = "下肢燃脂塑形",
-                content = "【训练步骤】\n1. 徒手深蹲 20次 × 4组\n2. 箭步蹲 15次/侧 × 4组\n3. 臀桥 30次 × 4组\n✅ 组间休息：1分钟\n💡 训练要点：膝盖不超过脚尖，臀部发力",
-                duration = 30,
-                difficulty = "中",
-                isLearned = false,
-                videoUrl = "https://xxx.com/video3.mp4"
-            ),
-            CourseItem(
-                courseId = "${planId}_004",
-                planId = planId,
-                courseName = "全身循环燃脂",
-                content = "【训练步骤】\n1. 波比跳 12次 × 4组\n2. 弓步跳 15次/侧 × 3组\n3. 平板开合跳 20次 × 4组\n✅ 组间休息：1分钟\n💡 训练要点：量力而行，避免受伤",
-                duration = 35,
-                difficulty = "中",
-                isLearned = false,
-                videoUrl = "https://xxx.com/video4.mp4"
-            ),
-            CourseItem(
-                courseId = "${planId}_005",
-                planId = planId,
-                courseName = "高强度间歇燃脂",
-                content = "【训练步骤】\n1. 冲刺高抬腿 20秒 × 6组\n2. 开合跳 30秒 × 6组\n3. 俯身登山 20秒 × 6组\n✅ 组间休息：30秒\n💡 训练要点：全力冲刺，高效燃脂",
-                duration = 40,
-                difficulty = "难",
-                isLearned = false,
-                videoUrl = "https://xxx.com/video5.mp4"
-            )
-        )
-
-        return PlanDetail(
-            planId = planId,
-            planName = planName,
-            totalCourseCount = fatLossCourseList.size,
-            courseList = fatLossCourseList
-        )
-    }
-
-    companion object {
-        fun actionStart(context: Context, planId: String, planName: String) {
-            val intent = Intent(context, PlanDetailActivity::class.java).apply {
-                putExtra("plan_id", planId)
-                putExtra("plan_name", planName)
-            }
-            context.startActivity(intent)
-        }
+        binding.rvCourseList.adapter = courseAdapter
     }
 }

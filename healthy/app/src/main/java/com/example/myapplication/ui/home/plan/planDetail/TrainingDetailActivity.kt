@@ -2,16 +2,21 @@ package com.example.myapplication.ui.home.plan.planDetail
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.ActivityTrainingDetailBinding
+import java.util.Locale
+import androidx.constraintlayout.widget.ConstraintSet
+import android.view.View
 
 class TrainingDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTrainingDetailBinding
+    private lateinit var actionAdapter: TrainActionAdapter
 
-    // 计时器相关
     private var seconds = 0
     private var isRunning = false
     private val handler = Handler(Looper.getMainLooper())
@@ -23,7 +28,6 @@ class TrainingDetailActivity : AppCompatActivity() {
         }
     }
 
-    // 接收训练数据
     private lateinit var currentCourse: CourseItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,12 +35,16 @@ class TrainingDetailActivity : AppCompatActivity() {
         binding = ActivityTrainingDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 接收训练数据
-        currentCourse = intent.getSerializableExtra("COURSE_ITEM") as CourseItem
+        currentCourse = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra("COURSE_ITEM", CourseItem::class.java)!!
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getSerializableExtra("COURSE_ITEM") as CourseItem
+        }
 
         initToolbar()
-        initTrainingContent()
-        initGoButton()
+        initActionList()
+        initTimerButton()
         initTimerButtons()
     }
 
@@ -45,38 +53,43 @@ class TrainingDetailActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { finish() }
     }
 
-    // 显示完整训练内容
-    private fun initTrainingContent() {
-        binding.tvTrainingContent.text = currentCourse.content
+    private fun initActionList() {
+        actionAdapter = TrainActionAdapter()
+        binding.rvActionList.layoutManager = LinearLayoutManager(this)
+        binding.rvActionList.adapter = actionAdapter
+        actionAdapter.setData(currentCourse.actionList)
+
+        // 弹窗+计时器升降
+        actionAdapter.setOnWatchActionClickListener { actionItem ->
+            if (binding.llTimerArea.visibility == View.VISIBLE) {
+                moveTimerToTop()
+            }
+            val bottomSheet = ActionVideoBottomSheet.newInstance(actionItem)
+            bottomSheet.show(supportFragmentManager, "ActionVideoBottomSheet")
+            bottomSheet.dialog?.setOnDismissListener {
+                if (binding.llTimerArea.visibility == View.VISIBLE) {
+                    moveTimerToBottom()
+                }
+            }
+        }
     }
 
-    // 初始化GO按钮：点击后显示计时器
-    private fun initGoButton() {
+    private fun initTimerButton() {
         binding.btnGoTimer.setOnClickListener {
-            // 隐藏GO按钮，显示计时器区域
-            binding.btnGoTimer.visibility = android.view.View.GONE
-            binding.llTimerArea.visibility = android.view.View.VISIBLE
-            // 自动开始计时
+            binding.btnGoTimer.visibility = View.GONE
+            binding.llTimerArea.visibility = View.VISIBLE
             startTimer()
         }
     }
 
-    // 初始化计时器按钮
     private fun initTimerButtons() {
-        // 暂停/继续按钮（三角形）
         binding.btnPausePlay.setOnClickListener {
-            if (isRunning) {
-                pauseTimer()
-            } else {
-                startTimer()
-            }
+            if (isRunning) pauseTimer() else startTimer()
         }
-
-        // 终止按钮（正方形）：重置计时，隐藏计时器，显示GO按钮
         binding.btnStop.setOnClickListener {
             stopTimer()
-            binding.llTimerArea.visibility = android.view.View.GONE
-            binding.btnGoTimer.visibility = android.view.View.VISIBLE
+            binding.llTimerArea.visibility = View.GONE
+            binding.btnGoTimer.visibility = View.VISIBLE
         }
     }
 
@@ -103,12 +116,28 @@ class TrainingDetailActivity : AppCompatActivity() {
         val hours = seconds / 3600
         val minutes = (seconds % 3600) / 60
         val secs = seconds % 60
-        binding.tvTimer.text = String.format(java.util.Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, secs)
+        binding.tvTimer.text = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, secs)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(timerRunnable)
+    }
+
+    private fun moveTimerToTop() {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(binding.root)
+        constraintSet.clear(binding.llTimerArea.id, ConstraintSet.BOTTOM)
+        constraintSet.connect(binding.llTimerArea.id, ConstraintSet.TOP, binding.toolbar.id, ConstraintSet.BOTTOM, 16)
+        constraintSet.applyTo(binding.root)
+    }
+
+    private fun moveTimerToBottom() {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(binding.root)
+        constraintSet.clear(binding.llTimerArea.id, ConstraintSet.TOP)
+        constraintSet.connect(binding.llTimerArea.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
+        constraintSet.applyTo(binding.root)
     }
 
     companion object {
