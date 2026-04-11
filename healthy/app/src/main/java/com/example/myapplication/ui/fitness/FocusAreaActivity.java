@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -90,6 +91,9 @@ public class FocusAreaActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        // 在 onCreate 中找到 btnNext 后添加：
+        btnNext.setEnabled(true);
+        btnNext.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.button_enabled)));
     }
 
     private void setBodyImage(String shape) {
