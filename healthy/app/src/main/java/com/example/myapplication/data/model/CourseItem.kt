@@ -1,6 +1,9 @@
 package com.example.myapplication.data.model
 
-sealed class CourseItem {
+import java.io.Serializable
+
+// 给父类实现Serializable，确保子类可序列化
+sealed class CourseItem : Serializable {
     abstract val id: Int
 
     // 课程视频项
@@ -9,8 +12,12 @@ sealed class CourseItem {
         val title: String,
         val trainerName: String,    // 教练名
         val coverUrl: String,
-        val videoUrl: String,       // <--- 补上这个字段，解决 Fragment 的红字
+        val videoUrl: String,       // 视频地址
         val duration: Int,
-        val difficultyTag: String   // 难度标签：初级/中级/高级
+        val difficultyTag: String,  // 【修复】末尾加上逗号
+        val preparePose: String,
+        val actionProcess: String,
+        val breathRhythm: String,
+        val attention: String
     ) : CourseItem()
 }
