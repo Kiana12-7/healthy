@@ -6,11 +6,14 @@ import org.example.api.dto.WorkoutPlanActionDto;
 import org.example.api.dto.WorkoutPlanCourseDto;
 import org.example.api.dto.WorkoutPlanDetailDto;
 import org.example.api.entity.PlanDetail;
+import org.example.api.entity.User;
 import org.example.api.entity.Video;
 import org.example.api.entity.WorkoutPlan;
 import org.example.api.repository.PlanDetailRepository;
 import org.example.api.repository.VideoRepository;
 import org.example.api.repository.WorkoutPlanRepository;
+import org.example.api.repository.specs.WorkoutPlanSpec;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,13 +32,16 @@ public class PlanDetailServiceImpl implements PlanDetailService{
     private final VideoRepository videoRepository;
     private final PlanDetailRepository planDetailRepository;
     private final WorkoutPlanRepository workoutPlanRepository;
+    private final UserService userService;
 
     public PlanDetailServiceImpl(VideoRepository videoRepository,
                                  PlanDetailRepository planDetailRepository,
-                                 WorkoutPlanRepository workoutPlanRepository) {
+                                 WorkoutPlanRepository workoutPlanRepository,
+                                 UserService userService) {
         this.videoRepository = videoRepository;
         this.planDetailRepository = planDetailRepository;
         this.workoutPlanRepository = workoutPlanRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -106,6 +114,7 @@ public class PlanDetailServiceImpl implements PlanDetailService{
         WorkoutPlanCourseDto dto = new WorkoutPlanCourseDto();
         dto.setCourseId(workoutPlan.getId() + "_" + dayNumber);
         dto.setPlanId(workoutPlan.getId());
+        dto.setPlanName(workoutPlan.getName());
         dto.setCourseName("第" + dayNumber + "天训练");
         dto.setActionList(actionList);
         dto.setDuration(resolveCourseDuration(sortedDetails));
@@ -184,5 +193,26 @@ public class PlanDetailServiceImpl implements PlanDetailService{
             }
         }
         return false;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<WorkoutPlanCourseDto> getTodayWorkoutPlanCourses(LocalDate date) {
+        User currentUser = userService.getCurrentLoginUserDetails();
+        Specification<WorkoutPlan> spec = WorkoutPlanSpec.isDate(date).and(WorkoutPlanSpec.isUser(currentUser));
+        List<WorkoutPlan> workoutPlans = workoutPlanRepository.findAll(spec);
+
+        List<WorkoutPlanCourseDto> result = new ArrayList<>();
+
+            int dayNumber = (int) ChronoUnit.DAYS.between(workoutPlans.get(0).getStartDate(), date) + 1;
+            if (dayNumber >= 1) {
+                List<PlanDetail> dailyPlanDetails = planDetailRepository
+                        .findAllByWorkoutPlan_IdAndDayNumberOrderByOrderInDayAsc(workoutPlans.get(0).getId(), dayNumber);
+                if (!dailyPlanDetails.isEmpty()) {
+                    result.add(toCourseDto(workoutPlans.get(0), dayNumber, dailyPlanDetails));
+                }
+            }
+
+        return result;
     }
 }

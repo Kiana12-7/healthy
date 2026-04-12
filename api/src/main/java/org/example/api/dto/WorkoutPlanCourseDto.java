@@ -8,6 +8,7 @@ import java.util.List;
 public class WorkoutPlanCourseDto {
     private String courseId;
     private Long planId;
+    private String planName;
     private String courseName;
     private List<WorkoutPlanActionDto> actionList;
     private Integer duration;

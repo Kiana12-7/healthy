@@ -1,9 +1,11 @@
 package org.example.api.service;
 
 import org.example.api.dto.AIPlanResponseDTO;
+import org.example.api.dto.WorkoutPlanCourseDto;
 import org.example.api.dto.WorkoutPlanDetailDto;
 import org.example.api.entity.PlanDetail;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface PlanDetailService {
@@ -26,4 +28,9 @@ public interface PlanDetailService {
      * 获取训练计划详情
      */
     WorkoutPlanDetailDto getWorkoutPlanDetail(Long workoutPlanId);
+
+    /**
+     * 获取当前用户某天的训练详情列表
+     */
+    List<WorkoutPlanCourseDto> getTodayWorkoutPlanCourses(LocalDate date);
 }
