@@ -1,91 +1,119 @@
 package com.example.myapplication.ui.today
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
+import com.example.myapplication.data.remote.VitaDataSource
 import com.example.myapplication.databinding.FragmentTodayBinding
+import com.example.myapplication.ui.ai.AiChatActivity
+import com.example.myapplication.data.model.CourseItem // 必须导入这个
+// import com.example.myapplication.ui.video.VideoPlayActivity // 导入你的播放页面
 
 class TodayFragment : Fragment(R.layout.fragment_today) {
 
     private var _binding: FragmentTodayBinding? = null
-    // 使用这种方式访问 binding，确保 ID 能够被正确解析
     private val binding get() = _binding!!
 
-    // 提示：确保 build.gradle 有 implementation("androidx.fragment:fragment-ktx:1.6.2")
+    private lateinit var calendarAdapter: CalendarAdapter
     private val viewModel: TodayViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // 关键：绑定布局
         _binding = FragmentTodayBinding.bind(view)
 
-        // 1. 初始化列表
-        setupRecyclerViews()
+        setupCalendar()
+        setupRecyclerViews() // 这里面包含了点击逻辑
+        initClickListeners()
 
-        // 2. 观察 LiveData 动态切换 UI
-        viewModel.courseList.observe(viewLifecycleOwner) { courses ->
-            if (courses.isNullOrEmpty()) {
-                // 如果没有数据，隐藏列表，显示缺省布局
-                binding.rvTodayCourses.visibility = View.GONE
-                binding.llEmptyState.visibility = View.VISIBLE
-            } else {
-                // 如果有数据，显示列表，隐藏缺省布局
-                binding.rvTodayCourses.visibility = View.VISIBLE
-                binding.llEmptyState.visibility = View.GONE
-                (binding.rvTodayCourses.adapter as? TodayCourseAdapter)?.submitList(courses)
+        // 观察日历
+        viewModel.calendarDays.observe(viewLifecycleOwner) { days ->
+            calendarAdapter.submitList(days)
+        }
+
+        // 观察滚动
+        // 在 TodayFragment.kt 的 onViewCreated 中
+        viewModel.scrollToPosition.observe(viewLifecycleOwner) { position ->
+            position?.let {
+                // 使用 post 确保在界面渲染出来的第一时刻进行“闪现”滚动
+                binding.rvCalendar.post {
+                    val layoutManager = binding.rvCalendar.layoutManager as? LinearLayoutManager
+                    // 关键：第一个参数是索引，第二个参数 0 表示把这个索引的对象对齐到屏幕最左侧
+                    // 配合 ViewModel 里的 (todayIndex - 1)，就能实现“今天在第二位”
+                    layoutManager?.scrollToPositionWithOffset(it, 0)
+                }
             }
         }
 
-        // 3. 事件监听
-        initClickListeners()
+        // 观察课程列表
+        viewModel.courseList.observe(viewLifecycleOwner) { courses: List<CourseItem>? ->
+            if (courses.isNullOrEmpty()) {
+                binding.rvTodayCourses.visibility = View.GONE
+                binding.llEmptyState.visibility = View.VISIBLE
+            } else {
+                binding.rvTodayCourses.visibility = View.VISIBLE
+                binding.llEmptyState.visibility = View.GONE
 
-        // 4. 加载日历
-        setupCalendar()
+                (binding.rvTodayCourses.adapter as? TodayCourseAdapter)?.submitList(courses)
+                (binding.rvAllCourses.adapter as? TodayCourseAdapter)?.submitList(courses)
+            }
+        }
     }
 
     private fun setupRecyclerViews() {
-        val courseAdapter = TodayCourseAdapter()
+        // 定义点击处理逻辑，解决 Cannot infer type 和 Unresolved reference 报错
+        val courseAdapter = TodayCourseAdapter { course: CourseItem ->
+            if (course is CourseItem.TrainingVideo) {
+                // 这里的跳转逻辑你可以根据实际播放页面的类名修改
+                // val intent = Intent(requireContext(), VideoPlayActivity::class.java).apply {
+                //     putExtra("VIDEO_URL", course.videoUrl)
+                //     putExtra("VIDEO_TITLE", course.title)
+                // }
+                // startActivity(intent)
+            }
+        }
+
         binding.rvTodayCourses.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = courseAdapter
+            isNestedScrollingEnabled = false
         }
 
-        // 如果你有第二个 RecyclerView (全部课程)
         binding.rvAllCourses.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = TodayCourseAdapter() // 或者你专门的 Adapter
-        }
-    }
-
-    private fun initClickListeners() {
-        // AI 提问区域点击
-        binding.llAiInput.setOnClickListener {
-            // 这里执行跳转或弹出对话框逻辑
-        }
-
-        // 定制计划按钮点击 (对应 XML 里的 btn_customize)
-        binding.btnCustomize.setOnClickListener {
-            // 点击后的操作
-        }
-
-        // 悬浮按钮点击
-        binding.fabAiCoach.setOnClickListener {
-            // AI 教练逻辑
+            adapter = TodayCourseAdapter { /* 下方列表的点击逻辑 */ }
+            isNestedScrollingEnabled = false
         }
     }
 
     private fun setupCalendar() {
-        binding.rvCalendar.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        // 此处等你有 CalendarAdapter 后再设置适配器
-        // binding.rvCalendar.adapter = CalendarAdapter(...)
+        calendarAdapter = CalendarAdapter { selectedDay, position ->
+            viewModel.onDateSelected(selectedDay, position)
+        }
+        binding.rvCalendar.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = calendarAdapter
+            isNestedScrollingEnabled = false
+        }
+    }
+
+    private fun initClickListeners() {
+        binding.llAiInput.setOnClickListener {
+            startActivity(Intent(context, AiChatActivity::class.java).apply { putExtra("SOURCE", "search") })
+        }
+        binding.fabAiCoach.setOnClickListener {
+            startActivity(Intent(context, AiChatActivity::class.java).apply { putExtra("SOURCE", "coach") })
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // 必须置空以防内存泄漏
         _binding = null
     }
 }

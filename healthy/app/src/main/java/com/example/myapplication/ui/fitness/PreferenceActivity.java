@@ -1,6 +1,8 @@
 package com.example.myapplication.ui.fitness;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +20,7 @@ public class PreferenceActivity extends AppCompatActivity {
 
     private RadioGroup rgSportType, rgDuration, rgRequirement, rgEquipment;
     private Button btnNext;
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,21 +40,31 @@ public class PreferenceActivity extends AppCompatActivity {
         rgEquipment = findViewById(R.id.rgEquipment);
         btnNext = findViewById(R.id.btnNext);
 
+        sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
+
+        // 初始按钮状态（未全选时禁用）
+        updateButtonState();
+
+        // 为每个 RadioGroup 设置监听器，当任一选项改变时更新按钮状态
+        RadioGroup.OnCheckedChangeListener listener = (group, checkedId) -> updateButtonState();
+        rgSportType.setOnCheckedChangeListener(listener);
+        rgDuration.setOnCheckedChangeListener(listener);
+        rgRequirement.setOnCheckedChangeListener(listener);
+        rgEquipment.setOnCheckedChangeListener(listener);
+
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validateSelections()) {
-                    // 获取所有选中的值
-                    String sportType = getSelectedSportType();
-                    String duration = getSelectedDuration();
-                    String requirement = getSelectedRequirement();
-                    String equipment = getSelectedEquipment();
+                    // 保存所有选择
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("sport_type", getSelectedSportType());
+                    editor.putString("duration", getSelectedDuration());
+                    editor.putString("requirement", getSelectedRequirement());
+                    editor.putString("equipment", getSelectedEquipment());
+                    editor.apply();
 
-                    // 可以保存到 SharedPreferences 或传递给下一个界面
-                    Toast.makeText(PreferenceActivity.this,
-                            "运动类型：" + sportType + "\n时长：" + duration + "\n要求：" + requirement + "\n器械：" + equipment,
-                            Toast.LENGTH_LONG).show();
-
+                    // 跳转到运动能力界面
                     Intent intent = new Intent(PreferenceActivity.this, AbilityActivity.class);
                     startActivity(intent);
                 } else {
@@ -59,6 +72,20 @@ public class PreferenceActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * 更新按钮状态：全选时启用并变绿，否则禁用并变灰
+     */
+    private void updateButtonState() {
+        boolean allSelected = rgSportType.getCheckedRadioButtonId() != -1 &&
+                rgDuration.getCheckedRadioButtonId() != -1 &&
+                rgRequirement.getCheckedRadioButtonId() != -1 &&
+                rgEquipment.getCheckedRadioButtonId() != -1;
+        btnNext.setEnabled(allSelected);
+        btnNext.setBackgroundTintList(ColorStateList.valueOf(
+                allSelected ? getColor(R.color.button_enabled) : getColor(R.color.button_disabled)
+        ));
     }
 
     private boolean validateSelections() {
@@ -91,6 +118,9 @@ public class PreferenceActivity extends AppCompatActivity {
     private String getSelectedRequirement() {
         int id = rgRequirement.getCheckedRadioButtonId();
         if (id == R.id.rbNoNoise) return "零噪音";
+        if (id == R.id.rbNoJump) return "无跳跃";
+        if (id == R.id.rbSmallSpace) return "小场地";
+        if (id == R.id.rbNoRequirement) return "没有以上要求";
         return "";
     }
 

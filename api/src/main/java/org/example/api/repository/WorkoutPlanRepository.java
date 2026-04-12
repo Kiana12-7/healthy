@@ -6,4 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface WorkoutPlanRepository  extends CrudRepository<WorkoutPlan, Long>, PagingAndSortingRepository<WorkoutPlan, Long>, JpaSpecificationExecutor<WorkoutPlan> {
+
+    // 添加自定义查询方法(V003InitWorkoutPlan用的)
+    boolean existsByName(String name);
 }

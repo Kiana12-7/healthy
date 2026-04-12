@@ -1,10 +1,12 @@
 package com.example.myapplication.ui.fitness;
 
 import android.content.Intent;
+import android.content.SharedPreferences;   // 添加这一行
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.content.res.ColorStateList;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +38,6 @@ public class WoundActivity extends AppCompatActivity {
         cardWaist = findViewById(R.id.cardWaist);
         btnNext = findViewById(R.id.btnNext);
 
-        // 设置卡片点击事件
         cardKnee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,30 +54,25 @@ public class WoundActivity extends AppCompatActivity {
             }
         });
 
-        // 下一步按钮
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 收集选中的伤病
-                StringBuilder selected = new StringBuilder();
-                if (isKneeSelected) selected.append("膝盖 ");
-                if (isWaistSelected) selected.append("腰部 ");
+        btnNext.setOnClickListener(v -> {
+            StringBuilder selected = new StringBuilder();
+            if (isKneeSelected) selected.append("膝盖 ");
+            if (isWaistSelected) selected.append("腰部 ");
+            String injuries = selected.length() == 0 ? "无伤病情况" : selected.toString().trim();
 
-                Intent intent = new Intent(WoundActivity.this, BodilyFormActivity.class);
-                intent.putExtra("selected_injuries", selected.toString().trim());
-                startActivity(intent);
-            }
+            SharedPreferences sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
+            sharedPref.edit().putString("injuries", injuries).apply();
+
+            Intent intent = new Intent(WoundActivity.this, BodilyFormActivity.class);
+            startActivity(intent);
         });
+        btnNext.setEnabled(true);
+        btnNext.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.button_enabled)));
     }
 
-    /**
-     * 更新卡片的背景颜色来表示选中状态
-     * @param card 卡片视图
-     * @param isSelected 是否选中
-     */
     private void updateCardBackground(CardView card, boolean isSelected) {
         if (isSelected) {
-            card.setCardBackgroundColor(getColor(R.color.selected_color)); // 需要定义颜色资源
+            card.setCardBackgroundColor(getColor(R.color.selected_color));
         } else {
             card.setCardBackgroundColor(getColor(android.R.color.white));
         }

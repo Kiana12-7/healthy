@@ -1,5 +1,7 @@
 package org.example.api.service;
 
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.example.api.dto.LoggedInUserDTO;
@@ -35,23 +37,23 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Optional<User> getCurrentUser() {
-        UserDetails userDetails = this.getCurrentLoginUserDetails();
-
-        if (userDetails instanceof User) {
-            return Optional.of((User) userDetails);
-        }
-
-        return Optional.empty();
+        User user = this.getCurrentLoginUserDetails();
+        return Optional.of(user);
     }
 
     @Override
-    public UserDetails getCurrentLoginUserDetails() {
+    public User getCurrentLoginUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails user = (UserDetails) authentication.getPrincipal();
-        if (null == user) {
-            throw new RuntimeException("没有登录用户");
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            return userRepository.findByUsername(username).orElseThrow(EntityNotFoundException::new);
+        } else if (principal instanceof String) {
+            String username = (String) principal;
+            return userRepository.findByUsername(username).orElseThrow(EntityNotFoundException::new);
+        } else {
+            throw new RuntimeException("无法获取当前用户");
         }
-        return user;
     }
 
     @Override

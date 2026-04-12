@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- 【核心修复】计划大图：彻底解决挤压变形 -->
+        <!-- 计划大图-->
         <ImageView
             android:id="@+id/iv_plan_image"
             android:layout_width="match_parent"
@@ -26,7 +26,9 @@
             android:scaleType="centerCrop"
             android:maxHeight="220dp"
             android:minHeight="160dp"
-            android:src="@drawable/ai_plan" />
+            android:src="@drawable/ai_plan"
+            android:paddingTop="16dp" />
+
 
         <!-- 计划标题 -->
         <TextView

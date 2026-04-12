@@ -54,25 +54,28 @@
             <TextView
                 android:id="@+id/btn_filter_goal"
                 style="@style/GreenFilterButtonStyle"
-                android:text="@string/filter_goal" />
+                android:text="@string/filter_goal"
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/btn_filter_part"
                 style="@style/GreenFilterButtonStyle"
-                android:text="@string/filter_part" />
+                android:text="@string/filter_part"
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/btn_filter_difficulty"
                 style="@style/GreenFilterButtonStyle"
-                android:text="@string/filter_difficulty" />
+                android:text="@string/filter_difficulty"
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/btn_filter_crowd"
                 style="@style/GreenFilterButtonStyle"
-                android:text="@string/filter_crowd" />
+                android:text="@string/filter_crowd"
+                android:textColor="#000000"/>
         </LinearLayout>
 
-        <!-- 筛选栏一起吸顶 -->
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
@@ -82,24 +85,39 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- 计划列表RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_plan_list"
+    <!-- 滚动容器 -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="ifContentScrolls"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <!-- 底部提示文案 -->
-    <TextView
-        android:id="@+id/tv_placeholder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="32dp"
-        android:text="到底啦，去看看定制其他吧~"
-        android:textColor="#999999"
-        android:textSize="12sp"
-        android:layout_gravity="bottom|center_horizontal"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 计划列表RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_plan_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="ifContentScrolls"
+                android:nestedScrollingEnabled="false"/>
+
+            <!-- 底部提示文案 -->
+            <TextView
+                android:id="@+id/tv_placeholder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"
+                android:text="到底啦，去看看定制其他吧~"
+                android:textColor="#999999"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

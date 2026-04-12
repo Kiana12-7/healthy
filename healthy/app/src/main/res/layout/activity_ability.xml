@@ -205,11 +205,22 @@
 
     </ScrollView>
 
+    <!-- 在生成计划按钮上方添加 -->
+    <Button
+        android:id="@+id/btnMyInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="我的信息"
+        android:textSize="16sp"
+        android:backgroundTint="#9E9E9E" />
+
     <Button
         android:id="@+id/btnGenerate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="24dp"
+        android:layout_marginBottom="24dp"
         android:text="生成计划"
         android:textSize="16sp"
         android:backgroundTint="?attr/colorPrimary" />

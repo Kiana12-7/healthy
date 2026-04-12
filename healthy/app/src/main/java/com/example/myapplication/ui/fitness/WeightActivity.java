@@ -2,6 +2,7 @@ package com.example.myapplication.ui.fitness;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,8 +22,7 @@ import com.example.myapplication.R;
 
 public class WeightActivity extends AppCompatActivity {
 
-    private EditText etHeightCm;
-    private EditText etWeightKg;
+    private EditText etHeightCm, etWeightKg;
     private TextView tvBmiResult;
     private ImageView ivStatusImage;
     private Button btnGoToThird;
@@ -31,12 +32,11 @@ public class WeightActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weight);
 
-        // 初始化 Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setTitle(null);
         }
 
         etHeightCm = findViewById(R.id.etHeightCm);
@@ -45,81 +45,84 @@ public class WeightActivity extends AppCompatActivity {
         ivStatusImage = findViewById(R.id.ivStatusImage);
         btnGoToThird = findViewById(R.id.btnGoToThird);
 
+        // 初始按钮状态
+        updateButtonState();
+
         TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
                 calculateAndDisplayBmi();
+                updateButtonState();  // 每次输入后更新按钮状态
             }
         };
-
         etHeightCm.addTextChangedListener(textWatcher);
         etWeightKg.addTextChangedListener(textWatcher);
 
-        btnGoToThird.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(WeightActivity.this, WoundActivity.class);
-                startActivity(intent);
+        btnGoToThird.setOnClickListener(v -> {
+            String heightStr = etHeightCm.getText().toString().trim();
+            String weightStr = etWeightKg.getText().toString().trim();
+
+            if (heightStr.isEmpty() || weightStr.isEmpty()) {
+                Toast.makeText(WeightActivity.this, "请填写身高和体重", Toast.LENGTH_SHORT).show();
+                return;
             }
+            try {
+                double h = Double.parseDouble(heightStr);
+                double w = Double.parseDouble(weightStr);
+                if (h <= 0 || w <= 0) throw new NumberFormatException();
+            } catch (NumberFormatException e) {
+                Toast.makeText(WeightActivity.this, "请输入有效数字", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            startActivity(new Intent(WeightActivity.this, WoundActivity.class));
         });
     }
 
+    private void updateButtonState() {
+        boolean isValid = !etHeightCm.getText().toString().trim().isEmpty() &&
+                !etWeightKg.getText().toString().trim().isEmpty();
+        btnGoToThird.setEnabled(isValid);
+        btnGoToThird.setBackgroundTintList(ColorStateList.valueOf(
+                isValid ? getColor(R.color.button_enabled) : getColor(R.color.button_disabled)
+        ));
+    }
+
     private void calculateAndDisplayBmi() {
+        // 原有代码不变（省略）
         String heightStr = etHeightCm.getText().toString().trim();
         String weightStr = etWeightKg.getText().toString().trim();
-
         if (heightStr.isEmpty() || weightStr.isEmpty()) {
             tvBmiResult.setText("BMI: --");
-            // 无输入时，可设置默认图片或隐藏图片
-            ivStatusImage.setImageResource(R.drawable.normal); // 可选：设置默认图
+            ivStatusImage.setImageResource(R.drawable.normal);
             return;
         }
-
         try {
             double heightCm = Double.parseDouble(heightStr);
             double weightKg = Double.parseDouble(weightStr);
-
             if (heightCm <= 0 || weightKg <= 0) {
                 tvBmiResult.setText("BMI: 请输入正数");
                 ivStatusImage.setImageResource(R.drawable.normal);
                 return;
             }
-
             double heightM = heightCm / 100.0;
             double bmi = weightKg / (heightM * heightM);
-            String bmiText = String.format("BMI: %.1f", bmi);
-            tvBmiResult.setText(bmiText);
+            tvBmiResult.setText(String.format("BMI: %.1f", bmi));
+            if (bmi < 18.5) ivStatusImage.setImageResource(R.drawable.thin);
+            else if (bmi >= 24) ivStatusImage.setImageResource(R.drawable.fat);
+            else ivStatusImage.setImageResource(R.drawable.normal);
 
-            // 根据 BMI 显示对应的图片
-            updateStatusImage(bmi);
-            // 在 calculateAndDisplayBmi() 方法中，计算得到 bmi 后添加以下代码：
-            SharedPreferences sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putFloat("bmi", (float) bmi);
-            editor.apply();
-
+            SharedPreferences sp = getSharedPreferences("health_app", MODE_PRIVATE);
+            sp.edit().putFloat("bmi", (float) bmi)
+                    .putFloat("height", (float) heightCm)
+                    .putFloat("weight", (float) weightKg).apply();
         } catch (NumberFormatException e) {
             tvBmiResult.setText("BMI: 输入无效");
-            ivStatusImage.setImageResource(R.drawable.normal);
-        }
-    }
-
-    /**
-     * 根据 BMI 值更新状态图片
-     * 标准：偏瘦 < 18.5，正常 18.5~24，过胖 >= 24
-     */
-    private void updateStatusImage(double bmi) {
-        if (bmi < 18.5) {
-            ivStatusImage.setImageResource(R.drawable.thin);
-        } else if (bmi >= 24) {
-            ivStatusImage.setImageResource(R.drawable.fat);
-        } else {
             ivStatusImage.setImageResource(R.drawable.normal);
         }
     }

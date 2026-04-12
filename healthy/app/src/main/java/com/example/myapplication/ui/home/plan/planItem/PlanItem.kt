@@ -4,12 +4,15 @@ import com.example.myapplication.R
 
 // 计划实体类：预留图片、ID、接口字段
 data class PlanItem(
-    val id: String, // 【预留】后端接口返回的计划ID
+    val id: String, // 后端接口返回的计划ID
     val name: String,
-    val imageResId: Int, // 【新增】本地图片资源ID（开发阶段用）
-    val imageUrl: String? = null, // 【预留】后端接口返回的图片URL（上线用）
+    val imageResId: Int, // 本地图片资源ID（开发阶段用）
+    val imageUrl: String? = null, // 后端接口返回的图片URL（上线用）
     val tagIds: List<String>
-) {
+
+)
+
+{
     companion object {
         // 获取所有38个计划（已绑定图片和标签）
         fun getAllPlans(): List<PlanItem> {
@@ -62,7 +65,6 @@ data class PlanItem(
                     FilterTag("goal_fat_loss", "减脂", FilterType.GOAL),
                     FilterTag("goal_muscle_gain", "增肌", FilterType.GOAL),
                     FilterTag("goal_posture", "体态改善", FilterType.GOAL),
-                    FilterTag("goal_ability", "能力提升", FilterType.GOAL),
                     FilterTag("goal_relax", "舒缓放松", FilterType.GOAL),
                     FilterTag("goal_health", "保持健康", FilterType.GOAL),
                     FilterTag("goal_cardio", "有氧提升", FilterType.GOAL)
@@ -70,13 +72,9 @@ data class PlanItem(
                 FilterType.PART to listOf(
                     FilterTag("part_whole", "全身", FilterType.PART),
                     FilterTag("part_abdominal", "腹部", FilterType.PART),
-                    FilterTag("part_waist", "腰部", FilterType.PART),
                     FilterTag("part_leg", "腿部", FilterType.PART),
                     FilterTag("part_arm", "手臂", FilterType.PART),
-                    FilterTag("part_hip", "臀部", FilterType.PART),
-                    FilterTag("part_back", "背部", FilterType.PART),
                     FilterTag("part_chest", "胸部", FilterType.PART),
-                    FilterTag("part_neck", "颈部", FilterType.PART),
                     FilterTag("part_shoulder", "肩部", FilterType.PART)
                 ),
                 FilterType.DIFFICULTY to listOf(
@@ -88,11 +86,7 @@ data class PlanItem(
                 FilterType.CROWD to listOf(
                     FilterTag("crowd_student", "学生党", FilterType.CROWD),
                     FilterTag("crowd_heavy", "大体重", FilterType.CROWD),
-                    FilterTag("crowd_postpartum", "产后妈妈", FilterType.CROWD),
-                    FilterTag("crowd_period", "生理期", FilterType.CROWD),
-                    FilterTag("crowd_light", "小体重", FilterType.CROWD),
                     FilterTag("crowd_office_worker", "上班族", FilterType.CROWD),
-                    FilterTag("crowd_middle_aged", "中老年", FilterType.CROWD)
                 )
             )
         }

@@ -6,6 +6,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +50,9 @@ public class BodilyFormActivity extends AppCompatActivity {
                 updateButtonStyle(btnStraight);
             }
         });
+        // 在 onCreate 中找到 btnNext 后添加：
+        btnNext.setEnabled(true);
+        btnNext.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.button_enabled)));
 
         btnPear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,13 +85,13 @@ public class BodilyFormActivity extends AppCompatActivity {
         updateButtonStyle(btnStraight);
 
         // 下一步按钮：跳转到第五个界面（暂时空置，可以创建 FifthActivity 或提示完成）
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(BodilyFormActivity.this, AimActivity.class);
-                intent.putExtra("body_shape", selectedShape);
-                startActivity(intent);
-            }
+        btnNext.setOnClickListener(v -> {
+            SharedPreferences sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
+            sharedPref.edit().putString("body_shape", selectedShape).apply();
+
+            Intent intent = new Intent(BodilyFormActivity.this, AimActivity.class);
+            intent.putExtra("body_shape", selectedShape); // 仍传递，但已保存
+            startActivity(intent);
         });
     }
 

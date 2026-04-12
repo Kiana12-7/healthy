@@ -1,5 +1,8 @@
 package com.example.myapplication.ui.fitness;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +20,8 @@ public class AbilityActivity extends AppCompatActivity {
 
     private RadioGroup rgPushup, rgSquat, rgSitups, rgStairs;
     private Button btnGenerate;
+    private Button btnMyInfo;
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,30 +40,66 @@ public class AbilityActivity extends AppCompatActivity {
         rgSitups = findViewById(R.id.rgSitups);
         rgStairs = findViewById(R.id.rgStairs);
         btnGenerate = findViewById(R.id.btnGenerate);
+        btnMyInfo = findViewById(R.id.btnMyInfo);
 
-        btnGenerate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (validateSelections()) {
-                    // 获取所有选中的值
-                    String pushup = getSelectedPushup();
-                    String squat = getSelectedSquat();
-                    String situps = getSelectedSitups();
-                    String stairs = getSelectedStairs();
+        sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
 
-                    // 保存或传递数据
-                    Toast.makeText(AbilityActivity.this,
-                            "俯卧撑：" + pushup + "\n深蹲：" + squat + "\n仰卧起坐：" + situps + "\n爬楼：" + stairs,
-                            Toast.LENGTH_LONG).show();
+        // “我的信息”按钮始终绿色且可点击
+        btnMyInfo.setEnabled(true);
+        btnMyInfo.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.button_enabled)));
+        btnMyInfo.setOnClickListener(v -> {
+            Intent intent = new Intent(AbilityActivity.this, StatisticsActivity.class);
+            startActivity(intent);
+        });
 
-                    // TODO: 跳转到生成计划界面（如计划展示）
-                    // Intent intent = new Intent(AbilityActivity.this, PlanActivity.class);
-                    // startActivity(intent);
-                } else {
-                    Toast.makeText(AbilityActivity.this, "请完整填写所有运动能力问题", Toast.LENGTH_SHORT).show();
-                }
+        // 初始按钮状态（未全选时禁用灰色）
+        updateGenerateButtonState();
+
+        // 为每个 RadioGroup 设置监听器，当任一选项改变时更新“生成计划”按钮状态
+        RadioGroup.OnCheckedChangeListener listener = (group, checkedId) -> updateGenerateButtonState();
+        rgPushup.setOnCheckedChangeListener(listener);
+        rgSquat.setOnCheckedChangeListener(listener);
+        rgSitups.setOnCheckedChangeListener(listener);
+        rgStairs.setOnCheckedChangeListener(listener);
+
+        // “生成计划”按钮点击事件
+        btnGenerate.setOnClickListener(v -> {
+            if (validateSelections()) {
+                String pushup = getSelectedPushup();
+                String squat = getSelectedSquat();
+                String situps = getSelectedSitups();
+                String stairs = getSelectedStairs();
+
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("pushup", pushup);
+                editor.putString("squat", squat);
+                editor.putString("situp", situps);
+                editor.putString("stairs", stairs);
+                editor.apply();
+
+                Toast.makeText(AbilityActivity.this,
+                        "俯卧撑：" + pushup + "\n深蹲：" + squat + "\n仰卧起坐：" + situps + "\n爬楼：" + stairs,
+                        Toast.LENGTH_LONG).show();
+
+                // TODO: 跳转到生成计划界面
+            } else {
+                Toast.makeText(AbilityActivity.this, "请完整填写所有运动能力问题", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**
+     * 更新“生成计划”按钮状态：全选时启用并变绿，否则禁用并变灰
+     */
+    private void updateGenerateButtonState() {
+        boolean allSelected = rgPushup.getCheckedRadioButtonId() != -1 &&
+                rgSquat.getCheckedRadioButtonId() != -1 &&
+                rgSitups.getCheckedRadioButtonId() != -1 &&
+                rgStairs.getCheckedRadioButtonId() != -1;
+        btnGenerate.setEnabled(allSelected);
+        btnGenerate.setBackgroundTintList(ColorStateList.valueOf(
+                allSelected ? getColor(R.color.button_enabled) : getColor(R.color.button_disabled)
+        ));
     }
 
     private boolean validateSelections() {

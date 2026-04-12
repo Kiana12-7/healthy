@@ -48,13 +48,10 @@ class CourseFragment : Fragment(R.layout.fragment_course) {
                 if (courseAdapter == null) {
                     // 创建适配器，并设置条目点击事件
                     courseAdapter = CourseAdapter(videos) { video ->
-                        // 点击条目 → 跳转到视频详情页
-                        val intent =
-                            Intent(requireContext(), VideoDetailActivity::class.java).apply {
-                                // 传递视频地址和标题
-                                putExtra("VIDEO_URL", video.videoUrl)
-                                putExtra("VIDEO_TITLE", video.title)
-                            }
+                        // 点击条目 → 跳转到视频详情页（传递完整序列化对象）
+                        val intent = Intent(requireContext(), VideoDetailActivity::class.java).apply {
+                            putExtra("VIDEO_ITEM", video)
+                        }
                         startActivity(intent)
                     }
                     // 设置适配器
@@ -84,7 +81,7 @@ class CourseFragment : Fragment(R.layout.fragment_course) {
         // 创建瀑布流布局管理器：2列，垂直方向
         val staggeredManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         // 设置间隙策略，防止列表条目乱序、跳动
-        staggeredManager.gapStrategy = 2
+        staggeredManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
 
         // 对 RecyclerView 进行配置
         binding.rvVideoList.apply {
