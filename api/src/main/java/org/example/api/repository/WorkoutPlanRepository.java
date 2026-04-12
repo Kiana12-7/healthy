@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface WorkoutPlanRepository  extends CrudRepository<WorkoutPlan, Long>, PagingAndSortingRepository<WorkoutPlan, Long>, JpaSpecificationExecutor<WorkoutPlan> {
@@ -15,4 +16,6 @@ public interface WorkoutPlanRepository  extends CrudRepository<WorkoutPlan, Long
     boolean existsByNameAndFitnessForm_Id(String name, Long fitnessFormId);
 
     Optional<WorkoutPlan> findFirstByNameAndFitnessForm_IdOrderByIdAsc(String name, Long fitnessFormId);
+
+    List<WorkoutPlan> findAllByUser_UsernameOrderByIdAsc(String username);
 }
