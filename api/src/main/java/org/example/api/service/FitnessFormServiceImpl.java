@@ -1,12 +1,13 @@
 package org.example.api.service;
 
+import jakarta.transaction.Transactional;
 import org.example.api.entity.FitnessForm;
 import org.example.api.entity.User;
 import org.example.api.repository.FitnessFormRepository;
-import org.example.api.repository.specs.FitnessFormSpec;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class FitnessFormServiceImpl implements FitnessFormService{
     private final UserService userService;
     private final FitnessFormRepository fitnessFormRepository;
@@ -25,12 +26,14 @@ public class FitnessFormServiceImpl implements FitnessFormService{
 
     @Override
     public FitnessForm save(User user, String description) {
-        FitnessForm fitnessForm = this.fitnessFormRepository.findBy(FitnessFormSpec.isUser(user)).orElseGet(() -> {
+        FitnessForm fitnessForm = this.fitnessFormRepository.findByUser(user).orElseGet(() -> {
             FitnessForm instance = new FitnessForm();
             instance.setUser(user);
-            instance.setDescription(description);
             return instance;
         });
+
+        fitnessForm.setUser(user);
+        fitnessForm.setDescription(description);
 
         return this.fitnessFormRepository.save(fitnessForm);
     }

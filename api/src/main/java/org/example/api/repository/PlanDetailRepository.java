@@ -13,4 +13,6 @@ public interface PlanDetailRepository extends CrudRepository<PlanDetail, Long>, 
     void deleteByWorkoutPlan_Id(Long workoutPlanId);
 
     List<PlanDetail> findAllByWorkoutPlan_IdOrderByDayNumberAscOrderInDayAsc(Long workoutPlanId);
+
+    List<PlanDetail> findAllByWorkoutPlan_IdAndDayNumberOrderByOrderInDayAsc(Long workoutPlanId, Integer dayNumber);
 }

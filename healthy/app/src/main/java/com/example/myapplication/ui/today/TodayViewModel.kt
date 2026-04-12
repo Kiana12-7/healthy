@@ -5,13 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.model.CalendarDay
-import com.example.myapplication.data.model.CourseItem
 import com.example.myapplication.data.remote.RetrofitClient
+import com.example.myapplication.ui.home.plan.planDetail.CourseItem as PlanCourseItem
+import com.example.myapplication.ui.home.plan.planDetail.TrainActionItem
+import com.example.myapplication.data.model.CourseItem as VideoCourseItem
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 class TodayViewModel : ViewModel() {
+    private var currentSelectedDate: Date = Date()
 
     private val _calendarDays = MutableLiveData<List<CalendarDay>>()
     val calendarDays: LiveData<List<CalendarDay>> = _calendarDays
@@ -19,14 +22,17 @@ class TodayViewModel : ViewModel() {
     private val _scrollToPosition = MutableLiveData<Int>()
     val scrollToPosition: LiveData<Int> = _scrollToPosition
 
-    private val _courseList = MutableLiveData<List<CourseItem>>()
-    val courseList: LiveData<List<CourseItem>> = _courseList
+    private val _todayPlanList = MutableLiveData<List<PlanCourseItem>>()
+    val todayPlanList: LiveData<List<PlanCourseItem>> = _todayPlanList
+
+    private val _courseList = MutableLiveData<List<VideoCourseItem>>()
+    val courseList: LiveData<List<VideoCourseItem>> = _courseList
 
     val isLoading = MutableLiveData<Boolean>()
 
     init {
         generateCalendarRange()
-        fetchCoursesFromServer(Date())
+        refreshCurrentDate()
     }
 
     private fun generateCalendarRange() {
@@ -64,19 +70,53 @@ class TodayViewModel : ViewModel() {
 
         _calendarDays.value = daysList
 
-        // 【关键逻辑】为了让今日在第 2 位（前面留一个空位看昨天），我们滚到 (todayIndex - 1)
-        // 比如今天索引 15，滚到 14，屏幕第一项是 14(昨)，第二项就是 15(今)
-        _scrollToPosition.value = if (todayIndex >= 1) todayIndex - 1 else 0
+        _scrollToPosition.value = todayIndex
+    }
+
+    private fun fetchTodayPlanFromServer(date: Date) {
+        val dateParam = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
+        viewModelScope.launch {
+            isLoading.value = true
+            try {
+                val response = RetrofitClient.workoutPlanService.getTodayWorkoutPlanCourses(dateParam)
+                _todayPlanList.value = response.map { dto ->
+                    PlanCourseItem(
+                        courseId = dto.courseId,
+                        planId = dto.planId.toString(),
+                        courseName = listOfNotNull(dto.planName, dto.courseName).joinToString(" · "),
+                        actionList = dto.actionList.map { action ->
+                            TrainActionItem(
+                                actionId = action.actionId.toString(),
+                                actionName = action.actionName,
+                                groupDesc = action.groupDesc,
+                                restDesc = action.restDesc,
+                                videoUrl = action.videoUrl,
+                                actionDesc = action.actionDesc
+                            )
+                        },
+                        duration = dto.duration,
+                        difficulty = dto.difficulty,
+                        isLearned = dto.learned,
+                        videoUrl = dto.videoUrl,
+                        coverUrl = dto.coverUrl
+                    )
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _todayPlanList.value = emptyList()
+            } finally {
+                isLoading.value = false
+            }
+        }
     }
 
     private fun fetchCoursesFromServer(date: Date) {
         val dateParam = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
         viewModelScope.launch {
-            isLoading.value = true
             try {
                 val response = RetrofitClient.courseService.getVideoList(dateParam)
                 val mappedList = response.map { dto ->
-                    CourseItem.TrainingVideo(
+                    VideoCourseItem.TrainingVideo(
                         id = dto.id,
                         title = dto.title,
                         trainerName = dto.author ?: "专业教练",
@@ -94,26 +134,26 @@ class TodayViewModel : ViewModel() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 _courseList.value = emptyList()
-            } finally {
-                isLoading.value = false
             }
         }
     }
 
     fun onDateSelected(selectedDay: CalendarDay, position: Int) {
+        currentSelectedDate = selectedDay.date
         val currentList = _calendarDays.value ?: return
         val newList = currentList.map {
             it.copy(isSelected = (it.date == selectedDay.date))
         }
         _calendarDays.value = newList
-        // 点击哪个滚到哪个
         _scrollToPosition.value = position
+        fetchTodayPlanFromServer(selectedDay.date)
         fetchCoursesFromServer(selectedDay.date)
     }
 
     fun selectDateFromPicker(year: Int, month: Int, dayOfMonth: Int) {
         val targetCalendar = Calendar.getInstance()
         targetCalendar.set(year, month, dayOfMonth)
+        currentSelectedDate = targetCalendar.time
         val targetDateStr = SimpleDateFormat("M/d", Locale.getDefault()).format(targetCalendar.time)
         val currentList = _calendarDays.value ?: return
         val targetIndex = currentList.indexOfFirst { it.displayMonthDay == targetDateStr }
@@ -121,7 +161,13 @@ class TodayViewModel : ViewModel() {
         if (targetIndex != -1) {
             onDateSelected(currentList[targetIndex], targetIndex)
         } else {
+            fetchTodayPlanFromServer(targetCalendar.time)
             fetchCoursesFromServer(targetCalendar.time)
         }
+    }
+
+    fun refreshCurrentDate() {
+        fetchTodayPlanFromServer(currentSelectedDate)
+        fetchCoursesFromServer(currentSelectedDate)
     }
 }
