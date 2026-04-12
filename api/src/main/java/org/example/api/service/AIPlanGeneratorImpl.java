@@ -61,13 +61,7 @@ public class AIPlanGeneratorImpl implements AIPlanGenerator{
         return """
             请根  据以下用户信息生成一份个性化训练计划，输出JSON格式。
             
-            用户信息（来自 FitnessForm 实体）：
-            - 训练部位(trainLocation)：%s 当前状态(partState)：%s
-            - 身高(height)：%s cm
-            - 体型(bodyType)：%s
-            - 受伤部位(hurtLocation)：%s
-            - 计划类型(planType)：%s
-            - 喜爱运动(passionSport)：%s
+            用户信息（来自 FitnessForm 实体）：%s
             
             【重要约束】
             你只能从下面提供的可用动作列表中选择动作，不得使用列表之外的动作名称。
@@ -97,12 +91,7 @@ public class AIPlanGeneratorImpl implements AIPlanGenerator{
                 }
               ]
             }
-            """.formatted(
-                            form.getTrainLocation(), PartState.fromByte(form.getPartState()), form.getHeight(),
-                            BodyType.fromByte(form.getBodyType()), HurtLocation.fromByte(form.getHurtLocation()),
-                            PlanType.fromByte(form.getPlanType()), PassionSport.fromByte(form.getPassionSport()),
-                            videoService.getAvailableVideosString()
-                    );
+            """.formatted(form.getDescription(), videoService.getAvailableVideosString());
     }
 
     @Override

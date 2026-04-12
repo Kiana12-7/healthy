@@ -20,7 +20,6 @@ public class WorkoutPlan extends BaseEntity<Long> {
     @Column(name = "name")
     private String name;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = true)
     private User user;

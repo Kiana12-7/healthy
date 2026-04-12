@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private const val EXTRA_SELECT_TODAY = "select_today"
+    }
 
     // 底部导航栏控件实例（延迟初始化）
     private lateinit var bottomNav: BottomNavigationView
@@ -24,32 +29,44 @@ class MainActivity : AppCompatActivity() {
         // 绑定布局中的底部导航栏控件
         bottomNav = findViewById(R.id.bottom_navigation)
 
-        // 页面首次创建时
-        if (savedInstanceState == null) {
-            // 默认显示首页 Fragment
-            replaceFragment(HomeFragment())
-        }
-
         // 设置导航项选中监听
         bottomNav.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.navigation_home -> {
-                    replaceFragment(HomeFragment())
-                    true
-                }
+            val targetFragment = createFragment(menuItem.itemId) ?: return@setOnItemSelectedListener false
+            replaceFragment(targetFragment)
+            true
+        }
 
-                R.id.navigation_today -> {
-                    replaceFragment(TodayFragment())
-                    true
-                }
+        if (savedInstanceState == null) {
+            selectDestinationFromIntent(intent)
+        }
+    }
 
-                R.id.navigation_personal -> {
-                    replaceFragment(PersonalFragment())
-                    true
-                }
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        selectDestinationFromIntent(intent)
+    }
 
-                else -> false
-            }
+    private fun selectDestinationFromIntent(intent: Intent?) {
+        val targetItemId = if (intent?.getBooleanExtra(EXTRA_SELECT_TODAY, false) == true) {
+            R.id.navigation_today
+        } else {
+            R.id.navigation_home
+        }
+
+        if (bottomNav.selectedItemId == targetItemId) {
+            replaceFragment(createFragment(targetItemId) ?: return)
+        } else {
+            bottomNav.selectedItemId = targetItemId
+        }
+    }
+
+    private fun createFragment(itemId: Int): Fragment? {
+        return when (itemId) {
+            R.id.navigation_home -> HomeFragment()
+            R.id.navigation_today -> TodayFragment()
+            R.id.navigation_personal -> PersonalFragment()
+            else -> null
         }
     }
 
@@ -62,4 +79,5 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.fragment_container, fragment) // 替换容器内的 Fragment
             .commit() // 提交事务
     }
+
 }

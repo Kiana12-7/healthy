@@ -47,27 +47,27 @@ public class V003InitWorkoutPlan implements CommandLineRunner, Ordered {
     @Override
     @Transactional
     public void run(String... args) {
-        // 1. 防重复：如果“个性减脂计划”已存在，则跳过全部初始化
-        if (workoutPlanRepository.existsByName("个性减脂计划")) {
-            System.out.println("预设计划已存在，跳过初始化");
-            return;
-        }
-
-        // 2. 确保系统用户和系统健康表单存在
-        ensureSystemUserAndForm();
-
-        // 3. 构建所有计划名称列表（共38个）
-        List<String> planNames = getPlanNames();
-
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = startDate.plusDays(30);  // 默认30天
-
-        int count = 0;
-        for (String name : planNames) {
-            workoutPlanService.save(startDate, endDate, SYSTEM_FITNESS_FORM_ID, name);
-            count++;
-        }
-        System.out.println("成功插入 " + count + " 个预设计划");
+//        // 1. 防重复：如果“个性减脂计划”已存在，则跳过全部初始化
+//        if (workoutPlanRepository.existsByName("个性减脂计划")) {
+//            System.out.println("预设计划已存在，跳过初始化");
+//            return;
+//        }
+//
+//        // 2. 确保系统用户和系统健康表单存在
+//        ensureSystemUserAndForm();
+//
+//        // 3. 构建所有计划名称列表（共38个）
+//        List<String> planNames = getPlanNames();
+//
+//        LocalDate startDate = LocalDate.now();
+//        LocalDate endDate = startDate.plusDays(30);  // 默认30天
+//
+//        int count = 0;
+//        for (String name : planNames) {
+//            workoutPlanService.save(startDate, endDate, SYSTEM_FITNESS_FORM_ID, name);
+//            count++;
+//        }
+//        System.out.println("成功插入 " + count + " 个预设计划");
     }
 
     /**
