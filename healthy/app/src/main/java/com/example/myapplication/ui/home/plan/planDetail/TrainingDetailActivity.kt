@@ -12,6 +12,8 @@ import com.example.myapplication.databinding.ActivityTrainingDetailBinding
 import java.util.Locale
 import androidx.constraintlayout.widget.ConstraintSet
 import android.view.View
+import com.example.myapplication.data.model.CourseItem as VideoCourseItem
+import com.example.myapplication.ui.video.VideoDetailActivity
 
 class TrainingDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTrainingDetailBinding
@@ -59,18 +61,12 @@ class TrainingDetailActivity : AppCompatActivity() {
         binding.rvActionList.adapter = actionAdapter
         actionAdapter.setData(currentCourse.actionList)
 
-        // 弹窗+计时器升降
+        // 直接复用课程视频详情页，保证动作视频可播放
         actionAdapter.setOnWatchActionClickListener { actionItem ->
-            if (binding.llTimerArea.visibility == View.VISIBLE) {
-                moveTimerToTop()
+            val intent = Intent(this@TrainingDetailActivity, VideoDetailActivity::class.java).apply {
+                putExtra("VIDEO_ITEM", actionItem.toPlayableVideo())
             }
-            val bottomSheet = ActionVideoBottomSheet.newInstance(actionItem)
-            bottomSheet.show(supportFragmentManager, "ActionVideoBottomSheet")
-            bottomSheet.dialog?.setOnDismissListener {
-                if (binding.llTimerArea.visibility == View.VISIBLE) {
-                    moveTimerToBottom()
-                }
-            }
+            startActivity(intent)
         }
     }
 
@@ -147,5 +143,21 @@ class TrainingDetailActivity : AppCompatActivity() {
             }
             context.startActivity(intent)
         }
+    }
+
+    private fun TrainActionItem.toPlayableVideo(): VideoCourseItem.TrainingVideo {
+        return VideoCourseItem.TrainingVideo(
+            id = actionId.toIntOrNull() ?: 0,
+            title = actionName,
+            trainerName = currentCourse.courseName,
+            coverUrl = currentCourse.coverUrl.orEmpty(),
+            videoUrl = videoUrl,
+            duration = 0,
+            difficultyTag = currentCourse.difficulty,
+            preparePose = "先跟随视频调整到「$actionName」的起始姿势，再开始正式动作。",
+            actionProcess = actionDesc,
+            breathRhythm = "动作过程中保持均匀呼吸，发力时呼气，还原时吸气。",
+            attention = "$groupDesc，$restDesc。动作标准优先于速度。"
+        )
     }
 }

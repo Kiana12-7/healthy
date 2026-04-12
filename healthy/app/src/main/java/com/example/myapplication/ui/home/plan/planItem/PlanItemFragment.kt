@@ -9,18 +9,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.data.remote.RetrofitClient
 import com.example.myapplication.ui.fitness.WeightActivity
 import com.example.myapplication.ui.home.plan.planDetail.PlanDetailActivity
 import com.example.myapplication.widget.FilterPopupWindow
+import kotlinx.coroutines.launch
 
 class PlanItemFragment : Fragment() {
 
     private var columnCount = 1
     // 类成员变量，供筛选使用
-    private val fullPlanList = PlanItem.getAllPlans()
+    private var fullPlanList: List<PlanItem> = emptyList()
     private val allFilterTags = PlanItem.getAllFilterTags()
     private val selectedTagMap = mutableMapOf<FilterType, MutableList<FilterTag>>()
 
@@ -38,7 +41,7 @@ class PlanItemFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val rootView = inflater.inflate(R.layout.fragment_item_list, container, false)
 
         // ========== 定制计划Banner点击：跳转到 WeightActivity ==========
@@ -53,7 +56,7 @@ class PlanItemFragment : Fragment() {
         rvPlanList.layoutManager = LinearLayoutManager(requireContext())
 
         // 直接赋值给类成员变量，不重复定义
-        planAdapter = MyPlanItemRecyclerViewAdapter(fullPlanList)
+        planAdapter = MyPlanItemRecyclerViewAdapter(emptyList())
         rvPlanList.adapter = planAdapter
 
         // ========== 计划点击跳转到详情页 ==========
@@ -63,6 +66,26 @@ class PlanItemFragment : Fragment() {
 
         initFilterButtons(rootView)
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadWorkoutPlans()
+    }
+
+    private fun loadWorkoutPlans() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.workoutPlanService.getWorkoutPlanList()
+                fullPlanList = response.map(PlanItem::fromWorkoutPlanDto)
+                applyFilters()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                fullPlanList = emptyList()
+                planAdapter.updateData(emptyList())
+                Toast.makeText(requireContext(), "计划列表加载失败", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun initFilterButtons(rootView: View) {
@@ -83,10 +106,14 @@ class PlanItemFragment : Fragment() {
 
         FilterPopupWindow(requireContext(), tagList) { selectedTags ->
             selectedTagMap[filterType] = selectedTags.toMutableList()
-            val filteredList = FilterManager.filterPlans(fullPlanList, selectedTagMap)
-            planAdapter.updateData(filteredList)
+            applyFilters()
             anchorView.isSelected = selectedTags.isNotEmpty()
         }.show(anchorView)
+    }
+
+    private fun applyFilters() {
+        val filteredList = FilterManager.filterPlans(fullPlanList, selectedTagMap)
+        planAdapter.updateData(filteredList)
     }
 
     companion object {

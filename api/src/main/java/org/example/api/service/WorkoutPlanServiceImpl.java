@@ -2,6 +2,7 @@ package org.example.api.service;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import org.example.api.dto.WorkoutPlanListDto;
 import org.example.api.entity.FitnessForm;
 import org.example.api.entity.User;
 import org.example.api.entity.WorkoutPlan;
@@ -11,9 +12,13 @@ import org.example.api.repository.specs.FitnessFormSpec;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkoutPlanServiceImpl implements WorkoutPlanService{
+    private static final String SYSTEM_TEMPLATE_USERNAME = "system_template_user";
+
     private final WorkoutPlanRepository workoutPlanRepository;
     private final UserService userService;
     private final FitnessFormRepository fitnessFormRepository;
@@ -56,6 +61,21 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService{
         workoutPlan.setUser(fitnessForm.getUser());
 
         return this.workoutPlanRepository.save(workoutPlan);
+    }
+
+    @Override
+    public List<WorkoutPlanListDto> getTemplatePlanList() {
+        return this.workoutPlanRepository.findAllByUser_UsernameOrderByIdAsc(SYSTEM_TEMPLATE_USERNAME)
+                .stream()
+                .map(workoutPlan -> {
+                    WorkoutPlanListDto dto = new WorkoutPlanListDto();
+                    dto.setId(workoutPlan.getId());
+                    dto.setName(workoutPlan.getName());
+                    dto.setStartDate(workoutPlan.getStartDate());
+                    dto.setEndDate(workoutPlan.getEndDate());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
 }
