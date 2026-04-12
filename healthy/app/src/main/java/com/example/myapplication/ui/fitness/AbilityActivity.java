@@ -1,5 +1,7 @@
 package com.example.myapplication.ui.fitness;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -9,15 +11,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.data.remote.FitnessFormDataSource;
+import com.example.myapplication.data.remote.RetrofitClient;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 public class AbilityActivity extends AppCompatActivity {
-
     private RadioGroup rgPushup, rgSquat, rgSitups, rgStairs;
     private Button btnGenerate;
     private Button btnMyInfo;
@@ -47,47 +56,64 @@ public class AbilityActivity extends AppCompatActivity {
         // “我的信息”按钮始终绿色且可点击
         btnMyInfo.setEnabled(true);
         btnMyInfo.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.button_enabled)));
-        btnMyInfo.setOnClickListener(v -> {
-            Intent intent = new Intent(AbilityActivity.this, StatisticsActivity.class);
-            startActivity(intent);
-        });
-
-        // 初始按钮状态（未全选时禁用灰色）
-        updateGenerateButtonState();
 
         // 为每个 RadioGroup 设置监听器，当任一选项改变时更新“生成计划”按钮状态
-        RadioGroup.OnCheckedChangeListener listener = (group, checkedId) -> updateGenerateButtonState();
+        RadioGroup.OnCheckedChangeListener listener = (group, checkedId) -> {
+            saveAllSelections();
+            updateGenerateButtonState();
+        };
         rgPushup.setOnCheckedChangeListener(listener);
         rgSquat.setOnCheckedChangeListener(listener);
         rgSitups.setOnCheckedChangeListener(listener);
         rgStairs.setOnCheckedChangeListener(listener);
+        // “我的信息”按钮：跳转到统计页面
+        btnMyInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AbilityActivity.this, StatisticsActivity.class);
+                startActivity(intent);
+            }
+        });
 
-        // “生成计划”按钮点击事件
-        btnGenerate.setOnClickListener(v -> {
-            if (validateSelections()) {
-                String pushup = getSelectedPushup();
-                String squat = getSelectedSquat();
-                String situps = getSelectedSitups();
-                String stairs = getSelectedStairs();
+        // “生成计划”按钮：保存数据并提示（后续可跳转到计划展示）
+        btnGenerate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (validateSelections()) {
+                    // 获取所有选中的值
+                    SharedPreferences sp = getSharedPreferences("health_app", MODE_PRIVATE);
+                    String description = buildUserProfileForAI(sp);
+                    // 你需要根据实际情况构造请求体，这里简化
+                    Call<ResponseBody> call = RetrofitClient.INSTANCE.getFitnessFormService().save(description);
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(AbilityActivity.this, "计划生成成功", Toast.LENGTH_SHORT).show();
 
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString("pushup", pushup);
-                editor.putString("squat", squat);
-                editor.putString("situp", situps);
-                editor.putString("stairs", stairs);
-                editor.apply();
+                                // 跳转
+                                Intent intent = new Intent(AbilityActivity.this, MainActivity.class);
+                                intent.putExtra("select_today", true);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(AbilityActivity.this, "服务器错误: " + response.code(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
-                Toast.makeText(AbilityActivity.this,
-                        "俯卧撑：" + pushup + "\n深蹲：" + squat + "\n仰卧起坐：" + situps + "\n爬楼：" + stairs,
-                        Toast.LENGTH_LONG).show();
-
-                // TODO: 跳转到生成计划界面
-            } else {
-                Toast.makeText(AbilityActivity.this, "请完整填写所有运动能力问题", Toast.LENGTH_SHORT).show();
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(AbilityActivity.this, "网络异常: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(AbilityActivity.this, "请完整填写所有运动能力问题", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
-
+    
     /**
      * 更新“生成计划”按钮状态：全选时启用并变绿，否则禁用并变灰
      */
@@ -100,6 +126,50 @@ public class AbilityActivity extends AppCompatActivity {
         btnGenerate.setBackgroundTintList(ColorStateList.valueOf(
                 allSelected ? getColor(R.color.button_enabled) : getColor(R.color.button_disabled)
         ));
+    }
+    
+    private String buildUserProfileForAI(SharedPreferences sp) {
+        float height = sp.getFloat("height", 0f);
+        float weight = sp.getFloat("weight", 0f);
+        String injuries = sp.getString("injuries", "无伤病情况");
+        String bodyShape = sp.getString("body_shape", "未选择");
+        String aimGoal = sp.getString("aim_goal", "未选择");
+        String focusArea = sp.getString("focus_area", "未选择");
+        String currentStatus = sp.getString("current_body_status", "未选择");
+        String targetStatus = sp.getString("target_body_status", "未选择");
+        String sportType = sp.getString("sport_type", "未选择");
+        String duration = sp.getString("duration", "未选择");
+        String requirement = sp.getString("requirement", "未选择");
+        String equipment = sp.getString("equipment", "未选择");
+        String pushUp = sp.getString("pushup", "未选择");
+        String squat = sp.getString("squat", "未选择");
+        String sitUp = sp.getString("situp", "未选择");
+        String stairs = sp.getString("stairs", "未选择");
+
+        String profile = "我目前的身高是 " + height + " 厘米，体重 " + weight + " 公斤。\n" +
+                "伤病情况：" + injuries + "。\n" +
+                "体型：" + bodyShape + "。\n" +
+                "运动目标：" + aimGoal + "，重点改善部位是 " + focusArea + "。\n" +
+                "体态改善意向：希望从“" + currentStatus + "”改善到“" + targetStatus + "”。\n" +
+                "运动偏好：除了常规训练，还愿意做 " + sportType + "，每天能投入的运动时长约为 " + duration + "。\n" +
+                "计划要求：" + requirement + "，允许使用的器械有：" + equipment + "。\n" +
+                "当前运动能力：\n" +
+                "- 俯卧撑：" + pushUp + "\n" +
+                "- 深蹲：" + squat + "\n" +
+                "- 仰卧起坐：" + sitUp + "\n" +
+                "- 爬楼梯（或类似有氧）：" + stairs + "\n" +
+                "请根据以上信息为我制定一份个性化的健身计划。";
+
+        return profile;
+    }
+
+    private void saveAllSelections() {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("pushup", getSelectedPushup());
+        editor.putString("squat", getSelectedSquat());
+        editor.putString("situp", getSelectedSitups());
+        editor.putString("stairs", getSelectedStairs());
+        editor.apply();
     }
 
     private boolean validateSelections() {

@@ -28,6 +28,9 @@ object RetrofitClient {
             .build()
     }
 
+    val fitnessFormService: FitnessFormService by lazy {
+        retrofit.create(FitnessFormService::class.java)
+    }
     val vitaService: VitaService by lazy {
         retrofit.create(VitaService::class.java)
     }

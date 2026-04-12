@@ -21,26 +21,8 @@ public class FitnessForm extends BaseEntity<Long> {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "part_state", nullable = false)
-    private byte partState;
-
-    @Column(length = 10)
-    private String height;
-
-    @Column(name = "train_location")
-    private byte trainLocation;
-
-    @Column(name = "body_type")
-    private byte bodyType;
-
-    @Column(name = "hurt_location")
-    private byte hurtLocation;
-
-    @Column(name = "plan_type")
-    private byte planType;
-
-    @Column(name = "passion_sport")
-    private byte passionSport;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     @UpdateTimestamp
     @Column(name = "update_time", updatable = false)
