@@ -119,10 +119,24 @@
     <string name="desc_empty_img">无日程插图</string>
     <string name="schedule_empty_hint">合理的计划有益于建立运动习惯</string>
     <string name="btn_customize_plan">定制计划</string>
+    <string name="btn_generate_ai_plan">AI生成计划</string>
+    <string name="btn_generate_ai_plan_loading">生成中...</string>
     <string name="desc_ai_fab">AI助手</string>
     <string name="desc_search_icon">搜索图标</string>
     <string name="hint_ask_ai">询问 AI 教练</string>
     <string name="navigation_today">今日</string>
+    <string name="dialog_fill_fitness_title">先填写定制信息</string>
+    <string name="dialog_fill_fitness_message">生成 AI 计划前，需要先完成一遍健身信息填写。</string>
+    <string name="dialog_generate_ai_plan_title">生成 AI 计划</string>
+    <string name="dialog_generate_ai_plan_message">将根据你当前填写的健身信息生成新的锻炼计划，是否继续？</string>
+    <string name="dialog_generate_ai_plan_success_title">生成完成</string>
+    <string name="dialog_generate_ai_plan_success_message">新的 AI 锻炼计划已经生成，今日日程已刷新。</string>
+    <string name="dialog_generate_ai_plan_failed_title">生成失败</string>
+    <string name="dialog_generate_ai_plan_failed_message">AI 锻炼计划生成失败，请稍后再试。</string>
+    <string name="dialog_action_fill_now">去填写</string>
+    <string name="dialog_action_generate">开始生成</string>
+    <string name="dialog_action_cancel">取消</string>
+    <string name="dialog_action_ok">知道了</string>
 
     <!-- 通用描述 -->
     <string name="avatar_desc">用户头像</string>

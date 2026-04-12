@@ -10,6 +10,7 @@ data class WorkoutPlanDetailDto(
 data class WorkoutPlanCourseDto(
     val courseId: String,
     val planId: Long,
+    val planName: String? = null,
     val courseName: String,
     val actionList: List<WorkoutPlanActionDto>,
     val duration: Int,

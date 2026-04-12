@@ -27,6 +27,9 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public class AbilityActivity extends AppCompatActivity {
+    public static final String HEALTH_APP_PREFS = "health_app";
+    public static final String KEY_FITNESS_FORM_COMPLETED = "fitness_form_completed";
+
     private RadioGroup rgPushup, rgSquat, rgSitups, rgStairs;
     private Button btnGenerate;
     private Button btnMyInfo;
@@ -51,7 +54,7 @@ public class AbilityActivity extends AppCompatActivity {
         btnGenerate = findViewById(R.id.btnGenerate);
         btnMyInfo = findViewById(R.id.btnMyInfo);
 
-        sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
+        sharedPref = getSharedPreferences(HEALTH_APP_PREFS, MODE_PRIVATE);
 
         // “我的信息”按钮始终绿色且可点击
         btnMyInfo.setEnabled(true);
@@ -81,7 +84,7 @@ public class AbilityActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (validateSelections()) {
                     // 获取所有选中的值
-                    SharedPreferences sp = getSharedPreferences("health_app", MODE_PRIVATE);
+                    SharedPreferences sp = getSharedPreferences(HEALTH_APP_PREFS, MODE_PRIVATE);
                     String description = buildUserProfileForAI(sp);
                     // 你需要根据实际情况构造请求体，这里简化
                     Call<ResponseBody> call = RetrofitClient.INSTANCE.getFitnessFormService().save(description);
@@ -90,6 +93,7 @@ public class AbilityActivity extends AppCompatActivity {
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if (response.isSuccessful()) {
                                 Toast.makeText(AbilityActivity.this, "计划生成成功", Toast.LENGTH_SHORT).show();
+                                sharedPref.edit().putBoolean(KEY_FITNESS_FORM_COMPLETED, true).apply();
 
                                 // 跳转
                                 Intent intent = new Intent(AbilityActivity.this, MainActivity.class);

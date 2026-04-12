@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.myapplication.data.model.CourseItem
 import com.example.myapplication.databinding.ItemTodayCourseBinding
 
@@ -33,19 +34,12 @@ class TodayCourseAdapter(
 
         fun bind(item: CourseItem) {
             if (item is CourseItem.TrainingVideo) {
-                // 1. 对应你 XML 里的 @+id/tv_course_name
                 binding.tvCourseName.text = item.title
-
-                // 2. 对应你 XML 里的 @+id/tv_course_info
-                // 这里我们把教练名和时长拼在一起显示
                 val infoText = "${item.trainerName} · ${item.duration / 60}分钟"
                 binding.tvCourseInfo.text = infoText
-
-                // 3. 对应你 XML 里的 @+id/iv_course_cover
-                // 如果你有图片加载库（如 Glide），可以在这里加载封面
-                // Glide.with(binding.ivCourseCover.context).load(item.coverUrl).into(binding.ivCourseCover)
-
-                // 设置点击事件
+                binding.ivCourseCover.load(item.coverUrl) {
+                    crossfade(true)
+                }
                 binding.root.setOnClickListener { onItemClick(item) }
             }
         }
