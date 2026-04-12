@@ -56,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
         binding.etUsername.afterTextChanged { checkForm() }
         binding.etPassword.afterTextChanged { checkForm() }
 
-        binding.cbAgree.setOnCheckedChangeListener { _, _ -> checkForm() }
+//        binding.cbAgree.setOnCheckedChangeListener { _, _ -> checkForm() }
 
         binding.etPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE && binding.btnLogin.isEnabled) {
@@ -70,23 +70,22 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             doLogin()
         }
-
-        binding.tvTour.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
-
-        binding.tvFindAccount.setOnClickListener {
-            Toast.makeText(this, "找回密码", Toast.LENGTH_SHORT).show()
-        }
+//        binding.tvTour.setOnClickListener {
+//            startActivity(Intent(this, MainActivity::class.java))
+//            finish()
+//        }
+//
+//        binding.tvFindAccount.setOnClickListener {
+//            Toast.makeText(this, "找回密码", Toast.LENGTH_SHORT).show()
+//        }
     }
 
     private fun checkForm() {
         val username = binding.etUsername.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
-        val agree = binding.cbAgree.isChecked
+//        val agree = binding.cbAgree.isChecked
 
-        loginViewModel.loginDataChanged(username, password, agree)
+        loginViewModel.loginDataChanged(username, password)
     }
 
     private fun doLogin() {
