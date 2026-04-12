@@ -17,4 +17,13 @@ public interface WorkoutPlanService {
      * @param fitnessFormId 关联的用户健康表
      * */
     WorkoutPlan save(LocalDate startTime, LocalDate endTime, Long fitnessFormId);
+
+    /**
+     * 保存锻炼计划
+     * @param startTime 开始日期
+     * @param endTime  结束日期
+     * @param fitnessFormId 关联的用户健康表
+     * */
+    WorkoutPlan save(LocalDate startTime, LocalDate endTime, Long fitnessFormId, String name);
+
 }

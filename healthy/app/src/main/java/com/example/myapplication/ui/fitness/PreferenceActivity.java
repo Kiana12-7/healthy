@@ -2,11 +2,11 @@ package com.example.myapplication.ui.fitness;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -42,6 +42,16 @@ public class PreferenceActivity extends AppCompatActivity {
 
         sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
 
+        // 初始按钮状态（未全选时禁用）
+        updateButtonState();
+
+        // 为每个 RadioGroup 设置监听器，当任一选项改变时更新按钮状态
+        RadioGroup.OnCheckedChangeListener listener = (group, checkedId) -> updateButtonState();
+        rgSportType.setOnCheckedChangeListener(listener);
+        rgDuration.setOnCheckedChangeListener(listener);
+        rgRequirement.setOnCheckedChangeListener(listener);
+        rgEquipment.setOnCheckedChangeListener(listener);
+
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +72,20 @@ public class PreferenceActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * 更新按钮状态：全选时启用并变绿，否则禁用并变灰
+     */
+    private void updateButtonState() {
+        boolean allSelected = rgSportType.getCheckedRadioButtonId() != -1 &&
+                rgDuration.getCheckedRadioButtonId() != -1 &&
+                rgRequirement.getCheckedRadioButtonId() != -1 &&
+                rgEquipment.getCheckedRadioButtonId() != -1;
+        btnNext.setEnabled(allSelected);
+        btnNext.setBackgroundTintList(ColorStateList.valueOf(
+                allSelected ? getColor(R.color.button_enabled) : getColor(R.color.button_disabled)
+        ));
     }
 
     private boolean validateSelections() {

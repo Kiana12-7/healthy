@@ -25,7 +25,6 @@
             android:paddingTop="24dp"
             android:paddingBottom="20dp">
 
-            <!-- 圆形头像 -->
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_avatar"
                 android:layout_width="80dp"
@@ -37,7 +36,6 @@
                 app:strokeWidth="2dp"
                 app:strokeColor="#F0F0F0"/>
 
-            <!-- 昵称 + 数据 -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -68,10 +66,8 @@
                         android:textColor="#999999"
                         android:textSize="18sp"
                         android:textStyle="normal"/>
-
                 </LinearLayout>
 
-                <!-- 关注/粉丝/加油 -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -112,10 +108,8 @@
                         android:text="@string/default_days"
                         android:textColor="#666666"
                         android:textSize="13sp"/>
-
                 </LinearLayout>
 
-                <!-- 等级 + 累计运动 -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -123,7 +117,6 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
-                    <!-- 等级徽章 -->
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -139,7 +132,6 @@
                             android:textSize="11sp"
                             android:paddingVertical="2dp"
                             android:paddingHorizontal="6dp"/>
-
                     </com.google.android.material.card.MaterialCardView>
 
                     <TextView
@@ -149,11 +141,8 @@
                         android:text="@string/workout_days"
                         android:textColor="#666666"
                         android:textSize="12sp"/>
-
                 </LinearLayout>
-
             </LinearLayout>
-
         </LinearLayout>
 
         <!-- 分割线 -->
@@ -162,7 +151,7 @@
             android:layout_height="0.5dp"
             android:background="#F0F0F0"/>
 
-        <!-- 2. 会员横幅 -->
+        <!-- 2. 健康计划横幅 -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -179,281 +168,149 @@
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="16dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:text="个性健康计划"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/vip"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fee"
-                        android:textColor="#333333"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:background="#FFD700"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="6dp"
-                        android:layout_marginEnd="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:backgroundTint="#FFD700"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/schedule"
-                        android:textColor="#E0E0E0"
-                        android:textSize="13sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/_2"
-                        android:textColor="#FFD700"
-                        android:textSize="13sp"/>
-
-                </LinearLayout>
-
+                    android:layout_marginTop="8dp"
+                    android:text="已坚持 12 天"
+                    android:textColor="#E0E0E0"
+                    android:textSize="14sp" />
             </LinearLayout>
-
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- 3. 快捷入口区 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+        <!-- 注意：快捷入口区已删除，其下方的分割线也已删除 -->
 
-            <!-- 赚币挑战 -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@android:drawable/ic_menu_my_calendar"
-                    android:contentDescription="@string/coin_challenge"
-                    app:tint="#7B61FF"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/coin_challenge"
-                    android:textColor="#333333"
-                    android:textSize="12sp"/>
-
-            </LinearLayout>
-
-            <!-- 幸运抽奖 -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@android:drawable/ic_menu_gallery"
-                    android:contentDescription="@string/lucky_draw"
-                    app:tint="#FF6B81"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/lucky_draw"
-                    android:textColor="#333333"
-                    android:textSize="12sp"/>
-
-            </LinearLayout>
-
-            <!-- 每日抽奖 -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@android:drawable/ic_menu_agenda"
-                    android:contentDescription="@string/daily_draw"
-                    app:tint="#FFB74D"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/daily_draw"
-                    android:textColor="#333333"
-                    android:textSize="12sp"/>
-
-            </LinearLayout>
-
-            <!-- 每日签到 -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@android:drawable/ic_menu_today"
-                    android:contentDescription="@string/daily_checkin"
-                    app:tint="#4CAF50"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/daily_checkin"
-                    android:textColor="#333333"
-                    android:textSize="12sp"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- 分割线 -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:layout_marginTop="20dp"
-            android:background="#F5F7FA"/>
-
-        <!-- 4. 功能网格区 -->
+        <!-- 3. 功能网格区（一行4项，只保留 item_courses 的 ID） -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingVertical="8dp">
+            android:paddingVertical="8dp"
+            android:layout_marginTop="20dp">
 
-            <!-- 第一行 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
-                <include layout="@layout/item_personal_function"
-                    android:id="@+id/item_dynamic"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-                <include layout="@layout/item_personal_function"
-                    android:id="@+id/item_favorite"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-                <include layout="@layout/item_personal_function"
+                <!-- 第1项：我的课程（保留ID） -->
+                <LinearLayout
                     android:id="@+id/item_courses"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
 
-                <include layout="@layout/item_personal_function"
-                    android:id="@+id/item_activity"
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@android:drawable/ic_menu_edit"
+                        android:contentDescription="我的课程"
+                        app:tint="#7B61FF" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="我的课程"
+                        android:textColor="#333333"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <!-- 第2项：待定（无ID） -->
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
 
-                <include layout="@layout/item_personal_function"
-                    android:id="@+id/item_diet"
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@android:drawable/ic_menu_help"
+                        android:contentDescription="待定"
+                        app:tint="#FFB74D" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="待定"
+                        android:textColor="#333333"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <!-- 第3项：待定（无ID） -->
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
 
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@android:drawable/ic_menu_camera"
+                        android:contentDescription="待定"
+                        app:tint="#4CAF50" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="待定"
+                        android:textColor="#333333"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <!-- 第4项：待定（无ID） -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@android:drawable/ic_menu_manage"
+                        android:contentDescription="待定"
+                        app:tint="#FF6B81" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="待定"
+                        android:textColor="#333333"
+                        android:textSize="12sp" />
+                </LinearLayout>
             </LinearLayout>
-
-            <!-- 第二行 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
-
-                <include layout="@layout/item_personal_function"
-                    android:id="@+id/item_order"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-                <include layout="@layout/item_personal_function"
-                    android:id="@+id/item_welfare"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-                <include layout="@layout/item_personal_function"
-                    android:id="@+id/item_family"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-                <include layout="@layout/item_personal_function"
-                    android:id="@+id/item_team"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-                <include layout="@layout/item_personal_function"
-                    android:id="@+id/item_help"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-            </LinearLayout>
-
         </LinearLayout>
 
         <!-- 分割线 -->
@@ -462,8 +319,9 @@
             android:layout_height="8dp"
             android:background="#F5F7FA"/>
 
-        <!-- 5. 我的数据区 -->
+        <!-- 4. 我的数据区 -->
         <LinearLayout
+            android:id="@+id/item_my_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -489,11 +347,8 @@
                 android:text="@string/大于号"
                 android:textColor="#999999"
                 android:textSize="18sp"
-                android:textStyle="normal"
-                tools:ignore="HardcodedText" />
-
+                android:textStyle="normal"/>
         </LinearLayout>
 
     </LinearLayout>
-
 </ScrollView>

@@ -4,6 +4,7 @@ import static androidx.core.content.ContentProviderCompat.requireContext;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,11 +53,19 @@ public class AbilityActivity extends AppCompatActivity {
 
         sharedPref = getSharedPreferences("health_app", MODE_PRIVATE);
 
-        rgPushup.setOnCheckedChangeListener((group, checkedId) -> saveAllSelections());
-        rgSquat.setOnCheckedChangeListener((group, checkedId) -> saveAllSelections());
-        rgSitups.setOnCheckedChangeListener((group, checkedId) -> saveAllSelections());
-        rgStairs.setOnCheckedChangeListener((group, checkedId) -> saveAllSelections());
+        // “我的信息”按钮始终绿色且可点击
+        btnMyInfo.setEnabled(true);
+        btnMyInfo.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.button_enabled)));
 
+        // 为每个 RadioGroup 设置监听器，当任一选项改变时更新“生成计划”按钮状态
+        RadioGroup.OnCheckedChangeListener listener = (group, checkedId) -> {
+            saveAllSelections();
+            updateGenerateButtonState();
+        };
+        rgPushup.setOnCheckedChangeListener(listener);
+        rgSquat.setOnCheckedChangeListener(listener);
+        rgSitups.setOnCheckedChangeListener(listener);
+        rgStairs.setOnCheckedChangeListener(listener);
         // “我的信息”按钮：跳转到统计页面
         btnMyInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +113,21 @@ public class AbilityActivity extends AppCompatActivity {
             }
         });
     }
+    
+    /**
+     * 更新“生成计划”按钮状态：全选时启用并变绿，否则禁用并变灰
+     */
+    private void updateGenerateButtonState() {
+        boolean allSelected = rgPushup.getCheckedRadioButtonId() != -1 &&
+                rgSquat.getCheckedRadioButtonId() != -1 &&
+                rgSitups.getCheckedRadioButtonId() != -1 &&
+                rgStairs.getCheckedRadioButtonId() != -1;
+        btnGenerate.setEnabled(allSelected);
+        btnGenerate.setBackgroundTintList(ColorStateList.valueOf(
+                allSelected ? getColor(R.color.button_enabled) : getColor(R.color.button_disabled)
+        ));
+    }
+    
     private String buildUserProfileForAI(SharedPreferences sp) {
         float height = sp.getFloat("height", 0f);
         float weight = sp.getFloat("weight", 0f);

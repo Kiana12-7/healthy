@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.content.res.ColorStateList;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,6 +66,8 @@ public class WoundActivity extends AppCompatActivity {
             Intent intent = new Intent(WoundActivity.this, BodilyFormActivity.class);
             startActivity(intent);
         });
+        btnNext.setEnabled(true);
+        btnNext.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.button_enabled)));
     }
 
     private void updateCardBackground(CardView card, boolean isSelected) {
