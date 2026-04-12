@@ -1,10 +1,12 @@
 package com.example.myapplication.ui.home.plan.planDetail
 
+import android.view.View
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.myapplication.databinding.ItemCourseListBinding
 
 class CourseListAdapter : ListAdapter<CourseItem, CourseListAdapter.CourseViewHolder>(CourseDiffCallback()) {
@@ -24,11 +26,23 @@ class CourseListAdapter : ListAdapter<CourseItem, CourseListAdapter.CourseViewHo
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(courseItem: CourseItem) {
-            // 绑定训练名称+动作说明
+            val actionSummary = courseItem.actionList.joinToString(" · ") { it.actionName }
+
             binding.tvCourseName.text = courseItem.courseName
-            // 绑定时长+难度
             binding.tvCourseDuration.text = "${courseItem.duration}分钟 · ${courseItem.difficulty}"
-            // 点击事件
+            binding.tvCourseTag.text = courseItem.difficulty
+            binding.tvCourseSummary.text = actionSummary
+
+            val coverUrl = courseItem.coverUrl.orEmpty()
+            if (coverUrl.isNotEmpty()) {
+                binding.ivCourseCover.load(coverUrl) {
+                    crossfade(true)
+                }
+            } else {
+                binding.ivCourseCover.setImageDrawable(null)
+            }
+
+            binding.ivPlayHint.visibility = if (courseItem.videoUrl.isNotEmpty()) View.VISIBLE else View.GONE
             itemView.setOnClickListener { onItemClickListener?.invoke(courseItem) }
         }
     }

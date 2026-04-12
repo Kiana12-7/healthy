@@ -21,6 +21,6 @@ public class FitnessFormSpec {
             return Specification.unrestricted();
         }
         return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
-                .equal(root.join("User", JoinType.LEFT).get("id").as(Long.class), userId);
+                .equal(root.join("user", JoinType.LEFT).get("id").as(Long.class), userId);
     }
 }

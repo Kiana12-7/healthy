@@ -32,30 +32,40 @@ class CalendarAdapter(private val onDateClick: (CalendarDay, Int) -> Unit) :
 
     inner class ViewHolder(private val binding: ItemCalendarDayBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CalendarDay, position: Int) {
-            // 1. 设置系统文字
             binding.tvDate.text = item.displayMonthDay
 
             if (item.isToday) {
                 binding.tvWeek.text = "今日"
-                binding.tvWeek.setTextColor(Color.parseColor("#00C48C")) // 今日文字变绿
             } else {
                 binding.tvWeek.text = item.displayWeekDay
-                binding.tvWeek.setTextColor(Color.parseColor("#999999"))
             }
 
-            // 2. 强烈的选中视觉效果
             if (item.isSelected) {
-                binding.llDateRoot.setBackgroundResource(R.drawable.bg_calendar_selected) // 使用我们刚写的绿底
+                binding.llDateRoot.setBackgroundResource(R.drawable.bg_calendar_selected)
                 binding.tvWeek.setTextColor(Color.WHITE)
                 binding.tvDate.setTextColor(Color.WHITE)
+                binding.viewTodayDot.setBackgroundColor(Color.WHITE)
+                binding.root.alpha = 1f
+                binding.root.scaleX = 1.04f
+                binding.root.scaleY = 1.04f
+            } else if (item.isToday) {
+                binding.llDateRoot.setBackgroundResource(R.drawable.bg_calendar_today)
+                binding.tvWeek.setTextColor(Color.parseColor("#00B07B"))
+                binding.tvDate.setTextColor(Color.parseColor("#154734"))
+                binding.viewTodayDot.setBackgroundColor(Color.parseColor("#00C48C"))
+                binding.root.alpha = 1f
+                binding.root.scaleX = 1f
+                binding.root.scaleY = 1f
             } else {
                 binding.llDateRoot.setBackgroundResource(R.drawable.bg_calendar_unselected)
-                // 恢复默认颜色
-                binding.tvDate.setTextColor(Color.parseColor("#333333"))
-                if (!item.isToday) binding.tvWeek.setTextColor(Color.parseColor("#999999"))
+                binding.tvWeek.setTextColor(Color.parseColor("#8D95A3"))
+                binding.tvDate.setTextColor(Color.parseColor("#2B3340"))
+                binding.viewTodayDot.setBackgroundColor(Color.TRANSPARENT)
+                binding.root.alpha = 0.92f
+                binding.root.scaleX = 1f
+                binding.root.scaleY = 1f
             }
 
-            // 3. 点击事件，把 position 也传出去用于滑动对齐
             binding.root.setOnClickListener {
                 onDateClick(item, position)
             }

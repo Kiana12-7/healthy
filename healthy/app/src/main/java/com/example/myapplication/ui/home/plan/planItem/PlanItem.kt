@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.home.plan.planItem
 
 import com.example.myapplication.R
+import com.example.myapplication.data.model.WorkoutPlanDto
 
 // 计划实体类：预留图片、ID、接口字段
 data class PlanItem(
@@ -14,9 +15,8 @@ data class PlanItem(
 
 {
     companion object {
-        // 获取所有38个计划（已绑定图片和标签）
-        fun getAllPlans(): List<PlanItem> {
-            return listOf(
+        private val builtInPlans by lazy {
+            listOf(
                 PlanItem("plan_001", "个性减脂计划", R.drawable.plan_01_fat_loss, null, listOf("goal_fat_loss", "part_whole", "diff_beginner", "crowd_general")),
                 PlanItem("plan_002", "告别肚腩计划", R.drawable.plan_02_abdominal, null, listOf("goal_fat_loss", "part_abdominal", "diff_beginner", "crowd_office_worker")),
                 PlanItem("plan_003", "学生党·全身增肌计划", R.drawable.plan_03_student_muscle, null, listOf("goal_muscle_gain", "part_whole", "diff_beginner", "crowd_student")),
@@ -55,6 +55,22 @@ data class PlanItem(
                 PlanItem("plan_036", "跳绳燃脂计划", R.drawable.plan_36_rope_burn, null, listOf("goal_fat_loss", "part_whole", "diff_elementary", "crowd_general")),
                 PlanItem("plan_037", "高效燃脂·保持健康计划", R.drawable.plan_37_burn_health, null, listOf("goal_fat_loss", "goal_health", "part_whole", "diff_elementary", "crowd_general")),
                 PlanItem("plan_038", "备战体测·高原模拟马拉松备赛", R.drawable.plan_38_marathon, null, listOf("goal_cardio", "part_leg", "diff_advanced", "crowd_student"))
+            )
+        }
+
+        // 获取所有38个计划（已绑定图片和标签）
+        fun getAllPlans(): List<PlanItem> {
+            return builtInPlans
+        }
+
+        fun fromWorkoutPlanDto(dto: WorkoutPlanDto): PlanItem {
+            val matched = builtInPlans.firstOrNull { it.name == dto.name }
+            return PlanItem(
+                id = dto.id.toString(),
+                name = dto.name,
+                imageResId = matched?.imageResId ?: R.drawable.plan_01_fat_loss,
+                imageUrl = null,
+                tagIds = matched?.tagIds ?: emptyList()
             )
         }
 
