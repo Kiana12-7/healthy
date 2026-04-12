@@ -1,8 +1,10 @@
 package org.example.api.service;
 
+import org.example.api.dto.WorkoutPlanListDto;
 import org.example.api.entity.WorkoutPlan;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface WorkoutPlanService {
     /**
@@ -25,5 +27,10 @@ public interface WorkoutPlanService {
      * @param fitnessFormId 关联的用户健康表
      * */
     WorkoutPlan save(LocalDate startTime, LocalDate endTime, Long fitnessFormId, String name);
+
+    /**
+     * 获取首页展示用的内置训练计划
+     */
+    List<WorkoutPlanListDto> getTemplatePlanList();
 
 }
