@@ -2,14 +2,22 @@ package com.example.myapplication.ui.ai
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.data.model.ChatMessage
+import com.example.myapplication.data.model.Result
+import com.example.myapplication.data.remote.VitaDataSource
 import com.example.myapplication.databinding.ActivityAiChatBinding
+import kotlinx.coroutines.launch
 
 class AiChatActivity : AppCompatActivity() {
+    companion object {
+        private const val PLAN_KEYWORD = "制定计划"
+    }
 
     private lateinit var binding: ActivityAiChatBinding
     private lateinit var chatAdapter: ChatAdapter // 统一放在顶部声明
+    private val vitaDataSource = VitaDataSource()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,25 +66,37 @@ class AiChatActivity : AppCompatActivity() {
      * 处理发送消息的逻辑
      */
     private fun performSendMessage(text: String) {
-        // 1. 展示用户发送的消息
         val userMsg = ChatMessage(text, true)
         chatAdapter.addMessage(userMsg)
-
-        // 自动滚动到底部
         binding.rvChatMessages.scrollToPosition(chatAdapter.itemCount - 1)
-
-        // 2. 模拟 AI 自动回复（后续可在此接入 Gemini 接口）
-        simulateAiResponse(text)
+        requestAiReply(text)
     }
 
-    /**
-     * 模拟延时回复
-     */
-    private fun simulateAiResponse(userText: String) {
-        binding.root.postDelayed({
-            val aiMsg = ChatMessage("收到你的问题：'$userText'。作为你的教练，我建议先热身 5 分钟。", false)
+    private fun requestAiReply(userText: String) {
+        lifecycleScope.launch {
+            binding.btnSend.isEnabled = false
+            val originalText = binding.btnSend.text
+            binding.btnSend.text = "发送中"
+
+            val result = if (userText.contains(PLAN_KEYWORD)) {
+                vitaDataSource.generatePlan().let { planResult ->
+                    when (planResult) {
+                        is Result.Success -> Result.Success("已根据你的健身信息开始生成训练计划，请稍后到“今日”页面查看最新安排。")
+                        is Result.Error -> Result.Error(planResult.exception)
+                    }
+                }
+            } else {
+                vitaDataSource.chat(userText)
+            }
+
+            val aiMsg = when (result) {
+                is Result.Success -> ChatMessage(result.data, false)
+                is Result.Error -> ChatMessage(result.exception.message ?: "请求失败，请稍后再试。", false)
+            }
             chatAdapter.addMessage(aiMsg)
             binding.rvChatMessages.scrollToPosition(chatAdapter.itemCount - 1)
-        }, 1000)
+            binding.btnSend.text = originalText
+            binding.btnSend.isEnabled = true
+        }
     }
 }
