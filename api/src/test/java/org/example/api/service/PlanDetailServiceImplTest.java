@@ -7,12 +7,14 @@ import org.example.api.entity.WorkoutPlan;
 import org.example.api.repository.PlanDetailRepository;
 import org.example.api.repository.VideoRepository;
 import org.example.api.repository.WorkoutPlanRepository;
+import org.example.api.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,11 +34,14 @@ class PlanDetailServiceImplTest {
     @Mock
     private WorkoutPlanRepository workoutPlanRepository;
 
+    @Mock
+    private UserService userService;
+
     private PlanDetailServiceImpl planDetailService;
 
     @BeforeEach
     void setUp() {
-        planDetailService = new PlanDetailServiceImpl(videoRepository, planDetailRepository, workoutPlanRepository);
+        planDetailService = new PlanDetailServiceImpl(videoRepository, planDetailRepository, workoutPlanRepository, userService);
     }
 
     @Test
@@ -92,5 +97,47 @@ class PlanDetailServiceImplTest {
         assertEquals(2, result.getCourseList().get(0).getActionList().size());
         assertEquals("深蹲", result.getCourseList().get(0).getActionList().get(0).getActionName());
         assertEquals("平板支撑", result.getCourseList().get(0).getActionList().get(1).getActionName());
+    }
+
+    @Test
+    void getTodayWorkoutPlanCoursesUsesCurrentUserAndDate() {
+        User user = new User();
+        user.setId(8L);
+
+        WorkoutPlan workoutPlan = new WorkoutPlan();
+        workoutPlan.setId(1L);
+        workoutPlan.setName("个性减脂计划");
+        workoutPlan.setStartDate(LocalDate.of(2026, 4, 10));
+        workoutPlan.setEndDate(LocalDate.of(2026, 5, 10));
+
+        Video video = new Video();
+        video.setId(11L);
+        video.setTitle("深蹲");
+        video.setUrl("https://example.com/squat.mp4");
+        video.setDuration(120);
+        video.setCoverUrl("https://example.com/squat.jpg");
+
+        PlanDetail planDetail = new PlanDetail();
+        planDetail.setId(101L);
+        planDetail.setDayNumber(3);
+        planDetail.setOrderInDay(1);
+        planDetail.setVideo(video);
+
+        when(userService.getCurrentLoginUserDetails()).thenReturn(user);
+        when(workoutPlanRepository.findAllByUser_IdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByStartDateAsc(
+                8L,
+                LocalDate.of(2026, 4, 12),
+                LocalDate.of(2026, 4, 12)
+        )).thenReturn(List.of(workoutPlan));
+        when(planDetailRepository.findAllByWorkoutPlan_IdAndDayNumberOrderByOrderInDayAsc(1L, 3))
+                .thenReturn(List.of(planDetail));
+
+        List<org.example.api.dto.WorkoutPlanCourseDto> result =
+                planDetailService.getTodayWorkoutPlanCourses(LocalDate.of(2026, 4, 12));
+
+        assertEquals(1, result.size());
+        assertEquals("个性减脂计划", result.get(0).getPlanName());
+        assertEquals("第3天训练", result.get(0).getCourseName());
+        assertEquals(1, result.get(0).getActionList().size());
     }
 }

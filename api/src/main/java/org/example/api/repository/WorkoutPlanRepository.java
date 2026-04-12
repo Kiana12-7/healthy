@@ -18,4 +18,10 @@ public interface WorkoutPlanRepository  extends CrudRepository<WorkoutPlan, Long
     Optional<WorkoutPlan> findFirstByNameAndFitnessForm_IdOrderByIdAsc(String name, Long fitnessFormId);
 
     List<WorkoutPlan> findAllByUser_UsernameOrderByIdAsc(String username);
+
+    List<WorkoutPlan> findAllByUser_IdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByStartDateAsc(
+            Long userId,
+            java.time.LocalDate startDate,
+            java.time.LocalDate endDate
+    );
 }

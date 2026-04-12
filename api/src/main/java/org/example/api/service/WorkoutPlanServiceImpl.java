@@ -8,7 +8,6 @@ import org.example.api.entity.User;
 import org.example.api.entity.WorkoutPlan;
 import org.example.api.repository.FitnessFormRepository;
 import org.example.api.repository.WorkoutPlanRepository;
-import org.example.api.repository.specs.FitnessFormSpec;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -39,7 +38,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService{
         // 获取当前用户id
         User currentUser = this.userService.getCurrentUser().orElseThrow(EntityExistsException::new);
         // 通过当前用户id获取器健康表单
-        FitnessForm form = this.fitnessFormRepository.findBy(FitnessFormSpec.isUser(currentUser)).orElseThrow(EntityNotFoundException::new);
+        FitnessForm form = this.fitnessFormRepository.findByUser(currentUser).orElseThrow(EntityNotFoundException::new);
         // 调用生成器中的生成方法
         return this.aiPlanGenerator.generatePlan(form);
     }
