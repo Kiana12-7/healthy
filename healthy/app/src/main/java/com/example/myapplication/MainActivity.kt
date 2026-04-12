@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -53,6 +54,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent?.getBooleanExtra("select_today", false) == true ) {
+            bottomNav.selectedItemId = R.id.navigation_today
+        }
+    }
+
     /**
      * 替换页面中的 Fragment
      * @param fragment 需要显示的目标 Fragment
@@ -62,4 +70,5 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.fragment_container, fragment) // 替换容器内的 Fragment
             .commit() // 提交事务
     }
+
 }
