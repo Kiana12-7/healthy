@@ -3,21 +3,26 @@ package com.example.myapplication.ui.home.plan.planDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.myapplication.data.model.WorkoutDurationSourceType
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.data.model.WorkoutPlanActionDto
 import com.example.myapplication.data.model.WorkoutPlanCourseDto
 import com.example.myapplication.data.model.WorkoutPlanDetailDto
 import com.example.myapplication.data.remote.RetrofitClient
 import com.example.myapplication.databinding.ActivityPlanDetailBinding
+import com.example.myapplication.utils.WorkoutDurationReporter
 import kotlinx.coroutines.launch
 
 class PlanDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlanDetailBinding
     private lateinit var courseAdapter: CourseListAdapter
+    private var browseStartedAtMs: Long = 0L
+    private var browseRecordDate: String = ""
 
     // 接收 planId 和 planName
     private val planId: String by lazy {
@@ -55,12 +60,18 @@ class PlanDetailActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { finish() }
     }
 
+    // 初始化课程列表
     private fun initActionList() {
         binding.rvCourseList.layoutManager = LinearLayoutManager(this)
         courseAdapter = CourseListAdapter()
 
+        // 点击课程 → 跳转到训练详情页
         courseAdapter.setOnItemClickListener { courseItem ->
-            TrainingDetailActivity.actionStart(this@PlanDetailActivity, courseItem)
+            TrainingDetailActivity.actionStart(
+                this@PlanDetailActivity,
+                courseItem,
+                WorkoutDurationSourceType.PLAN
+            )
         }
 
         binding.rvCourseList.adapter = courseAdapter
@@ -128,5 +139,23 @@ class PlanDetailActivity : AppCompatActivity() {
             videoUrl = videoUrl,
             actionDesc = actionDesc
         )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        browseStartedAtMs = SystemClock.elapsedRealtime()
+        browseRecordDate = WorkoutDurationReporter.currentRecordDate()
+    }
+
+    override fun onStop() {
+        if (browseStartedAtMs > 0L) {
+            WorkoutDurationReporter.reportSession(
+                WorkoutDurationSourceType.PLAN,
+                browseStartedAtMs,
+                browseRecordDate
+            )
+            browseStartedAtMs = 0L
+        }
+        super.onStop()
     }
 }

@@ -1,5 +1,6 @@
 package org.example.api.controller;
 
+import org.example.api.dto.CurrentWorkoutPlanSummaryDTO;
 import org.example.api.dto.WorkoutPlanDetailDto;
 import org.example.api.dto.WorkoutPlanCourseDto;
 import org.example.api.dto.WorkoutPlanListDto;
@@ -41,5 +42,12 @@ public class WorkoutPlanController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
         return planDetailService.getTodayWorkoutPlanCourses(date);
+    }
+
+    @GetMapping("/currentSummary")
+    public CurrentWorkoutPlanSummaryDTO getCurrentPlanSummary(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+    ) {
+        return workoutPlanService.getCurrentPlanSummary(date);
     }
 }

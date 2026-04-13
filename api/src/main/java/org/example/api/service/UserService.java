@@ -1,10 +1,9 @@
 package org.example.api.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.example.api.dto.CurrentUserDTO;
 import org.example.api.dto.LoggedInUserDTO;
 import org.example.api.entity.User;
-import org.springframework.boot.security.autoconfigure.SecurityProperties;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 
@@ -20,5 +19,11 @@ public interface UserService {
      * */
     User getCurrentLoginUserDetails();
 
+    CurrentUserDTO getCurrentLoginUser();
+
     LoggedInUserDTO login(String username, String password, HttpServletRequest request);
+
+    LoggedInUserDTO register(String username, String password, HttpServletRequest request);
+
+    void logout(HttpServletRequest request);
 }

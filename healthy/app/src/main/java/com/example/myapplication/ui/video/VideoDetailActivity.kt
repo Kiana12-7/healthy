@@ -119,7 +119,6 @@ class VideoDetailActivity : AppCompatActivity() {
         binding.playerView.layoutParams = params
     }
 
-    // ✅ 核心修复：Player 初始化 + 绑定
     private fun initPlayer(url: String) {
         exoPlayer = ExoPlayer.Builder(this).build()
 
