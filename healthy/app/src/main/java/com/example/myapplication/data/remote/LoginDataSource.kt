@@ -20,29 +20,62 @@ class LoginDataSource {
      * @return Result<LoggedInUser> 统一返回成功/失败
      */
     suspend fun login(username: String, password: String): Result<LoggedInUser> {
-        // 切换到IO线程执行网络请求
         return withContext(Dispatchers.IO) {
             try {
-                // 调用 Retrofit 的登录接口，把账号密码传给后台
                 val response = RetrofitClient.userService.login(username, password)
-
-                // 后台返回成功，包装成 Result.Success
                 Result.Success(response)
-
             } catch (e: HttpException) {
-                // HTTP 错误（如 400/401/404/500）
-                Result.Error(IOException("登录失败：服务器错误 ${e.code()}", e))
+                Result.Error(IOException(resolveAuthMessage("登录", e), e))
             } catch (e: IOException) {
-                // 网络错误（无网、超时、连接失败）
                 Result.Error(IOException("登录失败：网络异常", e))
             } catch (e: Exception) {
-                // 其他未知错误
                 Result.Error(IOException("登录失败：${e.message}", e))
             }
         }
     }
 
-    fun logout() {
-        // TODO: revoke authentication
+    suspend fun register(username: String, password: String): Result<LoggedInUser> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = RetrofitClient.userService.register(username, password)
+                Result.Success(response)
+            } catch (e: HttpException) {
+                Result.Error(IOException(resolveAuthMessage("注册", e), e))
+            } catch (e: IOException) {
+                Result.Error(IOException("注册失败：网络异常", e))
+            } catch (e: Exception) {
+                Result.Error(IOException("注册失败：${e.message}", e))
+            }
+        }
+    }
+
+    suspend fun logout(): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                RetrofitClient.userService.logout()
+                RetrofitClient.clearCookies()
+                Result.Success(Unit)
+            } catch (e: HttpException) {
+                if (e.code() == 401 || e.code() == 403) {
+                    RetrofitClient.clearCookies()
+                    Result.Success(Unit)
+                } else {
+                    Result.Error(IOException("退出失败：服务器错误 ${e.code()}", e))
+                }
+            } catch (e: IOException) {
+                Result.Error(IOException("退出失败：网络异常", e))
+            } catch (e: Exception) {
+                Result.Error(IOException("退出失败：${e.message}", e))
+            }
+        }
+    }
+
+    private fun resolveAuthMessage(action: String, exception: HttpException): String {
+        return when (exception.code()) {
+            400 -> "${action}失败：用户名不能为空，密码至少 6 位"
+            401 -> "${action}失败：用户名或密码错误"
+            409 -> "${action}失败：用户名已存在"
+            else -> "${action}失败：服务器错误 ${exception.code()}"
+        }
     }
 }

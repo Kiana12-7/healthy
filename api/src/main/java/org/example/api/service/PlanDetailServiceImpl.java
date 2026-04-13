@@ -203,15 +203,26 @@ public class PlanDetailServiceImpl implements PlanDetailService{
         List<WorkoutPlan> workoutPlans = workoutPlanRepository.findAll(spec);
 
         List<WorkoutPlanCourseDto> result = new ArrayList<>();
+        WorkoutPlan latestPlan = workoutPlans.stream()
+                .filter(workoutPlan -> workoutPlan.getStartDate() != null)
+                .max(
+                        Comparator.comparing(WorkoutPlan::getStartDate)
+                                .thenComparing(WorkoutPlan::getId, Comparator.nullsLast(Comparator.naturalOrder()))
+                )
+                .orElse(null);
 
-            int dayNumber = (int) ChronoUnit.DAYS.between(workoutPlans.get(0).getStartDate(), date) + 1;
-            if (dayNumber >= 1) {
-                List<PlanDetail> dailyPlanDetails = planDetailRepository
-                        .findAllByWorkoutPlan_IdAndDayNumberOrderByOrderInDayAsc(workoutPlans.get(0).getId(), dayNumber);
-                if (!dailyPlanDetails.isEmpty()) {
-                    result.add(toCourseDto(workoutPlans.get(0), dayNumber, dailyPlanDetails));
-                }
+        if (latestPlan == null) {
+            return result;
+        }
+
+        int dayNumber = (int) ChronoUnit.DAYS.between(latestPlan.getStartDate(), date) + 1;
+        if (dayNumber >= 1) {
+            List<PlanDetail> dailyPlanDetails = planDetailRepository
+                    .findAllByWorkoutPlan_IdAndDayNumberOrderByOrderInDayAsc(latestPlan.getId(), dayNumber);
+            if (!dailyPlanDetails.isEmpty()) {
+                result.add(toCourseDto(latestPlan, dayNumber, dailyPlanDetails));
             }
+        }
 
         return result;
     }

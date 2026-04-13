@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -100,15 +101,21 @@ class PlanDetailServiceImplTest {
     }
 
     @Test
-    void getTodayWorkoutPlanCoursesUsesCurrentUserAndDate() {
+    void getTodayWorkoutPlanCoursesUsesLatestActivePlanForCurrentDate() {
         User user = new User();
         user.setId(8L);
 
-        WorkoutPlan workoutPlan = new WorkoutPlan();
-        workoutPlan.setId(1L);
-        workoutPlan.setName("个性减脂计划");
-        workoutPlan.setStartDate(LocalDate.of(2026, 4, 10));
-        workoutPlan.setEndDate(LocalDate.of(2026, 5, 10));
+        WorkoutPlan oldPlan = new WorkoutPlan();
+        oldPlan.setId(1L);
+        oldPlan.setName("旧计划");
+        oldPlan.setStartDate(LocalDate.of(2026, 4, 1));
+        oldPlan.setEndDate(LocalDate.of(2026, 4, 28));
+
+        WorkoutPlan newPlan = new WorkoutPlan();
+        newPlan.setId(2L);
+        newPlan.setName("新计划");
+        newPlan.setStartDate(LocalDate.of(2026, 4, 12));
+        newPlan.setEndDate(LocalDate.of(2026, 5, 9));
 
         Video video = new Video();
         video.setId(11L);
@@ -119,25 +126,22 @@ class PlanDetailServiceImplTest {
 
         PlanDetail planDetail = new PlanDetail();
         planDetail.setId(101L);
-        planDetail.setDayNumber(3);
+        planDetail.setDayNumber(1);
         planDetail.setOrderInDay(1);
         planDetail.setVideo(video);
 
         when(userService.getCurrentLoginUserDetails()).thenReturn(user);
-        when(workoutPlanRepository.findAllByUser_IdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByStartDateAsc(
-                8L,
-                LocalDate.of(2026, 4, 12),
-                LocalDate.of(2026, 4, 12)
-        )).thenReturn(List.of(workoutPlan));
-        when(planDetailRepository.findAllByWorkoutPlan_IdAndDayNumberOrderByOrderInDayAsc(1L, 3))
+        when(workoutPlanRepository.findAll(org.mockito.ArgumentMatchers.<org.springframework.data.jpa.domain.Specification<WorkoutPlan>>any()))
+                .thenReturn(List.of(oldPlan, newPlan));
+        when(planDetailRepository.findAllByWorkoutPlan_IdAndDayNumberOrderByOrderInDayAsc(2L, 1))
                 .thenReturn(List.of(planDetail));
 
         List<org.example.api.dto.WorkoutPlanCourseDto> result =
                 planDetailService.getTodayWorkoutPlanCourses(LocalDate.of(2026, 4, 12));
 
         assertEquals(1, result.size());
-        assertEquals("个性减脂计划", result.get(0).getPlanName());
-        assertEquals("第3天训练", result.get(0).getCourseName());
+        assertEquals("新计划", result.get(0).getPlanName());
+        assertEquals("第1天训练", result.get(0).getCourseName());
         assertEquals(1, result.get(0).getActionList().size());
     }
 }
