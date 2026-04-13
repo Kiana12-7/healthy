@@ -6,6 +6,7 @@ import org.example.api.dto.CurrentUserDTO;
 import org.example.api.dto.LoggedInUserDTO;
 import org.example.api.entity.User;
 import org.example.api.repository.UserRepository;
+import org.example.api.repository.WorkoutDurationStatRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,9 @@ class UserServiceImplTest {
     private PasswordEncoder passwordEncoder;
 
     @Mock
+    private WorkoutDurationStatRepository workoutDurationStatRepository;
+
+    @Mock
     private HttpServletRequest request;
 
     @Mock
@@ -46,7 +50,7 @@ class UserServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserServiceImpl(userRepository, passwordEncoder);
+        userService = new UserServiceImpl(userRepository, passwordEncoder, workoutDurationStatRepository);
         SecurityContextHolder.clearContext();
     }
 
@@ -108,13 +112,14 @@ class UserServiceImplTest {
         when(userRepository.findByUsername("alice")).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("123456", "encoded-password")).thenReturn(true);
         when(request.getSession(true)).thenReturn(session);
+        when(workoutDurationStatRepository.countByUserAndTotalDurationSecondsGreaterThan(user, 0)).thenReturn(6L);
 
         userService.login("alice", "123456", request);
         CurrentUserDTO currentUser = userService.getCurrentLoginUser();
 
         assertEquals(8L, currentUser.getId());
         assertEquals("Alice", currentUser.getName());
-        assertEquals(0, currentUser.getDays());
+        assertEquals(6, currentUser.getDays());
         assertEquals(0, currentUser.getCalories());
         assertEquals(0, currentUser.getCourses());
     }

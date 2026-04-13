@@ -7,6 +7,7 @@ import org.example.api.dto.CurrentUserDTO;
 import org.example.api.dto.LoggedInUserDTO;
 import org.example.api.entity.User;
 import org.example.api.repository.UserRepository;
+import org.example.api.repository.WorkoutDurationStatRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,11 +29,14 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final WorkoutDurationStatRepository workoutDurationStatRepository;
 
     public UserServiceImpl(UserRepository userRepository,
-                            PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           WorkoutDurationStatRepository workoutDurationStatRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.workoutDurationStatRepository = workoutDurationStatRepository;
     }
 
     /**
@@ -74,10 +78,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public CurrentUserDTO getCurrentLoginUser() {
         User user = this.getCurrentLoginUserDetails();
+        int activeDays = (int) workoutDurationStatRepository.countByUserAndTotalDurationSecondsGreaterThan(user, 0);
         return new CurrentUserDTO(
                 user.getId(),
                 resolveDisplayName(user),
-                0,
+                activeDays,
                 0,
                 0
         );
