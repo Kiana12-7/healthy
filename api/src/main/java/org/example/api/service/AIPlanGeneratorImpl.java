@@ -45,15 +45,14 @@ public class AIPlanGeneratorImpl implements AIPlanGenerator{
         String prompt = buildPrompt(form);
         String jsonResponse = callOpenAI(prompt).getOutput().getChoices().get(0).getMessage().getContent();
         AIPlanResponseDTO dto = parseResponse(jsonResponse);
-        LocalDate startTime = LocalDate.parse(dto.getStartDate());
-        LocalDate endTime = LocalDate.parse(dto.getEndDate());
+        LocalDate startTime = LocalDate.now();
+        LocalDate endTime = startTime.plusDays(resolveDurationDays(dto.getDurationDays()) - 1L);
         // 保存训练计划
         WorkoutPlan workoutPlan = this.workoutPlanService.save(startTime, endTime, form.getId());
         // 批量保存训练详情
         this.planDetailService.saveAllByAIPlan(workoutPlan.getId(), dto.getDetails());
 
-        // todo 重试机制
-        return null;
+        return workoutPlan;
     }
 
     @Override
@@ -74,7 +73,9 @@ public class AIPlanGeneratorImpl implements AIPlanGenerator{
             2. 必须避开受伤部位（如膝盖受伤则避免深蹲、跳跃动作）。
             3. 根据训练地点选择动作：家→徒手或小哑铃；健身房→可使用器械。
             4. 每天安排4~6个动作，每个动作必须来自上面的可用列表。
-            5. 输出严格JSON格式，字段使用驼峰命名，示例：
+            5. dayNumber = 1 表示计划创建当天开始训练，后续按自然日顺延。
+            6. 连续练习3天需要休息一天
+            7. 输出严格JSON格式，字段使用驼峰命名，示例：
             {
               "planType": "减脂",
               "durationDays": 28,
@@ -86,6 +87,27 @@ public class AIPlanGeneratorImpl implements AIPlanGenerator{
                   "dayNumber": 1,
                   "videos": [
                     {"actionName": "俯卧撑", "orderInDay": 1},
+                    {"actionName": "引体向上", "orderInDay": 2}
+                  ]
+                },
+                {
+                  "dayNumber": 2,
+                  "videos": [
+                    {"actionName": "弓步蹲", "orderInDay": 1},
+                    {"actionName": "引体向上", "orderInDay": 2}
+                  ]
+                },
+                {
+                  "dayNumber": 3,
+                  "videos": [
+                    {"actionName": "俯卧撑", "orderInDay": 1},
+                    {"actionName": "肩推", "orderInDay": 2}
+                  ]
+                },
+                {
+                  "dayNumber": 5,
+                  "videos": [
+                    {"actionName": "硬拉", "orderInDay": 1},
                     {"actionName": "引体向上", "orderInDay": 2}
                   ]
                 }
@@ -130,5 +152,9 @@ public class AIPlanGeneratorImpl implements AIPlanGenerator{
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse AI response", e);
         }
+    }
+
+    private int resolveDurationDays(Integer durationDays) {
+        return durationDays != null && durationDays > 0 ? durationDays : 28;
     }
 }
