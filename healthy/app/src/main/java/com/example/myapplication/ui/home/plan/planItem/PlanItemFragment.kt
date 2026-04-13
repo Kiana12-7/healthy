@@ -45,11 +45,11 @@ class PlanItemFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.fragment_item_list, container, false)
 
         // ========== 定制计划Banner点击：跳转到 WeightActivity ==========
-        val bannerPlan = rootView.findViewById<ImageView>(R.id.iv_banner_plan)
-        bannerPlan.setOnClickListener {
-            val intent = Intent(requireContext(), WeightActivity::class.java)
-            startActivity(intent)
-        }
+        //val bannerPlan = rootView.findViewById<ImageView>(R.id.iv_banner_plan)
+        //bannerPlan.setOnClickListener {
+        //    val intent = Intent(requireContext(), WeightActivity::class.java)
+        //    startActivity(intent)
+        //}
 
         // 计划列表初始化
         val rvPlanList = rootView.findViewById<RecyclerView>(R.id.rv_plan_list)
