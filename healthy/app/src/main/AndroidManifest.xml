@@ -68,6 +68,12 @@
             android:name=".MainActivity"
             android:exported="true" />
         <activity
+            android:name=".ui.home.SearchActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyApplication"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".ui.video.VideoDetailActivity"
             android:configChanges="screenSize|orientation|screenLayout|smallestScreenSize|keyboardHidden"
             android:exported="false"

@@ -190,4 +190,10 @@
     <string name="action_process">动作过程</string>
     <string name="breath_rhythm">呼吸节奏</string>
     <string name="attention">注意事项</string>
+    <string name="search_find">搜索发现</string>
+    <string name="tuijian_plan">推荐计划</string>
+    <string name="can_not_find_plan">未找到相关计划</string>
+    <string name="search_train_plan">搜索训练计划</string>
+    <string name="search">搜索</string>
+    <string name="jump_to">跳转详情</string>
 </resources>
