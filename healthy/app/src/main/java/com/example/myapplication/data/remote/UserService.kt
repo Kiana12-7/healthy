@@ -13,7 +13,7 @@ import retrofit2.http.POST
  **/
 interface UserService {
     // 获取当前登录用户信息
-    @GET("me")
+    @GET("user/me")
     suspend fun me(): User
 
     @FormUrlEncoded
@@ -23,4 +23,13 @@ interface UserService {
         @Field("password") password: String
     ): LoggedInUser
 
+    @FormUrlEncoded
+    @POST("user/register")
+    suspend fun register(
+        @Field("username") username: String,
+        @Field("password") password: String
+    ): LoggedInUser
+
+    @POST("user/logout")
+    suspend fun logout()
 }

@@ -12,17 +12,27 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.R
+import com.example.myapplication.data.model.Result
+import com.example.myapplication.data.remote.LoginDataSource
+import com.example.myapplication.data.repository.LoginRepository
 import com.example.myapplication.ui.fitness.StatisticsActivity
+import com.example.myapplication.ui.login.LoginActivity
 import com.example.myapplication.ui.login.UserViewModel
+import kotlinx.coroutines.launch
 
 class PersonalFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var ivAvatar: ImageView
     private lateinit var tvNickname: TextView
     private lateinit var tvDays: TextView
+    private lateinit var btnLogout: TextView
     private lateinit var itemCourses: LinearLayout
     private var itemMyData: LinearLayout? = null
+    private val loginRepository by lazy {
+        LoginRepository(LoginDataSource())
+    }
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -35,6 +45,7 @@ class PersonalFragment : Fragment() {
             ivAvatar = view.findViewById(R.id.iv_avatar)
             tvNickname = view.findViewById(R.id.tv_nickname)
             tvDays = view.findViewById(R.id.tv_days)
+            btnLogout = view.findViewById(R.id.btn_logout)
             itemCourses = view.findViewById(R.id.item_courses)
             itemMyData = view.findViewById(R.id.item_my_data)
 
@@ -84,10 +95,36 @@ class PersonalFragment : Fragment() {
         ivAvatar.setOnClickListener {
             showToast("点击了头像")
         }
+
+        btnLogout.setOnClickListener {
+            logout()
+        }
     }
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun logout() {
+        btnLogout.isEnabled = false
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            when (val result = loginRepository.logout()) {
+                is Result.Success -> {
+                    showToast(getString(R.string.logout_success))
+                    val intent = Intent(requireContext(), LoginActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+
+                is Result.Error -> {
+                    btnLogout.isEnabled = true
+                    showToast(result.exception.message ?: getString(R.string.logout_failed))
+                }
+            }
+        }
     }
 
     override fun onResume() {
