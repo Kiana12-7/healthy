@@ -2,15 +2,20 @@ package org.example.api.service;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import org.example.api.dto.CurrentWorkoutPlanSummaryDTO;
 import org.example.api.dto.WorkoutPlanListDto;
 import org.example.api.entity.FitnessForm;
 import org.example.api.entity.User;
 import org.example.api.entity.WorkoutPlan;
 import org.example.api.repository.FitnessFormRepository;
 import org.example.api.repository.WorkoutPlanRepository;
+import org.example.api.repository.specs.WorkoutPlanSpec;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,6 +80,34 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService{
                     return dto;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public CurrentWorkoutPlanSummaryDTO getCurrentPlanSummary(LocalDate date) {
+        User currentUser = this.userService.getCurrentLoginUserDetails();
+        Specification<WorkoutPlan> spec = WorkoutPlanSpec.isDate(date).and(WorkoutPlanSpec.isUser(currentUser));
+        WorkoutPlan latestPlan = this.workoutPlanRepository.findAll(spec).stream()
+                .filter(workoutPlan -> workoutPlan.getStartDate() != null && workoutPlan.getEndDate() != null)
+                .max(
+                        Comparator.comparing(WorkoutPlan::getStartDate)
+                                .thenComparing(WorkoutPlan::getId, Comparator.nullsLast(Comparator.naturalOrder()))
+                )
+                .orElse(null);
+
+        CurrentWorkoutPlanSummaryDTO dto = new CurrentWorkoutPlanSummaryDTO();
+        if (latestPlan == null) {
+            dto.setHasActivePlan(false);
+            return dto;
+        }
+
+        dto.setHasActivePlan(true);
+        dto.setPlanId(latestPlan.getId());
+        dto.setPlanName(latestPlan.getName());
+        dto.setStartDate(latestPlan.getStartDate());
+        dto.setEndDate(latestPlan.getEndDate());
+        dto.setCurrentDay((int) ChronoUnit.DAYS.between(latestPlan.getStartDate(), date) + 1);
+        dto.setTotalDays((int) ChronoUnit.DAYS.between(latestPlan.getStartDate(), latestPlan.getEndDate()) + 1);
+        return dto;
     }
 
 }

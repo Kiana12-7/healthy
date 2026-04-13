@@ -53,4 +53,8 @@ object RetrofitClient {
     val workoutPlanService: WorkoutPlanService by lazy {
         retrofit.create(WorkoutPlanService::class.java)
     }
+
+    val workoutDurationService: WorkoutDurationService by lazy {
+        retrofit.create(WorkoutDurationService::class.java)
+    }
 }
