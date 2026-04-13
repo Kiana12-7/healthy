@@ -23,10 +23,28 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
             if (result is Result.Success) {
                 _loginResult.postValue(
-                    LoginResult(success = LoggedInUserView(displayName = "登录成功"))
+                    LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
                 )
             } else {
-                _loginResult.postValue(LoginResult(error = R.string.login_failed))
+                val message = (result as? Result.Error)?.exception?.message
+                    ?: "登录失败，请稍后重试"
+                _loginResult.postValue(LoginResult(errorMessage = message))
+            }
+        }
+    }
+
+    fun register(username: String, password: String) {
+        viewModelScope.launch {
+            val result = loginRepository.register(username, password)
+
+            if (result is Result.Success) {
+                _loginResult.postValue(
+                    LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
+                )
+            } else {
+                val message = (result as? Result.Error)?.exception?.message
+                    ?: "注册失败，请稍后重试"
+                _loginResult.postValue(LoginResult(errorMessage = message))
             }
         }
     }

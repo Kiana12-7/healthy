@@ -30,9 +30,12 @@ class LoginRepository(val dataSource: LoginDataSource) {
      * 清空内存缓存的用户信息
      * 调用数据源执行登出逻辑
      */
-    fun logout() {
-        user = null
-        dataSource.logout()
+    suspend fun logout(): Result<Unit> {
+        val result = dataSource.logout()
+        if (result is Result.Success) {
+            user = null
+        }
+        return result
     }
 
     /**
@@ -42,8 +45,17 @@ class LoginRepository(val dataSource: LoginDataSource) {
      * @return Result<LoggedInUser> 统一结果封装（成功/失败）
      */
     suspend fun login(username: String, password: String): Result<LoggedInUser> {
-        // handle login
         val result = dataSource.login(username, password)
+
+        if (result is Result.Success) {
+            setLoggedInUser(result.data)
+        }
+
+        return result
+    }
+
+    suspend fun register(username: String, password: String): Result<LoggedInUser> {
+        val result = dataSource.register(username, password)
 
         if (result is Result.Success) {
             setLoggedInUser(result.data)

@@ -8,7 +8,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.MainActivity
@@ -34,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginFormState.observe(this) {
             val loginState = it ?: return@observe
             binding.btnLogin.isEnabled = loginState.isDataValid
+            binding.btnRegister.isEnabled = loginState.isDataValid
 
             if (loginState.usernameError != null) {
                 binding.etUsername.error = getString(loginState.usernameError)
@@ -46,9 +46,13 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this) {
             val loginResult = it ?: return@observe
             binding.loading.visibility = View.GONE
-            if (loginResult.error != null) showLoginFailed(loginResult.error)
-            if (loginResult.success != null) updateUiWithUser(loginResult.success)
-            setResult(RESULT_OK)
+            if (loginResult.errorMessage != null) {
+                showOperationFailed(loginResult.errorMessage)
+            }
+            if (loginResult.success != null) {
+                setResult(RESULT_OK)
+                updateUiWithUser(loginResult.success)
+            }
         }
     }
 
@@ -69,6 +73,9 @@ class LoginActivity : AppCompatActivity() {
     private fun initClickListeners() {
         binding.btnLogin.setOnClickListener {
             doLogin()
+        }
+        binding.btnRegister.setOnClickListener {
+            doRegister()
         }
 //        binding.tvTour.setOnClickListener {
 //            startActivity(Intent(this, MainActivity::class.java))
@@ -98,6 +105,14 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.login(username, password)
     }
 
+    private fun doRegister() {
+        val username = binding.etUsername.text.toString().trim()
+        val password = binding.etPassword.text.toString().trim()
+
+        binding.loading.visibility = View.VISIBLE
+        loginViewModel.register(username, password)
+    }
+
     private fun updateUiWithUser(model: LoggedInUserView) {
         Toast.makeText(this, "欢迎 ${model.displayName}", Toast.LENGTH_LONG).show()
         val intent = Intent(this, MainActivity::class.java)
@@ -105,8 +120,8 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun showLoginFailed(@StringRes error: Int) {
-        Toast.makeText(applicationContext, error, Toast.LENGTH_SHORT).show()
+    private fun showOperationFailed(message: String) {
+        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     }
 }
 

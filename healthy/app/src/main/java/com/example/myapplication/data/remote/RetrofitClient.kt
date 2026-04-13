@@ -2,6 +2,7 @@ package com.example.myapplication.data.remote
 
 import android.content.Context
 import com.example.myapplication.utils.OkHttpUtil
+import com.example.myapplication.utils.PersistentCookieJar
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -14,6 +15,12 @@ object RetrofitClient {
 
     fun init(context: Context) {
         appContext = context.applicationContext
+    }
+
+    fun clearCookies() {
+        appContext?.let {
+            PersistentCookieJar.getInstance(it).clearCookies()
+        }
     }
 
     private val okHttpClient: OkHttpClient by lazy {
