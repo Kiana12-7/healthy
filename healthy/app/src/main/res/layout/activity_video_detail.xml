@@ -2,56 +2,56 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="#F5F7F9">
 
-    <!-- 顶部返回按钮：修复约束+内置背景（无需外部drawable）+语法规范 -->
+    <!-- 视频播放器 -->
+    <androidx.media3.ui.PlayerView
+        android:id="@+id/player_view"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:background="#000000"
+        app:use_controller="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- 返回按钮（修复：点击区域48dp+内容描述） -->
     <ImageView
         android:id="@+id/btn_back"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:src="@android:drawable/ic_menu_revert"
-        android:padding="8dp"
+        android:padding="12dp"
         android:clickable="true"
         android:focusable="true"
-        android:elevation="8dp"
         android:background="#80000000"
+        android:contentDescription="@string/ic_back"
         app:tint="#FFFFFF"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"/>
 
-    <!-- 视频播放器：完整约束，无语法错误 -->
-    <androidx.media3.ui.PlayerView
-        android:id="@+id/player_view"
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:background="#000000"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <!-- 加载进度条：完整约束，无报错 -->
+    <!-- 加载进度条 -->
     <ProgressBar
         android:id="@+id/progress_bar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:visibility="gone"
-        android:elevation="4dp"
         app:layout_constraintTop_toTopOf="@id/player_view"
         app:layout_constraintBottom_toBottomOf="@id/player_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- 滚动区域：完整约束，无语法错误 -->
+    <!-- 滚动面板 -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_desc"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:overScrollMode="never"
+        android:background="#FFFFFF"
+        android:padding="16dp"
         app:layout_constraintTop_toBottomOf="@id/player_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,33 +60,71 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
+
+            <!-- 标题 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="动作详情"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#222222"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- 标签栏（修复：文字对比度提升） -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="初级"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:background="#BBDEFB"
+                    android:textColor="#0D47A1"
+                    android:textSize="12sp"
+                    android:layout_marginRight="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="腿部 · 臀部"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:background="#E1BEE7"
+                    android:textColor="#4A148C"
+                    android:textSize="12sp"/>
+            </LinearLayout>
 
             <!-- 准备姿势 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="20dp">
+                android:background="#FFFFFF"
+                android:padding="14dp"
+                android:layout_marginBottom="12dp"
+                android:elevation="2dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/prepare_pose"
+                    android:text="【准备姿势】"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#333333"
-                    android:layout_marginBottom="8dp"/>
-
+                    android:textColor="#333333"/>
                 <TextView
                     android:id="@+id/tv_prepare_pose"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textColor="#666666"
-                    android:lineSpacingExtra="4dp"/>
-
+                    android:layout_marginTop="4dp"/>
             </LinearLayout>
 
             <!-- 动作过程 -->
@@ -94,25 +132,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="20dp">
-
+                android:background="#FFFFFF"
+                android:padding="14dp"
+                android:layout_marginBottom="12dp"
+                android:elevation="2dp">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/action_process"
+                    android:text="【动作过程】"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#333333"
-                    android:layout_marginBottom="8dp"/>
-
+                    android:textColor="#333333"/>
                 <TextView
                     android:id="@+id/tv_action_process"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textColor="#666666"
-                    android:lineSpacingExtra="4dp"/>
-
+                    android:layout_marginTop="4dp"/>
             </LinearLayout>
 
             <!-- 呼吸节奏 -->
@@ -120,54 +157,51 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="20dp">
-
+                android:background="#FFFFFF"
+                android:padding="14dp"
+                android:layout_marginBottom="12dp"
+                android:elevation="2dp">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/breath_rhythm"
+                    android:text="【呼吸节奏】"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#333333"
-                    android:layout_marginBottom="8dp"/>
-
+                    android:textColor="#333333"/>
                 <TextView
                     android:id="@+id/tv_breath_rhythm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textColor="#666666"
-                    android:lineSpacingExtra="4dp"/>
-
+                    android:layout_marginTop="4dp"/>
             </LinearLayout>
 
             <!-- 注意事项 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:background="#FFFFFF"
+                android:padding="14dp"
+                android:elevation="2dp">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/attention"
+                    android:text="【注意事项】"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#333333"
-                    android:layout_marginBottom="8dp"/>
-
+                    android:textColor="#333333"/>
                 <TextView
                     android:id="@+id/tv_attention"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textColor="#666666"
-                    android:lineSpacingExtra="4dp"/>
-
+                    android:layout_marginTop="4dp"/>
             </LinearLayout>
 
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

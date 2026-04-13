@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -10,19 +11,29 @@
         android:layout_height="56dp"
         android:background="@color/white"
         android:paddingHorizontal="16dp">
+
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_back" /> <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/ai_coach"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="#333333" />
+            android:src="@android:drawable/ic_menu_revert"
+            android:padding="12dp"
+            android:background="@drawable/bg_back_button_round"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="返回"
+            app:tint="#333333"
+            android:outlineProvider="background"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/ai_coach"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#333333" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -40,21 +51,30 @@
         android:padding="12dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
+
         <EditText
             android:id="@+id/et_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:minHeight="48dp"
+            android:gravity="center_vertical"
             android:background="@drawable/bg_ai_input_field"
             android:hint="@string/ai_coach_ask"
             android:padding="10dp"
             android:maxLines="4" />
-        <Button
+
+        <ImageView
             android:id="@+id/btn_send"
-            android:layout_width="60dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginStart="10dp"
-            android:text="@string/sent"
-            android:textSize="12sp" />
+            android:src="@android:drawable/ic_menu_send"
+            android:padding="12dp"
+            android:background="@drawable/bg_send_button_disable"
+            android:clickable="false"
+            android:focusable="false"
+            app:tint="#999999"
+            android:outlineProvider="background"/>
     </LinearLayout>
 </LinearLayout>
