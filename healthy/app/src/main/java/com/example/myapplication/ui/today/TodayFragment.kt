@@ -21,6 +21,7 @@ import com.example.myapplication.ui.fitness.WeightActivity
 import com.example.myapplication.ui.home.plan.planDetail.CourseListAdapter
 import com.example.myapplication.ui.home.plan.planDetail.CourseItem as PlanCourseItem
 import com.example.myapplication.ui.home.plan.planDetail.TrainingDetailActivity
+import com.example.myapplication.data.model.WorkoutDurationSourceType
 import com.example.myapplication.ui.video.VideoDetailActivity
 import kotlinx.coroutines.launch
 
@@ -83,7 +84,11 @@ class TodayFragment : Fragment(R.layout.fragment_today) {
             layoutManager = LinearLayoutManager(context)
             adapter = CourseListAdapter().apply {
                 setOnItemClickListener { courseItem ->
-                    TrainingDetailActivity.actionStart(requireContext(), courseItem)
+                    TrainingDetailActivity.actionStart(
+                        requireContext(),
+                        courseItem,
+                        WorkoutDurationSourceType.AI_PLAN
+                    )
                 }
             }
             isNestedScrollingEnabled = false

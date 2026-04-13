@@ -6,12 +6,15 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.ActivityTrainingDetailBinding
 import java.util.Locale
 import androidx.constraintlayout.widget.ConstraintSet
 import android.view.View
+import com.example.myapplication.data.model.WorkoutDurationSourceType
+import com.example.myapplication.utils.WorkoutDurationReporter
 import com.example.myapplication.data.model.CourseItem as VideoCourseItem
 import com.example.myapplication.ui.video.VideoDetailActivity
 
@@ -31,6 +34,9 @@ class TrainingDetailActivity : AppCompatActivity() {
     }
 
     private lateinit var currentCourse: CourseItem
+    private var sourceType: WorkoutDurationSourceType = WorkoutDurationSourceType.PLAN
+    private var browseStartedAtMs: Long = 0L
+    private var browseRecordDate: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +49,9 @@ class TrainingDetailActivity : AppCompatActivity() {
             @Suppress("DEPRECATION")
             intent.getSerializableExtra("COURSE_ITEM") as CourseItem
         }
+        sourceType = intent.getStringExtra(KEY_SOURCE_TYPE)
+            ?.let { runCatching { WorkoutDurationSourceType.valueOf(it) }.getOrNull() }
+            ?: WorkoutDurationSourceType.PLAN
 
         initToolbar()
         initActionList()
@@ -120,6 +129,20 @@ class TrainingDetailActivity : AppCompatActivity() {
         handler.removeCallbacks(timerRunnable)
     }
 
+    override fun onStart() {
+        super.onStart()
+        browseStartedAtMs = SystemClock.elapsedRealtime()
+        browseRecordDate = WorkoutDurationReporter.currentRecordDate()
+    }
+
+    override fun onStop() {
+        if (browseStartedAtMs > 0L) {
+            WorkoutDurationReporter.reportSession(sourceType, browseStartedAtMs, browseRecordDate)
+            browseStartedAtMs = 0L
+        }
+        super.onStop()
+    }
+
     private fun moveTimerToTop() {
         val constraintSet = ConstraintSet()
         constraintSet.clone(binding.root)
@@ -137,9 +160,16 @@ class TrainingDetailActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun actionStart(context: Context, courseItem: CourseItem) {
+        private const val KEY_SOURCE_TYPE = "key_source_type"
+
+        fun actionStart(
+            context: Context,
+            courseItem: CourseItem,
+            sourceType: WorkoutDurationSourceType = WorkoutDurationSourceType.PLAN
+        ) {
             val intent = Intent(context, TrainingDetailActivity::class.java).apply {
                 putExtra("COURSE_ITEM", courseItem)
+                putExtra(KEY_SOURCE_TYPE, sourceType.name)
             }
             context.startActivity(intent)
         }
