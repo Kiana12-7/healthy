@@ -21,7 +21,7 @@ public class SecurityConfig {
         http
                 .csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/login").permitAll() // 登录接口直接放行
+                        .requestMatchers("/user/login", "/user/register").permitAll()
                         .anyRequest().authenticated() // 其他接口需要登录
                 )
                 .formLogin(AbstractHttpConfigurer::disable)

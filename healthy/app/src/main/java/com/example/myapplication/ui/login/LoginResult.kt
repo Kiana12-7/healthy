@@ -5,5 +5,5 @@ package com.example.myapplication.ui.login
  */
 data class LoginResult(
     val success: LoggedInUserView? = null,
-    val error: Int? = null
+    val errorMessage: String? = null
 )

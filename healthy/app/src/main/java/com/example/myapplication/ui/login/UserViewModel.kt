@@ -24,7 +24,7 @@ class UserViewModel: ViewModel() {
                 _user.value = RetrofitClient.userService.me()
                 print(_user.value);
             } catch (e: Exception) {
-                // 网络异常或其他错误
+                _user.value = null
                 e.printStackTrace()
             }
         }
