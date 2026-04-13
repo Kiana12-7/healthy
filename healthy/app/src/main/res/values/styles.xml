@@ -1,13 +1,12 @@
 <resources>
+    <!-- 原有的筛选按钮样式 -->
     <style name="GreenFilterButtonStyle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
-        <!-- 兼容低版本：替换paddingHorizontal为左右padding -->
         <item name="android:paddingLeft">0dp</item>
         <item name="android:paddingRight">0dp</item>
-        <!-- 兼容低版本：替换paddingVertical为上下padding -->
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">4dp</item>
         <item name="android:textSize">12sp</item>
@@ -18,8 +17,45 @@
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
     </style>
+
+    <!-- 原有的圆形图片外观 -->
     <style name="CircleImageAppearance" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- 新增：纯文本自适应弹窗主题 -->
+    <style name="PureTextDialogTheme" parent="Theme.MaterialComponents.Light.Dialog">
+        <!-- 去掉标题栏，实现纯文本效果 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 自适应屏幕：最小宽度为屏幕宽度的90%（横竖屏均适用） -->
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+        <!-- 可选：限制最大宽度，避免大屏幕过宽（使用dp值） -->
+        <!-- <item name="android:windowMaxWidthMajor">360dp</item> -->
+        <!-- <item name="android:windowMaxWidthMinor">360dp</item> -->
+        <!-- 透明背景让Material圆角与阴影正常显示 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 内边距，使文字不贴边 -->
+        <item name="android:paddingLeft">24dp</item>
+        <item name="android:paddingRight">24dp</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingBottom">20dp</item>
+        <!-- 默认文字颜色和大小 -->
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">16sp</item>
+        <!-- 按钮样式：纯文字按钮，保持简洁 -->
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+    </style>
+
+    <!-- 确定按钮样式（绿色） -->
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/keep_green</item>
+    </style>
+
+    <!-- 取消/否定按钮样式（灰色） -->
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">#757575</item>
     </style>
 </resources>
