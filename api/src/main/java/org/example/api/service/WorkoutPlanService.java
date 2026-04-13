@@ -1,5 +1,6 @@
 package org.example.api.service;
 
+import org.example.api.dto.CurrentWorkoutPlanSummaryDTO;
 import org.example.api.dto.WorkoutPlanListDto;
 import org.example.api.entity.WorkoutPlan;
 
@@ -32,5 +33,7 @@ public interface WorkoutPlanService {
      * 获取首页展示用的内置训练计划
      */
     List<WorkoutPlanListDto> getTemplatePlanList();
+
+    CurrentWorkoutPlanSummaryDTO getCurrentPlanSummary(LocalDate date);
 
 }

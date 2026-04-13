@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvDateLabel"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content"
+            android:text="4/13"
+            android:textColor="#5E646A"
+            android:textSize="12sp" />
+
+        <FrameLayout
+            android:id="@+id/viewBarTrack"
+            android:layout_width="0dp"
+            android:layout_height="14dp"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_duration_track">
+
+            <View
+                android:id="@+id/viewBarFill"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_duration_fill"
+                android:visibility="invisible" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvDurationValue"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:gravity="end"
+            android:text="0分"
+            android:textColor="#1F2A24"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvSourceBreakdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="6dp"
+        android:text="计划 0分 · AI 0分"
+        android:textColor="#7A7F85"
+        android:textSize="12sp" />
+
+</LinearLayout>
