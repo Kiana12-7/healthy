@@ -1,16 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.MyApplication" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">@android:color/black</item>
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#90EE90</item>
+        <item name="android:dialogTheme">@style/PureTextDialogTheme</item>
+
+        <!-- 全局统一返回箭头样式（对 ActionBar 有效，对 Toolbar 需要配合 toolbarStyle） -->
+        <item name="homeAsUpIndicator">@drawable/ic_back_semitransparent</item>
+
+        <!-- 为 Toolbar 设置全局默认样式 -->
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+    </style>
+
+    <!-- 自定义 Toolbar 样式，设置默认导航图标 -->
+    <style name="ToolbarStyle" parent="Widget.Material3.Toolbar">
+        <item name="android:navigationIcon">@drawable/ic_back_semitransparent</item>
     </style>
 
     <style name="Theme.MyApplication" parent="Base.Theme.MyApplication" />
-    <style name="Widget.My.BottomNav"
-        parent="Widget.Material3.BottomNavigationView">
 
+    <style name="Widget.My.BottomNav" parent="Widget.Material3.BottomNavigationView">
         <item name="itemActiveIndicatorStyle">@null</item>
-
     </style>
 </resources>
