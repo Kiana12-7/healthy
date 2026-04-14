@@ -18,7 +18,7 @@ class AiChatActivity : AppCompatActivity() {
     companion object {
         private const val PLAN_KEYWORD = "制定计划"
         // AI自我介绍固定话术
-        private const val AI_INTRO_CONTENT = "我是你的专属AI健身教练，有任何健身相关的问题，都可以随时问我~"
+        private const val AI_INTRO_CONTENT = "我是vita,你的专属AI健身教练，有任何健身相关的问题，都可以随时问我"
     }
 
     private lateinit var binding: ActivityAiChatBinding
