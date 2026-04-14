@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 
@@ -37,6 +38,12 @@ class MyPlanItemRecyclerViewAdapter(
         // 绑定公共属性（假设两套布局都有 tv_plan_name）
         holder.tvPlanName?.text = item.name
 
+        holder.tvPlanTags?.apply {
+            val tags = item.getDisplayTags()
+            text = tags
+            isVisible = tags.isNotBlank()
+        }
+
         // 绑定图片
         if (item.imageResId != 0) {
             holder.ivPlanImage?.setImageResource(item.imageResId)
@@ -58,12 +65,14 @@ class MyPlanItemRecyclerViewAdapter(
     class ViewHolder(itemView: View, viewType: Int) : RecyclerView.ViewHolder(itemView) {
         var ivPlanImage: ImageView? = null
         var tvPlanName: TextView? = null
+        var tvPlanTags: TextView? = null
 
         init {
             if (viewType == 1) {
                 // 搜索页布局 ID
                 ivPlanImage = itemView.findViewById(R.id.iv_plan_icon)
                 tvPlanName = itemView.findViewById(R.id.tv_plan_name)
+                tvPlanTags = itemView.findViewById(R.id.tv_plan_tags)
             } else {
                 // 首页布局 ID (item_plan)
                 ivPlanImage = itemView.findViewById(R.id.iv_plan_image)

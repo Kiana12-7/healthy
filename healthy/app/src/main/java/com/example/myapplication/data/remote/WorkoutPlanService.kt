@@ -10,7 +10,7 @@ import retrofit2.http.Query
 interface WorkoutPlanService {
 
     @GET("workoutPlan/list")
-    suspend fun getWorkoutPlanList(): List<WorkoutPlanDto>
+    suspend fun getWorkoutPlanList(@Query("keyword") keyword: String? = null): List<WorkoutPlanDto>
 
     @GET("workoutPlan/{planId}/detail")
     suspend fun getWorkoutPlanDetail(@Path("planId") planId: Long): WorkoutPlanDetailDto

@@ -15,12 +15,10 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -91,5 +89,29 @@ class WorkoutPlanServiceImplTest {
         CurrentWorkoutPlanSummaryDTO summary = workoutPlanService.getCurrentPlanSummary(LocalDate.of(2026, 4, 13));
 
         assertFalse(summary.isHasActivePlan());
+    }
+
+    @Test
+    void getTemplatePlanListFiltersByKeyword() {
+        WorkoutPlan burnPlan = new WorkoutPlan();
+        burnPlan.setId(1L);
+        burnPlan.setName("全身燃脂计划");
+
+        WorkoutPlan sleepPlan = new WorkoutPlan();
+        sleepPlan.setId(2L);
+        sleepPlan.setName("高质量睡眠计划");
+
+        WorkoutPlan boxingPlan = new WorkoutPlan();
+        boxingPlan.setId(3L);
+        boxingPlan.setName("搏击燃脂训练");
+
+        when(workoutPlanRepository.findAllByUser_UsernameOrderByIdAsc("system_template_user"))
+                .thenReturn(List.of(burnPlan, sleepPlan, boxingPlan));
+
+        List<org.example.api.dto.WorkoutPlanListDto> result = workoutPlanService.getTemplatePlanList("燃脂");
+
+        assertEquals(2, result.size());
+        assertEquals("全身燃脂计划", result.get(0).getName());
+        assertEquals("搏击燃脂训练", result.get(1).getName());
     }
 }
