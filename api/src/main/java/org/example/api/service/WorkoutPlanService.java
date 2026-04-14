@@ -32,7 +32,14 @@ public interface WorkoutPlanService {
     /**
      * 获取首页展示用的内置训练计划
      */
-    List<WorkoutPlanListDto> getTemplatePlanList();
+    default List<WorkoutPlanListDto> getTemplatePlanList() {
+        return getTemplatePlanList(null);
+    }
+
+    /**
+     * 获取首页展示用的内置训练计划，并按关键字过滤
+     */
+    List<WorkoutPlanListDto> getTemplatePlanList(String keyword);
 
     CurrentWorkoutPlanSummaryDTO getCurrentPlanSummary(LocalDate date);
 

@@ -10,10 +10,23 @@ data class PlanItem(
     val imageResId: Int, // 本地图片资源ID（开发阶段用）
     val imageUrl: String? = null, // 后端接口返回的图片URL（上线用）
     val tagIds: List<String>
+) {
+    fun getDisplayTags(limit: Int = 3): String {
+        return tagIds
+            .mapNotNull { tagNameMap[it] }
+            .distinct()
+            .take(limit)
+            .joinToString(" · ")
+    }
 
-)
+    fun matchesKeyword(keyword: String): Boolean {
+        if (keyword.isBlank()) {
+            return true
+        }
+        return name.contains(keyword, ignoreCase = true) ||
+                getDisplayTags(limit = Int.MAX_VALUE).contains(keyword, ignoreCase = true)
+    }
 
-{
     companion object {
         private val builtInPlans by lazy {
             listOf(
@@ -58,13 +71,22 @@ data class PlanItem(
             )
         }
 
+        private val tagNameMap by lazy {
+            getAllFilterTags()
+                .values
+                .flatten()
+                .associate { it.id to it.name }
+        }
+
         // 获取所有38个计划（已绑定图片和标签）
         fun getAllPlans(): List<PlanItem> {
             return builtInPlans
         }
 
         fun fromWorkoutPlanDto(dto: WorkoutPlanDto): PlanItem {
-            val matched = builtInPlans.firstOrNull { it.name == dto.name }
+            val backendPlanId = "plan_${dto.id.toString().padStart(3, '0')}"
+            val matched = builtInPlans.firstOrNull { it.id == backendPlanId }
+                ?: builtInPlans.firstOrNull { it.name == dto.name }
             return PlanItem(
                 id = dto.id.toString(),
                 name = dto.name,
