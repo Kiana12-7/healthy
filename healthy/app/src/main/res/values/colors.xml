@@ -9,4 +9,18 @@
     <color name="keep_green">#81E292</color>
     <color name="button_disabled">#CCCCCC</color>   <!-- 灰色 -->
     <color name="button_enabled">#81C784</color>    <!-- 浅绿色 -->
+    <color name="search_bg_top">#EEF8F2</color>
+    <color name="search_bg_bottom">#FFFFFF</color>
+    <color name="search_surface">#FFFFFFFF</color>
+    <color name="search_surface_soft">#F5FBF8</color>
+    <color name="search_primary">#1DBA6F</color>
+    <color name="search_primary_dark">#119D59</color>
+    <color name="search_title">#122033</color>
+    <color name="search_body">#5E6D82</color>
+    <color name="search_stroke">#DCECE3</color>
+    <color name="search_chip_bg">#E8F7EF</color>
+    <color name="search_chip_text">#167C4C</color>
+    <color name="search_badge_bg">#EEF9F3</color>
+    <color name="search_badge_text">#178A54</color>
+    <color name="search_empty_icon_bg">#EFF7F3</color>
 </resources>

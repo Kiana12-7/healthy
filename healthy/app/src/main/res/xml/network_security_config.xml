@@ -3,6 +3,8 @@
     <domain-config cleartextTrafficPermitted="true">
         <!-- 替换为你实际需要访问的后端域名或 IP -->
         <domain includeSubdomains="true">10.0.2.2</domain>
+        <!-- 局域网ip-->
+        <domain includeSubdomains="true">192.168.67.18</domain>
         <domain includeSubdomains="true">your-dev-api.com</domain>
     </domain-config>
 </network-security-config>

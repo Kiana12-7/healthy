@@ -1,53 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="12dp"
-    android:gravity="center_vertical"
-    android:background="?attr/selectableItemBackground">
-
-    <ImageView
-        android:id="@+id/iv_plan_icon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:scaleType="centerCrop"
-        android:background="#F5F5F5"
-        android:src="@drawable/plan_01_fat_loss" />
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/search_surface"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="0dp"
+    app:rippleColor="@color/search_chip_bg"
+    app:strokeColor="@color/search_stroke"
+    app:strokeWidth="1dp">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginStart="16dp"
-        android:orientation="vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="14dp">
 
-        <TextView
-            android:id="@+id/tv_plan_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#333333"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:text="计划名称" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp">
 
-        <TextView
-            android:id="@+id/tv_plan_tags"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/iv_plan_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/search_surface_soft"
+                android:scaleType="centerCrop"
+                android:src="@drawable/plan_01_fat_loss" />
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:textColor="#666666"
-            android:textSize="13sp"
-            tools:text="减脂 · 全身 · 零基础" />
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_plan_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/search_title"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                tools:text="全身燃脂计划" />
+
+            <TextView
+                android:id="@+id/tv_plan_tags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/search_body"
+                android:textSize="13sp"
+                tools:text="减脂 · 全身 · 零基础" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_search_result_badge"
+                android:paddingStart="12dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="6dp"
+                android:text="@string/search_open_detail"
+                android:textColor="@color/search_badge_text"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:contentDescription="@string/jump_to"
+            android:rotation="-90"
+            android:src="@drawable/ic_arrow_down"
+            app:tint="@color/search_primary" />
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@android:drawable/ic_media_play"
-        app:tint="#EEEEEE"
-        android:rotation="0"
-        android:contentDescription="@string/jump_to" />
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>
