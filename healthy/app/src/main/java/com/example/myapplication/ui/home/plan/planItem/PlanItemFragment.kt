@@ -60,7 +60,8 @@ class PlanItemFragment : Fragment() {
         rvPlanList.adapter = planAdapter
 
         // ========== 计划点击跳转到详情页 ==========
-        planAdapter.setOnItemClickListener { planItem ->
+        // 明确指定参数类型为 (planItem: PlanItem)
+        planAdapter.setOnItemClickListener { planItem: PlanItem ->
             PlanDetailActivity.actionStart(requireContext(), planItem.id, planItem.name)
         }
 
