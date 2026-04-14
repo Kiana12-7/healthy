@@ -1,7 +1,5 @@
 package com.example.myapplication.ui.fitness;
 
-import static androidx.core.content.ContentProviderCompat.requireContext;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -11,8 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,11 +16,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.data.remote.FitnessFormDataSource;
 import com.example.myapplication.data.remote.RetrofitClient;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AbilityActivity extends AppCompatActivity {
     public static final String HEALTH_APP_PREFS = "health_app";
@@ -62,13 +59,17 @@ public class AbilityActivity extends AppCompatActivity {
 
         // 为每个 RadioGroup 设置监听器，当任一选项改变时更新“生成计划”按钮状态
         RadioGroup.OnCheckedChangeListener listener = (group, checkedId) -> {
-            saveAllSelections();
-            updateGenerateButtonState();
+            saveAllSelections();          // 实时保存选择
+            updateGenerateButtonState();  // 更新按钮状态
         };
         rgPushup.setOnCheckedChangeListener(listener);
         rgSquat.setOnCheckedChangeListener(listener);
         rgSitups.setOnCheckedChangeListener(listener);
         rgStairs.setOnCheckedChangeListener(listener);
+
+        // 初始化按钮状态（重要！确保初始时按钮为灰色禁用）
+        updateGenerateButtonState();
+
         // “我的信息”按钮：跳转到统计页面
         btnMyInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,15 +79,16 @@ public class AbilityActivity extends AppCompatActivity {
             }
         });
 
-        // “生成计划”按钮：保存数据并提示（后续可跳转到计划展示）
+        // “生成计划”按钮：保存数据并提交给后端生成计划
         btnGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validateSelections()) {
-                    // 获取所有选中的值
+                    // 获取所有选中的值（已在实时保存中存储，此处可直接使用）
                     SharedPreferences sp = getSharedPreferences(HEALTH_APP_PREFS, MODE_PRIVATE);
                     String description = buildUserProfileForAI(sp);
-                    // 你需要根据实际情况构造请求体，这里简化
+
+                    // 调用后端 API 保存数据并生成计划
                     Call<ResponseBody> call = RetrofitClient.INSTANCE.getFitnessFormService().save(description);
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
@@ -95,7 +97,7 @@ public class AbilityActivity extends AppCompatActivity {
                                 Toast.makeText(AbilityActivity.this, "计划生成成功", Toast.LENGTH_SHORT).show();
                                 sharedPref.edit().putBoolean(KEY_FITNESS_FORM_COMPLETED, true).apply();
 
-                                // 跳转
+                                // 跳转至主界面并标记显示今日计划
                                 Intent intent = new Intent(AbilityActivity.this, MainActivity.class);
                                 intent.putExtra("select_today", true);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -117,7 +119,7 @@ public class AbilityActivity extends AppCompatActivity {
             }
         });
     }
-    
+
     /**
      * 更新“生成计划”按钮状态：全选时启用并变绿，否则禁用并变灰
      */
@@ -131,7 +133,10 @@ public class AbilityActivity extends AppCompatActivity {
                 allSelected ? getColor(R.color.button_enabled) : getColor(R.color.button_disabled)
         ));
     }
-    
+
+    /**
+     * 构建发送给 AI 的用户画像描述文本
+     */
     private String buildUserProfileForAI(SharedPreferences sp) {
         float height = sp.getFloat("height", 0f);
         float weight = sp.getFloat("weight", 0f);
@@ -167,6 +172,9 @@ public class AbilityActivity extends AppCompatActivity {
         return profile;
     }
 
+    /**
+     * 实时保存所有选中的运动能力数据
+     */
     private void saveAllSelections() {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("pushup", getSelectedPushup());

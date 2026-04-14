@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:navigationIcon="?attr/homeAsUpIndicator" />
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <!-- 页面内容区域 -->
     <LinearLayout
@@ -85,7 +84,12 @@
                 android:text="直筒型"
                 android:layout_marginEnd="4dp"
                 android:backgroundTint="#E0E0E0"
-                android:textColor="#333333" />
+                android:textColor="#333333"
+                android:maxLines="1"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="10sp"
+                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeStepGranularity="1sp" />
 
             <Button
                 android:id="@+id/btnPear"
@@ -95,7 +99,10 @@
                 android:text="梨型"
                 android:layout_marginEnd="4dp"
                 android:backgroundTint="#E0E0E0"
-                android:textColor="#333333" />
+                android:textColor="#333333"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="12sp"/>
 
             <Button
                 android:id="@+id/btnFunnel"
@@ -105,7 +112,12 @@
                 android:text="漏斗型"
                 android:layout_marginEnd="4dp"
                 android:backgroundTint="#E0E0E0"
-                android:textColor="#333333" />
+                android:textColor="#333333"
+                android:maxLines="1"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="10sp"
+                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeStepGranularity="1sp" />
 
             <Button
                 android:id="@+id/btnApple"
@@ -113,8 +125,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="苹果型"
+                android:layout_marginEnd="4dp"
                 android:backgroundTint="#E0E0E0"
-                android:textColor="#333333" />
+                android:textColor="#333333"
+                android:maxLines="1"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="10sp"
+                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeStepGranularity="1sp" />
 
         </LinearLayout>
 
