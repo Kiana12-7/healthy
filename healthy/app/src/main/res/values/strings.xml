@@ -251,4 +251,27 @@
     <string name="personal_training_split_template">%1$s %2$s</string>
     <string name="personal_training_chart_breakdown">计划 %1$s · AI %2$s</string>
     <string name="personal_more_data">查看完整数据</string>
+    <string name="search_find">搜索发现</string>
+    <string name="tuijian_plan">推荐计划</string>
+    <string name="can_not_find_plan">未找到相关计划</string>
+    <string name="search_train_plan">搜索训练计划</string>
+    <string name="search">搜索</string>
+    <string name="search_header_title">找一套适合今天的训练</string>
+    <string name="search_header_subtitle">输入计划名称、训练目标或身体部位，直接从后端计划库里查找</string>
+    <string name="search_recommend_title">灵感搜索</string>
+    <string name="search_recommend_subtitle">点一下这些热门计划，马上查看匹配结果</string>
+    <string name="search_curated_title">精选计划</string>
+    <string name="search_curated_subtitle">系统模板计划，适合直接开练</string>
+    <string name="search_results_title">搜索结果</string>
+    <string name="search_result_count">共找到 %1$d 个计划</string>
+    <string name="search_keyword_hint">关键词：%1$s</string>
+    <string name="search_loading_hint">正在连接后端训练计划库…</string>
+    <string name="search_empty_title">没有找到匹配计划</string>
+    <string name="search_empty_desc">换个更短的关键词试试，或者直接点上方热门推荐</string>
+    <string name="search_error_title">计划暂时加载失败</string>
+    <string name="search_error_desc">请确认后端服务已经启动，然后重新搜索</string>
+    <string name="search_error_hint">当前未能连接到训练计划服务</string>
+    <string name="search_cache_fallback">网络异常，已展示缓存结果</string>
+    <string name="search_open_detail">查看详情</string>
+    <string name="jump_to">跳转详情</string>
 </resources>

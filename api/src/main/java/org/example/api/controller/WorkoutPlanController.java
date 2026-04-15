@@ -28,8 +28,10 @@ public class WorkoutPlanController {
     }
 
     @GetMapping("/list")
-    public List<WorkoutPlanListDto> getWorkoutPlanList() {
-        return workoutPlanService.getTemplatePlanList();
+    public List<WorkoutPlanListDto> getWorkoutPlanList(
+            @RequestParam(required = false) String keyword
+    ) {
+        return workoutPlanService.getTemplatePlanList(keyword);
     }
 
     @GetMapping("/{planId}/detail")

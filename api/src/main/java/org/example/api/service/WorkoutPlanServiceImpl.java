@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 @Service
 public class WorkoutPlanServiceImpl implements WorkoutPlanService{
@@ -68,18 +68,14 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService{
     }
 
     @Override
-    public List<WorkoutPlanListDto> getTemplatePlanList() {
+    public List<WorkoutPlanListDto> getTemplatePlanList(String keyword) {
+        String normalizedKeyword = keyword == null ? "" : keyword.trim();
+
         return this.workoutPlanRepository.findAllByUser_UsernameOrderByIdAsc(SYSTEM_TEMPLATE_USERNAME)
                 .stream()
-                .map(workoutPlan -> {
-                    WorkoutPlanListDto dto = new WorkoutPlanListDto();
-                    dto.setId(workoutPlan.getId());
-                    dto.setName(workoutPlan.getName());
-                    dto.setStartDate(workoutPlan.getStartDate());
-                    dto.setEndDate(workoutPlan.getEndDate());
-                    return dto;
-                })
-                .collect(Collectors.toList());
+                .filter(workoutPlan -> normalizedKeyword.isEmpty() || containsKeyword(workoutPlan.getName(), normalizedKeyword))
+                .map(this::toWorkoutPlanListDto)
+                .toList();
     }
 
     @Override
@@ -107,6 +103,22 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService{
         dto.setEndDate(latestPlan.getEndDate());
         dto.setCurrentDay((int) ChronoUnit.DAYS.between(latestPlan.getStartDate(), date) + 1);
         dto.setTotalDays((int) ChronoUnit.DAYS.between(latestPlan.getStartDate(), latestPlan.getEndDate()) + 1);
+        return dto;
+    }
+
+    private boolean containsKeyword(String planName, String keyword) {
+        if (planName == null || keyword.isBlank()) {
+            return false;
+        }
+        return planName.toLowerCase(Locale.ROOT).contains(keyword.toLowerCase(Locale.ROOT));
+    }
+
+    private WorkoutPlanListDto toWorkoutPlanListDto(WorkoutPlan workoutPlan) {
+        WorkoutPlanListDto dto = new WorkoutPlanListDto();
+        dto.setId(workoutPlan.getId());
+        dto.setName(workoutPlan.getName());
+        dto.setStartDate(workoutPlan.getStartDate());
+        dto.setEndDate(workoutPlan.getEndDate());
         return dto;
     }
 
