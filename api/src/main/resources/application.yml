@@ -26,7 +26,7 @@ spring:
       hibernate:
         dialect: "org.hibernate.dialect.MySQLDialect"
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
   # 上传文件大小限制
   servlet:
@@ -50,6 +50,33 @@ spring:
     url: "jdbc:mysql://${datasource.host:localhost}:${datasource.port:3306}/${datasource.dbname:healthy}?useUnicode=true&characterEncoding=utf-8"
     username: "${datasource.username:yunzhi}"
     password: "${datasource.password:yunzhi}"
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: "org.hibernate.dialect.MySQLDialect"
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  # 上传文件大小限制
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: ${file.size:20MB}
+      max-request-size: ${file.size:20MB}
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: hc
+  application:
+    name: healthy
+  datasource:
+    url: "jdbc:mysql://${datasource.host:localhost}:${datasource.port:3306}/${datasource.dbname:healthy}?useUnicode=true&characterEncoding=utf-8"
+    username: "${datasource.username:root}"
+    password: "${datasource.password:180615}"
   jpa:
     generate-ddl: true
     properties:
